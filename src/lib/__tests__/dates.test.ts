@@ -4,9 +4,11 @@ import {
   daysBetween,
   formatDayKey,
   formatDayLabel,
+  isoWeekday,
   maskBrDate,
   parseBrDate,
   toDayKey,
+  weekDays,
 } from '../dates';
 
 describe('datas como dia do calendário', () => {
@@ -43,6 +45,21 @@ describe('datas como dia do calendário', () => {
     expect(maskBrDate('10/05/19967')).toBe('10/05/1996');
     // Sem barra no fim: o backspace apaga dígitos normalmente
     expect(maskBrDate('10')).toBe('10');
+  });
+
+  it('dia da semana e a semana de segunda a domingo', () => {
+    expect(isoWeekday('2026-09-28')).toBe(1); // segunda
+    expect(isoWeekday('2026-10-04')).toBe(7); // domingo
+    expect(weekDays('2026-10-01')).toEqual([
+      '2026-09-28',
+      '2026-09-29',
+      '2026-09-30',
+      '2026-10-01',
+      '2026-10-02',
+      '2026-10-03',
+      '2026-10-04',
+    ]);
+    expect(weekDays('2026-10-04')[0]).toBe('2026-09-28');
   });
 
   it('formata para a tela', () => {

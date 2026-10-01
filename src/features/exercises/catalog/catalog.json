@@ -1,0 +1,1619 @@
+[
+  {
+    "key": "Barbell_Bench_Press_-_Medium_Grip",
+    "name": "Supino reto com barra",
+    "primary": "chest",
+    "secondary": ["triceps", "front_delts"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Deite no banco com os olhos abaixo da barra, pés firmes no chão e escápulas encaixadas.",
+      "Segure a barra um pouco mais aberta que os ombros e tire do suporte com os braços estendidos.",
+      "Desça controlando até encostar na parte de baixo do peito.",
+      "Empurre de volta até estender os braços, sem tirar o quadril do banco."
+    ]
+  },
+  {
+    "key": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+    "name": "Supino inclinado com barra",
+    "primary": "chest",
+    "secondary": ["front_delts", "triceps"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco entre 30° e 45° e deite com as escápulas encaixadas.",
+      "Segure a barra um pouco mais aberta que os ombros e tire do suporte.",
+      "Desça até a parte de cima do peito, com os cotovelos um pouco abaixo da linha dos ombros.",
+      "Empurre até estender os braços."
+    ]
+  },
+  {
+    "key": "Decline_Barbell_Bench_Press",
+    "name": "Supino declinado com barra",
+    "primary": "chest",
+    "secondary": ["triceps", "front_delts"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Prenda as pernas no apoio do banco declinado e deite.",
+      "Tire a barra do suporte com os braços estendidos, pegada um pouco mais aberta que os ombros.",
+      "Desça até a parte de baixo do peito e empurre de volta."
+    ]
+  },
+  {
+    "key": "Dumbbell_Bench_Press",
+    "name": "Supino reto com halteres",
+    "primary": "chest",
+    "secondary": ["triceps", "front_delts"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Sente no banco com os halteres apoiados nas coxas e deite levando-os até a altura do peito.",
+      "Empurre os halteres para cima até estender os braços, palmas para a frente.",
+      "Desça devagar até os cotovelos passarem um pouco da linha do banco e repita."
+    ]
+  },
+  {
+    "key": "Incline_Dumbbell_Press",
+    "name": "Supino inclinado com halteres",
+    "primary": "chest",
+    "secondary": ["front_delts", "triceps"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco entre 30° e 45° e deite com um halter em cada mão na altura do peito.",
+      "Empurre os halteres para cima até estender os braços.",
+      "Desça controlando até sentir o peito alongar e repita."
+    ]
+  },
+  {
+    "key": "Dumbbell_Flyes",
+    "name": "Crucifixo reto com halteres",
+    "primary": "chest",
+    "secondary": ["front_delts"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Deite no banco reto com os halteres acima do peito, palmas uma de frente para a outra.",
+      "Com os cotovelos levemente dobrados, abra os braços em arco até sentir o peito alongar.",
+      "Volte pelo mesmo arco, como se abraçasse uma árvore."
+    ]
+  },
+  {
+    "key": "Incline_Dumbbell_Flyes",
+    "name": "Crucifixo inclinado com halteres",
+    "primary": "chest",
+    "secondary": ["front_delts"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco entre 30° e 45° e segure os halteres acima do peito.",
+      "Com os cotovelos levemente dobrados, abra os braços em arco até alongar o peito.",
+      "Volte pelo mesmo arco, contraindo o peito."
+    ]
+  },
+  {
+    "key": "Butterfly",
+    "name": "Peck deck (voador)",
+    "primary": "chest",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco para as pegadas ficarem na altura do peito.",
+      "Com as costas apoiadas, junte os braços à frente do corpo, cotovelos levemente dobrados.",
+      "Abra devagar até sentir o peito alongar e repita."
+    ]
+  },
+  {
+    "key": "Cable_Crossover",
+    "name": "Crossover (polia alta)",
+    "primary": "chest",
+    "secondary": ["front_delts"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Com as polias no alto, segure uma pegada em cada mão e dê um passo à frente.",
+      "Incline levemente o tronco e, com os cotovelos um pouco dobrados, traga as mãos para a frente e para baixo até se encontrarem.",
+      "Volte devagar até sentir o peito alongar."
+    ]
+  },
+  {
+    "key": "Low_Cable_Crossover",
+    "name": "Crossover (polia baixa)",
+    "primary": "chest",
+    "secondary": ["front_delts"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Com as polias embaixo, segure uma pegada em cada mão e fique no centro.",
+      "Com os cotovelos levemente dobrados, traga as mãos para cima e para a frente até a altura do peito.",
+      "Volte devagar à posição inicial."
+    ]
+  },
+  {
+    "key": "Leverage_Chest_Press",
+    "name": "Supino reto máquina",
+    "primary": "chest",
+    "secondary": ["triceps", "front_delts"],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco para as pegadas ficarem na altura do meio do peito.",
+      "Com as escápulas encaixadas, empurre até quase estender os braços.",
+      "Volte controlando até sentir o peito alongar."
+    ]
+  },
+  {
+    "key": "Leverage_Incline_Chest_Press",
+    "name": "Supino inclinado máquina",
+    "primary": "chest",
+    "secondary": ["front_delts", "triceps"],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco para as pegadas ficarem perto da parte de cima do peito.",
+      "Com o peito aberto e as escápulas encaixadas, empurre até quase estender os braços.",
+      "Volte controlando até sentir o peito alongar."
+    ]
+  },
+  {
+    "key": "Smith_Machine_Incline_Bench_Press",
+    "name": "Supino inclinado no Smith",
+    "primary": "chest",
+    "secondary": ["front_delts", "triceps"],
+    "equipment": "smith",
+    "load": "kg",
+    "steps": [
+      "Posicione o banco inclinado (30° a 45°) de forma que a barra desça na parte de cima do peito.",
+      "Destrave a barra e desça controlando até perto do peito.",
+      "Empurre até estender os braços e trave a barra ao terminar."
+    ]
+  },
+  {
+    "key": "Pushups",
+    "name": "Flexão de braço",
+    "primary": "chest",
+    "secondary": ["triceps", "front_delts"],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Apoie as mãos no chão um pouco mais abertas que os ombros, corpo reto da cabeça aos pés.",
+      "Desça até o peito quase encostar no chão, cotovelos a uns 45° do corpo.",
+      "Empurre de volta sem deixar o quadril cair."
+    ]
+  },
+  {
+    "key": "Dips_-_Chest_Version",
+    "name": "Paralelas (foco no peito)",
+    "primary": "chest",
+    "secondary": ["triceps", "front_delts"],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Segure nas barras paralelas com os braços estendidos.",
+      "Incline o tronco à frente e desça até sentir o peito alongar, cotovelos abrindo levemente.",
+      "Empurre de volta até estender os braços."
+    ]
+  },
+  {
+    "key": "Straight-Arm_Dumbbell_Pullover",
+    "name": "Pullover com halter",
+    "primary": "chest",
+    "secondary": ["back", "triceps"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Deite no banco segurando um halter com as duas mãos acima do peito.",
+      "Com os cotovelos levemente dobrados, leve o halter para trás da cabeça em arco até alongar.",
+      "Volte pelo mesmo arco até acima do peito."
+    ]
+  },
+  {
+    "key": "Wide-Grip_Lat_Pulldown",
+    "name": "Puxada frente aberta (pulley)",
+    "primary": "back",
+    "secondary": ["biceps", "rear_delts"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Sente com as coxas presas no apoio e segure a barra bem aberta, palmas para a frente.",
+      "Puxe a barra até a parte de cima do peito, levando os cotovelos para baixo e para trás.",
+      "Volte devagar até estender os braços, sem soltar os ombros."
+    ]
+  },
+  {
+    "key": "Close-Grip_Front_Lat_Pulldown",
+    "name": "Puxada frente fechada",
+    "primary": "back",
+    "secondary": ["biceps"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Segure a barra com as mãos na largura dos ombros, palmas para a frente.",
+      "Puxe até a parte de cima do peito, mantendo o peito aberto.",
+      "Volte controlando até estender os braços."
+    ]
+  },
+  {
+    "key": "V-Bar_Pulldown",
+    "name": "Puxada com triângulo",
+    "primary": "back",
+    "secondary": ["biceps"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Encaixe o triângulo na polia alta e sente com as coxas presas.",
+      "Puxe o triângulo até a parte de cima do peito, inclinando levemente o tronco.",
+      "Volte devagar até estender os braços."
+    ]
+  },
+  {
+    "key": "Underhand_Cable_Pulldowns",
+    "name": "Puxada supinada",
+    "primary": "back",
+    "secondary": ["biceps"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Segure a barra com as palmas viradas para você, na largura dos ombros.",
+      "Puxe até a parte de cima do peito, levando os cotovelos junto ao corpo.",
+      "Volte controlando até estender os braços."
+    ]
+  },
+  {
+    "key": "Pullups",
+    "name": "Barra fixa (pronada)",
+    "primary": "back",
+    "secondary": ["biceps", "rear_delts"],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Pendure-se na barra com as mãos mais abertas que os ombros, palmas para a frente.",
+      "Puxe o corpo até o queixo passar da barra, sem balançar.",
+      "Desça até estender os braços."
+    ]
+  },
+  {
+    "key": "Chin-Up",
+    "name": "Barra fixa supinada",
+    "primary": "back",
+    "secondary": ["biceps"],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Pendure-se na barra com as palmas viradas para você, na largura dos ombros.",
+      "Puxe até o queixo passar da barra.",
+      "Desça devagar até estender os braços."
+    ]
+  },
+  {
+    "key": "Seated_Cable_Rows",
+    "name": "Remada baixa (triângulo)",
+    "primary": "back",
+    "secondary": ["biceps", "rear_delts"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Sente com os pés apoiados e os joelhos levemente dobrados, segurando o triângulo.",
+      "Com o tronco ereto, puxe até o abdômen, juntando as escápulas.",
+      "Volte estendendo os braços sem arredondar as costas."
+    ]
+  },
+  {
+    "key": "Bent_Over_Barbell_Row",
+    "name": "Remada curvada com barra",
+    "primary": "back",
+    "secondary": ["biceps", "rear_delts", "lower_back"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Segure a barra com as mãos na largura dos ombros e incline o tronco à frente, costas retas e joelhos levemente dobrados.",
+      "Puxe a barra até a parte de baixo do abdômen, juntando as escápulas.",
+      "Desça controlando até estender os braços."
+    ]
+  },
+  {
+    "key": "One-Arm_Dumbbell_Row",
+    "name": "Remada unilateral com halter (serrote)",
+    "primary": "back",
+    "secondary": ["biceps", "rear_delts"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Apoie a mão e o joelho do mesmo lado no banco, costas paralelas ao chão.",
+      "Com o halter na outra mão, puxe em direção ao quadril, cotovelo junto ao corpo.",
+      "Desça até estender o braço; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "T-Bar_Row_with_Handle",
+    "name": "Remada cavalinho",
+    "primary": "back",
+    "secondary": ["biceps", "rear_delts", "traps"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Fique com a barra entre as pernas e segure a pegada perto das anilhas.",
+      "Incline o tronco à frente com as costas retas e os joelhos levemente dobrados.",
+      "Puxe a pegada até o peito e desça controlando."
+    ]
+  },
+  {
+    "key": "Leverage_Iso_Row",
+    "name": "Remada máquina",
+    "primary": "back",
+    "secondary": ["biceps", "rear_delts"],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco para as pegadas ficarem na altura do peito e apoie o peito no encosto.",
+      "Puxe as pegadas em direção ao tronco, juntando as escápulas.",
+      "Volte devagar até estender os braços."
+    ]
+  },
+  {
+    "key": "Leverage_High_Row",
+    "name": "Remada alta articulada",
+    "primary": "back",
+    "secondary": ["biceps", "rear_delts"],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco para alcançar as pegadas acima da cabeça e prenda as coxas no apoio.",
+      "Puxe as pegadas para baixo e para trás, até as mãos ficarem perto dos ombros.",
+      "Volte controlando até estender os braços."
+    ]
+  },
+  {
+    "key": "Straight-Arm_Pulldown",
+    "name": "Pulldown com barra (braços estendidos)",
+    "primary": "back",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "De frente para a polia alta, segure a barra com os braços estendidos e incline levemente o tronco.",
+      "Sem dobrar os cotovelos, leve a barra até as coxas em arco.",
+      "Volte devagar até a altura dos olhos."
+    ]
+  },
+  {
+    "key": "Rope_Straight-Arm_Pulldown",
+    "name": "Pulldown na corda",
+    "primary": "back",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Prenda a corda na polia alta e segure com as duas mãos, braços estendidos à frente.",
+      "Incline o tronco a partir do quadril, mantendo as costas retas.",
+      "Leve a corda até as coxas sem dobrar os cotovelos e volte controlando."
+    ]
+  },
+  {
+    "key": "Seated_One-arm_Cable_Pulley_Rows",
+    "name": "Remada unilateral na polia",
+    "primary": "back",
+    "secondary": ["biceps", "rear_delts"],
+    "equipment": "cable",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Sente de frente para a polia baixa e segure a pegada com uma mão.",
+      "Puxe até o lado do abdômen, levando o cotovelo para trás.",
+      "Volte estendendo o braço; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "One_Arm_Lat_Pulldown",
+    "name": "Puxada unilateral",
+    "primary": "back",
+    "secondary": ["biceps"],
+    "equipment": "cable",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Prenda uma pegada única na polia alta e sente com as coxas presas.",
+      "Puxe a pegada até o ombro, levando o cotovelo para baixo, junto ao corpo.",
+      "Volte devagar até estender o braço; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Barbell_Shrug",
+    "name": "Encolhimento com barra",
+    "primary": "traps",
+    "secondary": [],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure a barra à frente das coxas com os braços estendidos.",
+      "Suba os ombros em direção às orelhas o máximo que der, sem dobrar os cotovelos.",
+      "Segure um instante no alto e desça devagar."
+    ]
+  },
+  {
+    "key": "Dumbbell_Shrug",
+    "name": "Encolhimento com halteres",
+    "primary": "traps",
+    "secondary": [],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure um halter em cada mão ao lado do corpo.",
+      "Suba os ombros em direção às orelhas sem dobrar os cotovelos.",
+      "Segure um instante e desça devagar."
+    ]
+  },
+  {
+    "key": "Upright_Barbell_Row",
+    "name": "Remada alta com barra",
+    "primary": "side_delts",
+    "secondary": ["traps"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure a barra à frente das coxas com as mãos um pouco mais fechadas que os ombros.",
+      "Puxe a barra junto ao corpo até a altura do peito, cotovelos subindo acima das mãos.",
+      "Desça controlando."
+    ]
+  },
+  {
+    "key": "Seated_Barbell_Military_Press",
+    "name": "Desenvolvimento com barra (sentado)",
+    "primary": "front_delts",
+    "secondary": ["side_delts", "triceps"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Sente com as costas apoiadas e segure a barra na altura dos ombros, mãos um pouco mais abertas que eles.",
+      "Empurre a barra para cima até estender os braços.",
+      "Desça até a altura do queixo e repita."
+    ]
+  },
+  {
+    "key": "Dumbbell_Shoulder_Press",
+    "name": "Desenvolvimento com halteres",
+    "primary": "front_delts",
+    "secondary": ["side_delts", "triceps"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Sente com as costas apoiadas e os halteres na altura dos ombros, palmas para a frente.",
+      "Empurre os halteres para cima até quase se encontrarem.",
+      "Desça devagar até a altura das orelhas."
+    ]
+  },
+  {
+    "key": "Arnold_Dumbbell_Press",
+    "name": "Desenvolvimento Arnold",
+    "primary": "front_delts",
+    "secondary": ["side_delts", "triceps"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Sente com os halteres à frente do peito, palmas viradas para você.",
+      "Empurre para cima girando os punhos até as palmas ficarem para a frente.",
+      "Desça fazendo o giro de volta."
+    ]
+  },
+  {
+    "key": "Machine_Shoulder_Military_Press",
+    "name": "Desenvolvimento máquina",
+    "primary": "front_delts",
+    "secondary": ["side_delts", "triceps"],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco para as pegadas ficarem na altura dos ombros.",
+      "Empurre para cima até quase estender os braços.",
+      "Desça controlando até a altura dos ombros."
+    ]
+  },
+  {
+    "key": "Smith_Machine_Overhead_Shoulder_Press",
+    "name": "Desenvolvimento no Smith",
+    "primary": "front_delts",
+    "secondary": ["side_delts", "triceps"],
+    "equipment": "smith",
+    "load": "kg",
+    "steps": [
+      "Posicione um banco com encosto reto sob a barra do Smith.",
+      "Destrave a barra na altura dos ombros e empurre até estender os braços.",
+      "Desça até a altura do queixo e trave a barra ao terminar."
+    ]
+  },
+  {
+    "key": "Side_Lateral_Raise",
+    "name": "Elevação lateral com halteres",
+    "primary": "side_delts",
+    "secondary": [],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure um halter em cada mão ao lado do corpo, cotovelos levemente dobrados.",
+      "Eleve os braços para os lados até a altura dos ombros, sem balançar o tronco.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Cable_Seated_Lateral_Raise",
+    "name": "Elevação lateral na polia",
+    "primary": "side_delts",
+    "secondary": ["traps"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Sente num banco entre duas polias baixas e segure as pegadas com as mãos cruzadas à frente do corpo.",
+      "Eleve os braços para os lados até a altura dos ombros, cotovelos levemente dobrados.",
+      "Desça controlando."
+    ]
+  },
+  {
+    "key": "Front_Dumbbell_Raise",
+    "name": "Elevação frontal com halteres",
+    "primary": "front_delts",
+    "secondary": [],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure os halteres à frente das coxas.",
+      "Eleve os braços à frente até a altura dos ombros, cotovelos levemente dobrados.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Front_Cable_Raise",
+    "name": "Elevação frontal na polia",
+    "primary": "front_delts",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "De costas para a polia baixa, segure a pegada com o cabo passando entre as pernas.",
+      "Eleve o braço à frente até a altura do ombro, cotovelo levemente dobrado.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Reverse_Machine_Flyes",
+    "name": "Crucifixo inverso na máquina (voador invertido)",
+    "primary": "rear_delts",
+    "secondary": ["traps"],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Sente de frente para o encosto do voador, com as pegadas na altura dos ombros.",
+      "Abra os braços para trás em arco, mantendo os cotovelos levemente dobrados.",
+      "Volte devagar até as mãos se aproximarem."
+    ]
+  },
+  {
+    "key": "Cable_Rear_Delt_Fly",
+    "name": "Crucifixo inverso na polia",
+    "primary": "rear_delts",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Com as polias no alto, segure o cabo da esquerda com a mão direita e o da direita com a esquerda, cruzando à frente.",
+      "Abra os braços para os lados e para trás, cotovelos levemente dobrados, até a linha dos ombros.",
+      "Volte devagar, cruzando de novo."
+    ]
+  },
+  {
+    "key": "Seated_Bent-Over_Rear_Delt_Raise",
+    "name": "Crucifixo inverso com halteres (sentado)",
+    "primary": "rear_delts",
+    "secondary": ["traps"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Sente na ponta do banco e incline o tronco até quase encostar nas coxas, halteres atrás das pernas.",
+      "Eleve os halteres para os lados até a altura dos ombros, cotovelos levemente dobrados.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Face_Pull",
+    "name": "Face pull",
+    "primary": "rear_delts",
+    "secondary": ["traps"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Prenda a corda na polia na altura do rosto e segure com as palmas para baixo.",
+      "Puxe a corda em direção ao rosto, abrindo as mãos e levando os cotovelos para fora e para trás.",
+      "Volte devagar até estender os braços."
+    ]
+  },
+  {
+    "key": "Barbell_Curl",
+    "name": "Rosca direta com barra",
+    "primary": "biceps",
+    "secondary": ["forearms"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure a barra com as palmas para a frente, mãos na largura dos ombros.",
+      "Com os cotovelos colados ao corpo, suba a barra até a altura do peito.",
+      "Desça devagar até estender os braços."
+    ]
+  },
+  {
+    "key": "EZ-Bar_Curl",
+    "name": "Rosca direta com barra W",
+    "primary": "biceps",
+    "secondary": ["forearms"],
+    "equipment": "ez_bar",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure a barra W nas curvas internas, palmas para a frente.",
+      "Com os cotovelos colados ao corpo, suba a barra até a altura do peito.",
+      "Desça devagar até estender os braços."
+    ]
+  },
+  {
+    "key": "Dumbbell_Alternate_Bicep_Curl",
+    "name": "Rosca alternada com halteres",
+    "primary": "biceps",
+    "secondary": ["forearms"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure um halter em cada mão ao lado do corpo.",
+      "Suba um halter girando o punho até a palma ficar para cima, com o cotovelo parado.",
+      "Desça devagar e repita com o outro braço."
+    ]
+  },
+  {
+    "key": "Hammer_Curls",
+    "name": "Rosca martelo",
+    "primary": "biceps",
+    "secondary": ["forearms"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure os halteres ao lado do corpo com as palmas viradas para dentro.",
+      "Suba os halteres mantendo a pegada neutra e os cotovelos parados.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Incline_Dumbbell_Curl",
+    "name": "Rosca inclinada com halteres",
+    "primary": "biceps",
+    "secondary": [],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Sente num banco inclinado a uns 45°, com os braços pendurados segurando os halteres.",
+      "Suba os halteres sem levar os cotovelos para a frente.",
+      "Desça devagar até estender os braços."
+    ]
+  },
+  {
+    "key": "Concentration_Curls",
+    "name": "Rosca concentrada",
+    "primary": "biceps",
+    "secondary": [],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Sente na ponta do banco e apoie o cotovelo na parte de dentro da coxa.",
+      "Suba o halter até perto do ombro, sem mexer o braço.",
+      "Desça devagar; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Preacher_Curl",
+    "name": "Rosca Scott com barra",
+    "primary": "biceps",
+    "secondary": [],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Sente no banco Scott com a parte de trás dos braços apoiada.",
+      "Suba a barra até perto dos ombros.",
+      "Desça devagar até quase estender os braços."
+    ]
+  },
+  {
+    "key": "Machine_Preacher_Curls",
+    "name": "Rosca Scott máquina",
+    "primary": "biceps",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco para os braços apoiarem por inteiro na almofada.",
+      "Suba as pegadas até perto dos ombros.",
+      "Desça devagar até quase estender os braços."
+    ]
+  },
+  {
+    "key": "Standing_Biceps_Cable_Curl",
+    "name": "Rosca na polia (barra)",
+    "primary": "biceps",
+    "secondary": ["forearms"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "De frente para a polia baixa, segure a barra com as palmas para cima.",
+      "Suba a barra até o peito com os cotovelos colados ao corpo.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Cable_Hammer_Curls_-_Rope_Attachment",
+    "name": "Rosca martelo na corda",
+    "primary": "biceps",
+    "secondary": ["forearms"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Prenda a corda na polia baixa e segure as pontas com as palmas viradas para dentro.",
+      "Suba a corda até perto dos ombros com os cotovelos parados.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Standing_One-Arm_Cable_Curl",
+    "name": "Rosca unilateral na polia",
+    "primary": "biceps",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Ao lado da polia baixa, segure a pegada com uma mão, palma para a frente.",
+      "Suba a pegada até perto do ombro, mantendo o cotovelo parado.",
+      "Desça devagar; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Triceps_Pushdown",
+    "name": "Tríceps pulley (barra)",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "De frente para a polia alta, segure a barra com as palmas para baixo.",
+      "Com os cotovelos colados ao corpo, empurre a barra para baixo até estender os braços.",
+      "Volte devagar até a altura do peito."
+    ]
+  },
+  {
+    "key": "Triceps_Pushdown_-_Rope_Attachment",
+    "name": "Tríceps na corda",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Segure a corda presa na polia alta, com os cotovelos junto ao corpo.",
+      "Empurre para baixo e abra as pontas da corda no final.",
+      "Volte devagar."
+    ]
+  },
+  {
+    "key": "Reverse_Grip_Triceps_Pushdown",
+    "name": "Tríceps pulley inverso",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Segure a barra da polia alta com as palmas para cima.",
+      "Com os cotovelos colados ao corpo, empurre para baixo até estender os braços.",
+      "Volte devagar."
+    ]
+  },
+  {
+    "key": "Cable_Rope_Overhead_Triceps_Extension",
+    "name": "Tríceps francês na corda (polia)",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "De costas para a polia, segure a corda atrás da cabeça com os cotovelos apontando para a frente.",
+      "Estenda os braços à frente e para cima, sem mexer os cotovelos.",
+      "Volte devagar até alongar o tríceps."
+    ]
+  },
+  {
+    "key": "Standing_Low-Pulley_One-Arm_Triceps_Extension",
+    "name": "Tríceps francês unilateral na polia",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "De costas para a polia baixa, segure a pegada com uma mão atrás da cabeça.",
+      "Estenda o braço para cima, mantendo o cotovelo apontado para o alto.",
+      "Desça devagar; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Cable_One_Arm_Tricep_Extension",
+    "name": "Tríceps unilateral na polia (pegada supinada)",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "De frente para a polia alta, segure a pegada com uma mão, palma para cima.",
+      "Com o cotovelo colado ao corpo, estenda o braço para baixo.",
+      "Volte devagar; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Standing_One-Arm_Dumbbell_Triceps_Extension",
+    "name": "Tríceps francês unilateral com halter",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Em pé, segure um halter com uma mão acima da cabeça, braço estendido.",
+      "Desça o halter atrás da cabeça dobrando só o cotovelo.",
+      "Estenda o braço de volta; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Seated_Triceps_Press",
+    "name": "Tríceps francês com halter (sentado)",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Sente com as costas apoiadas e segure um halter com as duas mãos acima da cabeça.",
+      "Desça o halter atrás da cabeça dobrando só os cotovelos.",
+      "Estenda os braços de volta."
+    ]
+  },
+  {
+    "key": "EZ-Bar_Skullcrusher",
+    "name": "Tríceps testa (barra W)",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "ez_bar",
+    "load": "kg",
+    "steps": [
+      "Deite no banco segurando a barra W acima do peito, braços estendidos.",
+      "Dobre os cotovelos e desça a barra até perto da testa, sem abrir os cotovelos.",
+      "Estenda os braços de volta."
+    ]
+  },
+  {
+    "key": "Close-Grip_Barbell_Bench_Press",
+    "name": "Supino fechado",
+    "primary": "triceps",
+    "secondary": ["chest", "front_delts"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Deite no banco e segure a barra com as mãos na largura dos ombros.",
+      "Desça até a parte de baixo do peito com os cotovelos junto ao corpo.",
+      "Empurre até estender os braços."
+    ]
+  },
+  {
+    "key": "Dips_-_Triceps_Version",
+    "name": "Paralelas (foco no tríceps)",
+    "primary": "triceps",
+    "secondary": ["chest", "front_delts"],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Segure nas barras paralelas com os braços estendidos e o tronco reto.",
+      "Desça dobrando os cotovelos para trás até uns 90°.",
+      "Empurre de volta até estender os braços."
+    ]
+  },
+  {
+    "key": "Bench_Dips",
+    "name": "Mergulho no banco",
+    "primary": "triceps",
+    "secondary": ["chest", "front_delts"],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Apoie as mãos na borda de um banco atrás de você, pernas estendidas à frente.",
+      "Desça o corpo dobrando os cotovelos até uns 90°.",
+      "Empurre de volta até estender os braços."
+    ]
+  },
+  {
+    "key": "Tricep_Dumbbell_Kickback",
+    "name": "Tríceps coice com halter",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Apoie uma mão e um joelho no banco, tronco paralelo ao chão.",
+      "Com o braço colado ao corpo e o cotovelo dobrado, estenda o braço para trás.",
+      "Volte devagar; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Machine_Triceps_Extension",
+    "name": "Tríceps máquina",
+    "primary": "triceps",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Ajuste o banco e apoie a parte de trás dos braços na almofada.",
+      "Estenda os cotovelos até quase travar.",
+      "Volte devagar."
+    ]
+  },
+  {
+    "key": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
+    "name": "Rosca de punho com barra",
+    "primary": "forearms",
+    "secondary": [],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Ajoelhe atrás de um banco e apoie os antebraços nele, segurando a barra com as palmas para cima.",
+      "Deixe a barra descer dobrando os punhos.",
+      "Suba a barra só com os punhos."
+    ]
+  },
+  {
+    "key": "Reverse_Barbell_Curl",
+    "name": "Rosca inversa com barra",
+    "primary": "forearms",
+    "secondary": ["biceps"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure a barra com as palmas para baixo.",
+      "Suba a barra até a altura do peito com os cotovelos parados.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Barbell_Squat",
+    "name": "Agachamento livre com barra",
+    "primary": "quads",
+    "secondary": ["glutes", "hamstrings", "lower_back"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Apoie a barra no trapézio, pés na largura dos ombros e pontas levemente para fora.",
+      "Desça empurrando o quadril para trás e dobrando os joelhos, peito aberto, até as coxas ficarem pelo menos paralelas ao chão.",
+      "Suba empurrando o chão com o pé inteiro."
+    ]
+  },
+  {
+    "key": "Front_Barbell_Squat",
+    "name": "Agachamento frontal",
+    "primary": "quads",
+    "secondary": ["glutes"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Apoie a barra na frente dos ombros, com os cotovelos altos.",
+      "Desça com o tronco o mais reto possível até as coxas passarem da linha dos joelhos.",
+      "Suba mantendo os cotovelos altos."
+    ]
+  },
+  {
+    "key": "Smith_Machine_Squat",
+    "name": "Agachamento no Smith",
+    "primary": "quads",
+    "secondary": ["glutes", "hamstrings"],
+    "equipment": "smith",
+    "load": "kg",
+    "steps": [
+      "Apoie a barra do Smith no trapézio, com os pés um pouco à frente do corpo.",
+      "Destrave e desça dobrando os joelhos até as coxas ficarem paralelas ao chão.",
+      "Suba e trave a barra ao terminar."
+    ]
+  },
+  {
+    "key": "Hack_Squat",
+    "name": "Agachamento hack (máquina)",
+    "primary": "quads",
+    "secondary": ["glutes"],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Encoste as costas e os ombros na máquina, pés na largura dos ombros na plataforma.",
+      "Destrave e desça dobrando os joelhos até uns 90° ou mais.",
+      "Suba empurrando a plataforma, sem travar os joelhos."
+    ]
+  },
+  {
+    "key": "Leg_Press",
+    "name": "Leg press 45°",
+    "primary": "quads",
+    "secondary": ["glutes", "hamstrings"],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Sente com as costas apoiadas e os pés na plataforma, na largura dos ombros.",
+      "Destrave e desça a plataforma dobrando os joelhos até uns 90°, sem tirar o quadril do banco.",
+      "Empurre de volta sem travar os joelhos."
+    ]
+  },
+  {
+    "key": "Leg_Extensions",
+    "name": "Cadeira extensora",
+    "primary": "quads",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Ajuste o encosto para o joelho ficar alinhado com o eixo da máquina e o rolo na parte de baixo da canela.",
+      "Estenda as pernas até quase travar os joelhos.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Single-Leg_Leg_Extension",
+    "name": "Cadeira extensora unilateral",
+    "primary": "quads",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Ajuste a máquina como na extensora comum e apoie só uma perna no rolo.",
+      "Estenda a perna até quase travar o joelho.",
+      "Desça devagar; ao terminar a série, troque de perna."
+    ]
+  },
+  {
+    "key": "Dumbbell_Lunges",
+    "name": "Avanço com halteres",
+    "primary": "quads",
+    "secondary": ["glutes", "hamstrings"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, com um halter em cada mão, dê um passo largo à frente.",
+      "Desça até o joelho de trás quase encostar no chão.",
+      "Volte empurrando com a perna da frente e alterne as pernas."
+    ]
+  },
+  {
+    "key": "Split_Squat_with_Dumbbells",
+    "name": "Agachamento búlgaro com halteres",
+    "primary": "quads",
+    "secondary": ["glutes", "hamstrings"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Apoie o peito do pé de trás num banco e fique com a outra perna à frente, um halter em cada mão.",
+      "Desça até a coxa da frente ficar paralela ao chão.",
+      "Suba empurrando com a perna da frente; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Smith_Single-Leg_Split_Squat",
+    "name": "Agachamento búlgaro no Smith",
+    "primary": "quads",
+    "secondary": ["glutes", "hamstrings"],
+    "equipment": "smith",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Coloque um banco atrás do Smith, apoie a barra no trapézio e o peito do pé de trás no banco.",
+      "Destrave e desça até a coxa da frente ficar paralela ao chão.",
+      "Suba empurrando com a perna da frente; ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Barbell_Walking_Lunge",
+    "name": "Passada com barra",
+    "primary": "quads",
+    "secondary": ["glutes", "hamstrings"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Apoie a barra no trapézio e dê um passo largo à frente.",
+      "Desça até o joelho de trás quase encostar no chão.",
+      "Suba trazendo a perna de trás à frente, já no passo seguinte."
+    ]
+  },
+  {
+    "key": "Dumbbell_Step_Ups",
+    "name": "Subida no banco com halteres",
+    "primary": "quads",
+    "secondary": ["glutes"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "De frente para um banco, com um halter em cada mão, apoie um pé inteiro em cima dele.",
+      "Suba empurrando com a perna de cima até ficar em pé no banco.",
+      "Desça controlando e alterne as pernas."
+    ]
+  },
+  {
+    "key": "Lying_Leg_Curls",
+    "name": "Mesa flexora",
+    "primary": "hamstrings",
+    "secondary": ["calves"],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Deite de bruços com o rolo logo acima dos calcanhares e os joelhos fora do banco.",
+      "Dobre os joelhos trazendo os calcanhares em direção ao glúteo, sem tirar o quadril do banco.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Seated_Leg_Curl",
+    "name": "Cadeira flexora",
+    "primary": "hamstrings",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Sente com o rolo de baixo atrás dos calcanhares e prenda as coxas com o apoio de cima.",
+      "Dobre os joelhos levando os calcanhares para baixo e para trás.",
+      "Volte devagar."
+    ]
+  },
+  {
+    "key": "Standing_Leg_Curl",
+    "name": "Flexora em pé",
+    "primary": "hamstrings",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Apoie o tronco na máquina e encaixe o rolo logo acima do calcanhar de uma perna.",
+      "Dobre o joelho trazendo o calcanhar em direção ao glúteo.",
+      "Desça devagar; ao terminar a série, troque de perna."
+    ]
+  },
+  {
+    "key": "Stiff-Legged_Barbell_Deadlift",
+    "name": "Stiff com barra",
+    "primary": "hamstrings",
+    "secondary": ["glutes", "lower_back"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure a barra à frente das coxas, joelhos levemente dobrados.",
+      "Desça a barra junto às pernas empurrando o quadril para trás, costas retas, até sentir os posteriores alongarem.",
+      "Suba contraindo glúteos e posteriores."
+    ]
+  },
+  {
+    "key": "Stiff-Legged_Dumbbell_Deadlift",
+    "name": "Stiff com halteres",
+    "primary": "hamstrings",
+    "secondary": ["glutes", "lower_back"],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure um halter em cada mão à frente das coxas, joelhos levemente dobrados.",
+      "Desça os halteres junto às pernas empurrando o quadril para trás, costas retas.",
+      "Suba contraindo glúteos e posteriores."
+    ]
+  },
+  {
+    "key": "Romanian_Deadlift",
+    "name": "Levantamento terra romeno",
+    "primary": "hamstrings",
+    "secondary": ["glutes", "lower_back"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Em pé, segure a barra à frente das coxas com as mãos na largura dos ombros.",
+      "Empurre o quadril para trás deslizando a barra pelas coxas até abaixo dos joelhos, costas retas e joelhos levemente dobrados.",
+      "Volte estendendo o quadril."
+    ]
+  },
+  {
+    "key": "Good_Morning",
+    "name": "Bom dia (good morning)",
+    "primary": "hamstrings",
+    "secondary": ["glutes", "lower_back"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Apoie a barra no trapézio, pés na largura do quadril e joelhos levemente dobrados.",
+      "Incline o tronco à frente empurrando o quadril para trás, costas retas, até quase paralelo ao chão.",
+      "Volte à posição em pé."
+    ]
+  },
+  {
+    "key": "Barbell_Hip_Thrust",
+    "name": "Elevação pélvica com barra",
+    "primary": "glutes",
+    "secondary": ["hamstrings"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Apoie a parte de cima das costas num banco e a barra (com proteção) sobre o quadril, pés firmes no chão.",
+      "Suba o quadril até o tronco ficar alinhado com as coxas, contraindo o glúteo.",
+      "Desça controlando."
+    ]
+  },
+  {
+    "key": "Barbell_Glute_Bridge",
+    "name": "Ponte de glúteo com barra",
+    "primary": "glutes",
+    "secondary": ["hamstrings"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Deite no chão com os joelhos dobrados e a barra sobre o quadril.",
+      "Suba o quadril contraindo o glúteo até alinhar tronco e coxas.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "One-Legged_Cable_Kickback",
+    "name": "Glúteo na polia (coice)",
+    "primary": "glutes",
+    "secondary": ["hamstrings"],
+    "equipment": "cable",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Prenda a tornozeleira na polia baixa e fique de frente para a máquina, segurando o apoio.",
+      "Leve a perna para trás e para cima contraindo o glúteo, sem arquear a lombar.",
+      "Volte devagar; ao terminar a série, troque de perna."
+    ]
+  },
+  {
+    "key": "Thigh_Abductor",
+    "name": "Cadeira abdutora",
+    "primary": "glutes",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Sente com as costas apoiadas e as almofadas do lado de fora dos joelhos.",
+      "Abra as pernas o máximo que der.",
+      "Volte devagar."
+    ]
+  },
+  {
+    "key": "Pull_Through",
+    "name": "Pull through na polia",
+    "primary": "glutes",
+    "secondary": ["hamstrings", "lower_back"],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "De costas para a polia baixa, com a corda passando entre as pernas, afaste os pés.",
+      "Incline o tronco à frente empurrando o quadril para trás, deixando a corda passar entre as pernas.",
+      "Volte à posição em pé contraindo o glúteo."
+    ]
+  },
+  {
+    "key": "Glute_Kickback",
+    "name": "Glúteo quatro apoios",
+    "primary": "glutes",
+    "secondary": ["hamstrings"],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "unilateral": true,
+    "steps": [
+      "Fique em quatro apoios, mãos abaixo dos ombros e joelhos abaixo do quadril.",
+      "Leve uma perna para trás e para cima com o joelho dobrado, contraindo o glúteo.",
+      "Volte devagar; ao terminar a série, troque de perna."
+    ]
+  },
+  {
+    "key": "Thigh_Adductor",
+    "name": "Cadeira adutora",
+    "primary": "adductors",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Sente com as costas apoiadas e as almofadas na parte de dentro dos joelhos.",
+      "Feche as pernas contraindo a parte interna das coxas.",
+      "Abra devagar até sentir alongar."
+    ]
+  },
+  {
+    "key": "Standing_Calf_Raises",
+    "name": "Panturrilha em pé (máquina)",
+    "primary": "calves",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Encaixe os ombros nas almofadas e apoie a ponta dos pés na plataforma, calcanhares para fora.",
+      "Desça os calcanhares até alongar bem a panturrilha.",
+      "Suba na ponta dos pés o máximo que der e segure um instante."
+    ]
+  },
+  {
+    "key": "Seated_Calf_Raise",
+    "name": "Panturrilha sentado",
+    "primary": "calves",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Sente com a almofada sobre a parte de baixo das coxas e a ponta dos pés na plataforma.",
+      "Desça os calcanhares até alongar bem.",
+      "Suba na ponta dos pés o máximo que der e segure um instante."
+    ]
+  },
+  {
+    "key": "Calf_Press_On_The_Leg_Press_Machine",
+    "name": "Panturrilha no leg press",
+    "primary": "calves",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Sente no leg press e apoie só a ponta dos pés na parte de baixo da plataforma, pernas estendidas.",
+      "Empurre com a ponta dos pés o máximo que der.",
+      "Volte devagar até alongar a panturrilha."
+    ]
+  },
+  {
+    "key": "Smith_Machine_Calf_Raise",
+    "name": "Panturrilha no Smith",
+    "primary": "calves",
+    "secondary": [],
+    "equipment": "smith",
+    "load": "kg",
+    "steps": [
+      "Apoie a barra do Smith no trapézio e a ponta dos pés numa plataforma, calcanhares para fora.",
+      "Desça os calcanhares até alongar bem.",
+      "Suba na ponta dos pés o máximo que der."
+    ]
+  },
+  {
+    "key": "Barbell_Deadlift",
+    "name": "Levantamento terra",
+    "primary": "lower_back",
+    "secondary": ["glutes", "hamstrings", "traps", "quads"],
+    "equipment": "barbell",
+    "load": "kg",
+    "steps": [
+      "Com a barra sobre o meio dos pés, segure-a um pouco mais aberta que as pernas.",
+      "Com as costas retas e o peito aberto, suba empurrando o chão e estendendo quadril e joelhos juntos.",
+      "Desça a barra junto ao corpo, empurrando o quadril para trás."
+    ]
+  },
+  {
+    "key": "Hyperextensions_Back_Extensions",
+    "name": "Banco romano (extensão lombar)",
+    "primary": "lower_back",
+    "secondary": ["glutes", "hamstrings"],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Deite de bruços no banco romano com os tornozelos presos e o quadril apoiado na almofada.",
+      "Desça o tronco dobrando o quadril, com as costas retas.",
+      "Suba até o corpo ficar alinhado, sem passar dessa linha."
+    ]
+  },
+  {
+    "key": "Crunches",
+    "name": "Abdominal supra (crunch)",
+    "primary": "abs",
+    "secondary": [],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Deite com os joelhos dobrados e as mãos atrás da cabeça ou cruzadas no peito.",
+      "Tire os ombros do chão contraindo o abdômen, sem puxar o pescoço.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Ab_Crunch_Machine",
+    "name": "Abdominal máquina",
+    "primary": "abs",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "kg",
+    "steps": [
+      "Sente na máquina e segure as pegadas, com os pés presos no apoio.",
+      "Flexione o tronco para a frente contraindo o abdômen.",
+      "Volte devagar."
+    ]
+  },
+  {
+    "key": "Cable_Crunch",
+    "name": "Abdominal na polia (ajoelhado)",
+    "primary": "abs",
+    "secondary": [],
+    "equipment": "cable",
+    "load": "kg",
+    "steps": [
+      "Ajoelhe de frente para a polia alta e segure a corda ao lado da cabeça.",
+      "Flexione o tronco levando os cotovelos em direção às coxas, contraindo o abdômen.",
+      "Volte devagar, sem soltar a tensão."
+    ]
+  },
+  {
+    "key": "Hanging_Leg_Raise",
+    "name": "Elevação de pernas na barra",
+    "primary": "abs",
+    "secondary": [],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Pendure-se na barra fixa com os braços estendidos.",
+      "Eleve as pernas até a altura do quadril ou mais, sem balançar.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Flat_Bench_Lying_Leg_Raise",
+    "name": "Elevação de pernas no banco",
+    "primary": "abs",
+    "secondary": [],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Deite no banco reto segurando a borda atrás da cabeça, pernas estendidas.",
+      "Eleve as pernas até ficarem perpendiculares ao banco.",
+      "Desça devagar sem encostar os pés no chão."
+    ]
+  },
+  {
+    "key": "Reverse_Crunch",
+    "name": "Abdominal infra",
+    "primary": "abs",
+    "secondary": [],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Deite com as mãos ao lado do corpo e os joelhos dobrados no alto.",
+      "Traga os joelhos em direção ao peito, tirando o quadril do chão.",
+      "Desça devagar."
+    ]
+  },
+  {
+    "key": "Plank",
+    "name": "Prancha",
+    "primary": "abs",
+    "secondary": ["lower_back"],
+    "equipment": "bodyweight",
+    "load": "time",
+    "steps": [
+      "Apoie os antebraços e a ponta dos pés no chão, cotovelos abaixo dos ombros.",
+      "Mantenha o corpo reto da cabeça aos pés, contraindo abdômen e glúteos.",
+      "Segure a posição pelo tempo planejado."
+    ]
+  },
+  {
+    "key": "Oblique_Crunches",
+    "name": "Abdominal oblíquo",
+    "primary": "abs",
+    "secondary": [],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Deite com os joelhos dobrados e as mãos atrás da cabeça.",
+      "Suba o tronco girando, levando o cotovelo em direção ao joelho oposto.",
+      "Desça e alterne os lados."
+    ]
+  },
+  {
+    "key": "Russian_Twist",
+    "name": "Giro russo",
+    "primary": "abs",
+    "secondary": [],
+    "equipment": "bodyweight",
+    "load": "bodyweight",
+    "steps": [
+      "Sente com os joelhos dobrados e incline o tronco para trás, tirando os pés do chão se conseguir.",
+      "Gire o tronco levando as mãos de um lado para o outro do quadril.",
+      "Mantenha o abdômen contraído durante todo o movimento."
+    ]
+  },
+  {
+    "key": "Dumbbell_Side_Bend",
+    "name": "Flexão lateral com halter",
+    "primary": "abs",
+    "secondary": [],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "unilateral": true,
+    "steps": [
+      "Em pé, segure um halter em uma mão ao lado do corpo.",
+      "Incline o tronco para o lado do halter e volte contraindo o lado oposto.",
+      "Ao terminar a série, troque de lado."
+    ]
+  },
+  {
+    "key": "Walking_Treadmill",
+    "name": "Esteira (caminhada)",
+    "primary": "cardio",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "time",
+    "steps": [
+      "Ajuste a velocidade e a inclinação aos poucos.",
+      "Caminhe com passadas naturais, sem se apoiar no corrimão.",
+      "Diminua a velocidade nos últimos minutos para desacelerar."
+    ]
+  },
+  {
+    "key": "Running_Treadmill",
+    "name": "Esteira (corrida)",
+    "primary": "cardio",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "time",
+    "steps": [
+      "Comece caminhando por alguns minutos para aquecer.",
+      "Aumente a velocidade até o ritmo de corrida planejado.",
+      "Termine diminuindo a velocidade aos poucos."
+    ]
+  },
+  {
+    "key": "Bicycling_Stationary",
+    "name": "Bicicleta ergométrica",
+    "primary": "cardio",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "time",
+    "steps": [
+      "Ajuste o banco para o joelho ficar levemente dobrado com o pedal embaixo.",
+      "Pedale no ritmo e na carga planejados.",
+      "Diminua a carga nos últimos minutos."
+    ]
+  },
+  {
+    "key": "Elliptical_Trainer",
+    "name": "Elíptico (transport)",
+    "primary": "cardio",
+    "secondary": [],
+    "equipment": "machine",
+    "load": "time",
+    "steps": [
+      "Suba nos pedais e segure as alças.",
+      "Mova pernas e braços em ritmo constante, ajustando a resistência.",
+      "Diminua o ritmo nos últimos minutos."
+    ]
+  },
+  {
+    "key": "Rowing_Stationary",
+    "name": "Remo ergômetro",
+    "primary": "cardio",
+    "secondary": ["back", "quads"],
+    "equipment": "machine",
+    "load": "time",
+    "steps": [
+      "Prenda os pés e segure a pegada com os braços estendidos.",
+      "Empurre com as pernas e, no final, puxe a pegada até a parte de baixo do peito.",
+      "Volte estendendo os braços e depois dobrando os joelhos."
+    ]
+  },
+  {
+    "key": "Stairmaster",
+    "name": "Escada (simulador)",
+    "primary": "cardio",
+    "secondary": ["glutes", "quads"],
+    "equipment": "machine",
+    "load": "time",
+    "steps": [
+      "Suba na máquina e escolha a velocidade.",
+      "Suba os degraus com o tronco ereto, apoiando pouco nas alças.",
+      "Diminua a velocidade nos últimos minutos."
+    ]
+  }
+]

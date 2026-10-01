@@ -44,6 +44,33 @@ export function addDays(key: DayKey, days: number): DayKey {
   return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}`;
 }
 
+/** Dia da semana ISO: 1 = segunda ... 7 = domingo. */
+export function isoWeekday(key: DayKey): number {
+  const day = new Date(toUtcMs(key)).getUTCDay();
+  return day === 0 ? 7 : day;
+}
+
+/** Os 7 dias (segunda a domingo) da semana que contém `key`. */
+export function weekDays(key: DayKey): DayKey[] {
+  const monday = addDays(key, 1 - isoWeekday(key));
+  return Array.from({ length: 7 }, (_, index) => addDays(monday, index));
+}
+
+export const WEEKDAY_NAMES = [
+  'Segunda',
+  'Terça',
+  'Quarta',
+  'Quinta',
+  'Sexta',
+  'Sábado',
+  'Domingo',
+] as const;
+
+/** 1 → 'Segunda' */
+export function weekdayName(weekday: number): string {
+  return WEEKDAY_NAMES[weekday - 1];
+}
+
 /** Idade completa em anos no dia `on`. */
 export function ageOn(birthDate: DayKey, on: DayKey): number {
   const birth = parts(birthDate);
