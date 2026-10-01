@@ -15,17 +15,23 @@ duo-gym-diet/
 ├── src/
 │   ├── app/                  # telas (Expo Router: cada arquivo é uma rota)
 │   │   ├── (tabs)/           # as 5 abas
-│   │   └── cadastro, peso, medida, perfil, historico-metas
+│   │   ├── cadastro, peso, medida, perfil, historico-metas
+│   │   └── biblioteca, exercicio/, catalogo/, sessao/, prescricao/, midia/...
 │   ├── components/ui/        # Screen, Card, Button, TextField, ChoiceChips, DateTimeField...
 │   ├── db/                   # SQLite: schema.ts, client.ts, migrations/ (geradas)
 │   ├── features/             # por funcionalidade: contas, consultas, gravações e cards
 │   │   ├── goals/            # TMB, gasto total, macros, histórico de metas
 │   │   ├── profile/          # perfil, formulário e cadastro
 │   │   ├── weight/           # pesagens e tendência
-│   │   └── measurements/     # medidas e % de gordura
+│   │   ├── measurements/     # medidas e % de gordura
+│   │   ├── exercises/        # catálogo (catalog/), biblioteca e exercícios próprios
+│   │   ├── media/            # links e fotos/vídeos da galeria
+│   │   └── plan/             # plano semanal, prescrição e plano de exemplo
 │   ├── lib/                  # datas, números (pt-BR) e Supabase
 │   ├── theme/palette.js      # cores do app (fonte única para Tailwind e código nativo)
 │   └── global.css            # entrada do Tailwind (NativeWind)
+├── assets/exercises/         # fotos do catálogo (WebP, geradas pelo script)
+├── scripts/                  # build-exercise-images.mjs
 ├── drizzle.config.ts         # drizzle-kit (gera as migrações do SQLite)
 ├── supabase/config.toml      # Supabase local (Docker)
 └── tailwind.config.js        # tokens de cor como variáveis CSS
@@ -67,7 +73,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 |---|---|---|
 | 0 | Fundação: Expo, NativeWind, tema escuro, abas, Supabase local, Jest | ✅ |
 | 1 | Banco local (SQLite + Drizzle), perfil, TMB/GET, metas de macros, peso com média móvel, medidas | ✅ |
-| 2 | Biblioteca de exercícios, mídias, plano semanal e seu treino pré-carregado | |
+| 2 | Biblioteca de exercícios, mídias, plano semanal e seu treino pré-carregado | ✅ |
 | 3 | Treino em tempo real: aquecimento automático, e1RM, recordes, progressão, timer com notificação | |
 | 4 | Dieta: TACO offline, scanner (Open Food Facts), diário por refeição, porções, água | |
 | 5 | Conta e sincronização: login, SyncQueue, Last-Write-Wins, RLS | |
@@ -130,3 +136,34 @@ em `EXPO_PUBLIC_SUPABASE_URL`.
 (21/21) e o bundle de iOS passaram. A aparência das telas, o teclado nos formulários e o seletor
 de data nativo só dá para conferir no aparelho. O seletor de data do Android (diálogos do
 Material 3) não foi testado em nenhum aparelho.
+
+## Fase 2 — Biblioteca, mídias e plano semanal
+
+- **Catálogo base com 123 exercícios** comuns em academia, com nome, músculos e "como fazer" em
+  português escritos para o app e duas fotos cada (início e fim do movimento). As fotos vêm do
+  [free-exercise-db](https://github.com/yuhonas/free-exercise-db) (domínio público, Unlicense) e
+  são reduzidas para WebP de 480 px por `scripts/build-exercise-images.mjs` (3,6 MB no total).
+  Ficam embutidas no app e funcionam sem internet.
+- **Biblioteca** com busca sem acento (nome, músculo ou equipamento) e filtro por grupo muscular.
+  Um exercício do catálogo vira "seu" quando entra no plano, ganha mídia ou é personalizado; dá
+  para criar exercícios próprios (as máquinas da sua academia).
+- **Exercício**: grupo principal e secundários (17 grupos, com o ombro dividido em anterior,
+  lateral e posterior), equipamento, tipo de carga (kg, **placas** sem conversão, peso corporal ou
+  tempo), unilateral, observação fixa e cargas de referência.
+- **Mídias**: links (YouTube e Instagram abrem no app) e fotos/vídeos da galeria copiados para a
+  pasta do app (`expo-image-picker`, `expo-file-system`, `expo-video`). O banco guarda só o
+  nome do arquivo, porque o caminho da pasta muda quando o iOS atualiza o app.
+- **Plano semanal** por dia da semana: treinos e atividades com horário (futebol), dia sem nada =
+  descanso. Cada exercício do treino tem séries válidas, faixa de reps (ou tempo), RIR, última até
+  a falha, aquecimento (completo, preparação ou direto), descanso, "subir a carga ao atingir X
+  reps" e alternativas. Reordenação com ↑/↓.
+- **Plano de exemplo** ("Usar plano de exemplo"): o treino real do autor, com 4 treinos, futebol
+  na quinta (21h30) e no domingo (8h) e as cargas de referência. "Montar do zero" começa vazio.
+- **Hoje** mostra o treino do dia com os exercícios, ou a atividade com "Marcar como feito"; a
+  semana na aba Treino mostra ✓ nas atividades feitas.
+- **Testes**: 96 no Jest, incluindo a integridade do catálogo (fotos, músculos), a busca, a
+  prescrição e o plano de exemplo montado num SQLite em memória.
+
+⚠️ **Validado no PC, falta validar no iPhone:** TypeScript, lint, 96 testes, `expo-doctor` e o
+bundle de iOS passaram. Galeria, vídeo, links abrindo no YouTube/Instagram e a navegação entre a
+folha de prescrição e a biblioteca só dá para conferir no aparelho.
