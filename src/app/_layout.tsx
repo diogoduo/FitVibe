@@ -69,6 +69,15 @@ function AppStack() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="peso" options={formSheet} />
         <Stack.Screen name="medida" options={formSheet} />
+        <Stack.Screen name="perfil" options={formSheet} />
+        <Stack.Screen
+          name="historico-metas"
+          options={{
+            headerShown: true,
+            title: 'Histórico de metas',
+            headerBackButtonDisplayMode: 'minimal',
+          }}
+        />
       </Stack.Protected>
       <Stack.Protected guard={!hasProfile}>
         <Stack.Screen name="cadastro" options={{ gestureEnabled: false }} />

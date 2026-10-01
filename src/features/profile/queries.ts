@@ -18,6 +18,14 @@ export function useProfile() {
 }
 
 /**
+ * Leitura direta (síncrona), para valores iniciais de formulário: o `useProfile` só tem o
+ * perfil depois da primeira consulta, e o formulário já precisa dele na primeira renderização.
+ */
+export function getProfile() {
+  return db.select().from(profiles).where(isNull(profiles.deletedAt)).limit(1).get() ?? null;
+}
+
+/**
  * Peso usado nas contas das metas: a tendência arredondada para 0,1 kg. Sem nenhuma
  * pesagem (todas excluídas), mantém o peso da meta vigente.
  */
