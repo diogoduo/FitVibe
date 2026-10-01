@@ -132,10 +132,10 @@ em `EXPO_PUBLIC_SUPABASE_URL`.
   versões de meta, exclusão lógica, apagar tudo) rodam num SQLite em memória (`sql.js`, só nos
   testes) com as mesmas migrações do app.
 
-⚠️ **Validado no PC, falta validar no iPhone:** TypeScript, lint, 61 testes, `expo-doctor`
-(21/21) e o bundle de iOS passaram. A aparência das telas, o teclado nos formulários e o seletor
-de data nativo só dá para conferir no aparelho. O seletor de data do Android (diálogos do
-Material 3) não foi testado em nenhum aparelho.
+✅ **Validado no PC e no iPhone:** TypeScript, lint, 61 testes, `expo-doctor` (21/21) e o bundle
+de iOS passaram no PC; no iPhone (Expo Go), cadastro, metas, pesagens, medidas e o seletor de data
+nativo funcionaram. O seletor de data do Android (diálogos do Material 3) ainda não foi testado
+em nenhum aparelho.
 
 ## Fase 2 — Biblioteca, mídias e plano semanal
 
@@ -164,6 +164,6 @@ Material 3) não foi testado em nenhum aparelho.
 - **Testes**: 96 no Jest, incluindo a integridade do catálogo (fotos, músculos), a busca, a
   prescrição e o plano de exemplo montado num SQLite em memória.
 
-⚠️ **Validado no PC, falta validar no iPhone:** TypeScript, lint, 96 testes, `expo-doctor` e o
-bundle de iOS passaram. Galeria, vídeo, links abrindo no YouTube/Instagram e a navegação entre a
-folha de prescrição e a biblioteca só dá para conferir no aparelho.
+✅ **Validado no PC e no iPhone:** TypeScript, lint, 96 testes, `expo-doctor` (21/21) e o bundle
+de iOS passaram no PC; no iPhone (Expo Go), plano de exemplo, prescrição, biblioteca, mídias e o
+treino do dia funcionaram.
