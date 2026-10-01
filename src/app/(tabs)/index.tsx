@@ -1,5 +1,6 @@
 import { ComingInPhase } from '@/components/coming-in-phase';
 import { Screen } from '@/components/ui/screen';
+import { WeightSummaryCard } from '@/features/weight/weight-summary-card';
 
 function formatToday() {
   const text = new Date().toLocaleDateString('pt-BR', {
@@ -13,13 +14,7 @@ function formatToday() {
 export default function TodayScreen() {
   return (
     <Screen title="Hoje" subtitle={formatToday()}>
-      <ComingInPhase
-        phase={1}
-        items={[
-          'Seu perfil e as metas de calorias e macros',
-          'Peso em jejum com média móvel de 7 dias',
-        ]}
-      />
+      <WeightSummaryCard />
       <ComingInPhase phase={3} items={['O treino do dia, pronto para registrar as séries']} />
     </Screen>
   );

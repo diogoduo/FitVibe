@@ -44,6 +44,9 @@ export default function RootLayout() {
   );
 }
 
+/** Formulários abertos por cima das abas (folha que sobe de baixo no iOS). */
+const formSheet = { presentation: 'modal', headerShown: true } as const;
+
 /**
  * Sem perfil, só o cadastro existe; com perfil, só o app. Quando o cadastro grava o perfil,
  * a guarda muda e o Expo Router leva para as abas sozinho (e de volta ao apagar os dados).
@@ -64,6 +67,7 @@ function AppStack() {
     >
       <Stack.Protected guard={hasProfile}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="peso" options={formSheet} />
       </Stack.Protected>
       <Stack.Protected guard={!hasProfile}>
         <Stack.Screen name="cadastro" options={{ gestureEnabled: false }} />

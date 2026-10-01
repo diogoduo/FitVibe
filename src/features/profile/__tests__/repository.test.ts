@@ -14,11 +14,12 @@ import {
 } from '../repository';
 
 let mockDb: TestDb;
+let mockIdCounter = 0;
 jest.mock('@/db/client', () => ({
   get db() {
     return mockDb;
   },
-  newId: () => require('crypto').randomUUID(),
+  newId: () => `id-${++mockIdCounter}`,
 }));
 
 const data: ProfileData = {
