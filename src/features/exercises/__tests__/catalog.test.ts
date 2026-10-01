@@ -46,6 +46,7 @@ const mine = (overrides: Partial<Exercise>): Exercise => ({
   notes: null,
   catalogKey: null,
   referenceSets: null,
+  loadIncrement: null,
   ...overrides,
 });
 

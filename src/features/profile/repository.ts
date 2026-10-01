@@ -12,6 +12,9 @@ import {
   plans,
   profiles,
   weightEntries,
+  workoutExercises,
+  workouts,
+  workoutSets,
   type Profile,
 } from '@/db/schema';
 import { toDayKey, todayKey } from '@/lib/dates';
@@ -71,6 +74,9 @@ export function dismissRecalc(profileId: string, trendKg: number) {
 export function wipeAllData() {
   db.transaction((tx) => {
     for (const table of [
+      workoutSets,
+      workoutExercises,
+      workouts,
       activityLogs,
       planExercises,
       planSessions,

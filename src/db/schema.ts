@@ -176,6 +176,8 @@ export const exercises = sqliteTable('exercises', {
   catalogKey: text('catalog_key'),
   /** Ponto de partida da progressão enquanto não há histórico (Fase 3). */
   referenceSets: text('reference_sets', { mode: 'json' }).$type<ReferenceSet[]>(),
+  /** Quanto a carga sobe na progressão; null = padrão do equipamento. */
+  loadIncrement: real('load_increment'),
 });
 
 /** Links (YouTube, Instagram...) e fotos/vídeos da galeria, guardados em Paths.document/media. */
@@ -257,6 +259,78 @@ export const activityLogs = sqliteTable(
   (t) => [index('activity_logs_day_idx').on(t.day)],
 );
 
+// ── Fase 3: treinos feitos ────────────────────────────────────────────────────────────────
+
+export const SET_KINDS = ['warmup', 'prep', 'working'] as const;
+export type SetKind = (typeof SET_KINDS)[number];
+
+/** Um treino feito (ou em andamento, enquanto `finishedAt` é null). */
+export const workouts = sqliteTable(
+  'workouts',
+  {
+    ...syncColumns,
+    /** Treino do plano que deu origem (null se o treino do plano foi apagado depois). */
+    planSessionId: text('plan_session_id'),
+    name: text('name').notNull(),
+    startedAt: integer('started_at', { mode: 'timestamp_ms' }).notNull(),
+    finishedAt: integer('finished_at', { mode: 'timestamp_ms' }),
+    /** Fim do descanso em andamento (timer), para sobreviver a fechar o app. */
+    restEndsAt: integer('rest_ends_at', { mode: 'timestamp_ms' }),
+  },
+  (t) => [index('workouts_started_at_idx').on(t.startedAt)],
+);
+
+/**
+ * Um exercício dentro de um treino feito. Guarda uma cópia da prescrição do dia: mudar o plano
+ * depois não altera o histórico.
+ */
+export const workoutExercises = sqliteTable(
+  'workout_exercises',
+  {
+    ...syncColumns,
+    workoutId: text('workout_id').notNull(),
+    exerciseId: text('exercise_id').notNull(),
+    /** Exercício do plano de onde veio (para as alternativas); null nos extras. */
+    planExerciseId: text('plan_exercise_id'),
+    sortOrder: integer('sort_order').notNull(),
+    skipped: integer('skipped', { mode: 'boolean' }).notNull(),
+    setsCount: integer('sets_count').notNull(),
+    repsMin: integer('reps_min'),
+    repsMax: integer('reps_max'),
+    durationMinSec: integer('duration_min_sec'),
+    durationMaxSec: integer('duration_max_sec'),
+    rirTarget: integer('rir_target'),
+    lastSetToFailure: integer('last_set_to_failure', { mode: 'boolean' }).notNull(),
+    warmup: text('warmup', { enum: WARMUP_TYPES }).notNull(),
+    restSec: integer('rest_sec').notNull(),
+    progressionTopReps: integer('progression_top_reps'),
+  },
+  (t) => [index('workout_exercises_workout_id_idx').on(t.workoutId)],
+);
+
+/**
+ * Uma série. Nasce planejada (com a sugestão de carga e reps) e vira feita quando `completedAt`
+ * é preenchido. RIR 0 = até a falha.
+ */
+export const workoutSets = sqliteTable(
+  'workout_sets',
+  {
+    ...syncColumns,
+    workoutExerciseId: text('workout_exercise_id').notNull(),
+    sortOrder: integer('sort_order').notNull(),
+    kind: text('kind', { enum: SET_KINDS }).notNull(),
+    load: real('load'),
+    reps: integer('reps'),
+    durationSec: integer('duration_sec'),
+    rir: integer('rir'),
+    /** Sugestão do app (para mostrar "↑ subir carga" e comparar com o feito). */
+    suggestedLoad: real('suggested_load'),
+    suggestedReps: integer('suggested_reps'),
+    completedAt: integer('completed_at', { mode: 'timestamp_ms' }),
+  },
+  (t) => [index('workout_sets_workout_exercise_id_idx').on(t.workoutExerciseId)],
+);
+
 export type Profile = typeof profiles.$inferSelect;
 export type GoalVersion = typeof goalVersions.$inferSelect;
 export type WeightEntry = typeof weightEntries.$inferSelect;
@@ -267,3 +341,6 @@ export type Plan = typeof plans.$inferSelect;
 export type PlanSession = typeof planSessions.$inferSelect;
 export type PlanExercise = typeof planExercises.$inferSelect;
 export type ActivityLog = typeof activityLogs.$inferSelect;
+export type Workout = typeof workouts.$inferSelect;
+export type WorkoutExercise = typeof workoutExercises.$inferSelect;
+export type WorkoutSet = typeof workoutSets.$inferSelect;

@@ -1,10 +1,20 @@
 import { isNull } from 'drizzle-orm';
 
-import { exercises, goalVersions, planSessions, plans, profiles, weightEntries } from '@/db/schema';
+import {
+  exercises,
+  goalVersions,
+  planSessions,
+  plans,
+  profiles,
+  weightEntries,
+  workouts,
+  workoutSets,
+} from '@/db/schema';
 import { createTestDb, type TestDb } from '@/db/test-db';
 import { todayKey } from '@/lib/dates';
 
 import { createSamplePlan } from '../../plan/sample-plan';
+import { startWorkout } from '../../workout/repository';
 import type { ProfileData } from '../profile-form';
 import {
   createProfile,
@@ -117,7 +127,10 @@ describe('wipeAllData', () => {
   it('apaga tudo de verdade, inclusive o plano e os exercícios', () => {
     createProfile(data, 82);
     createSamplePlan();
+    startWorkout(mockDb.select().from(planSessions).get()!.id);
     wipeAllData();
+    expect(mockDb.select().from(workouts).all()).toEqual([]);
+    expect(mockDb.select().from(workoutSets).all()).toEqual([]);
     expect(mockDb.select().from(plans).all()).toEqual([]);
     expect(mockDb.select().from(planSessions).all()).toEqual([]);
     expect(mockDb.select().from(exercises).all()).toEqual([]);
