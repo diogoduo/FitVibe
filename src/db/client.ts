@@ -15,3 +15,6 @@ export const db = drizzle(sqlite, { schema });
 
 /** Id dos registros (UUID v4), gerado no celular para funcionar offline e sincronizar depois. */
 export const newId = () => randomUUID();
+
+/** O banco ou uma transação aberta: funções de gravação aceitam os dois. */
+export type DbExecutor = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];

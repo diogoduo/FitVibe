@@ -1,4 +1,11 @@
-import { formatInt, formatKg, formatSignedKg, parseDecimal, toInputText } from '../numbers';
+import {
+  formatInt,
+  formatKg,
+  formatSignedInt,
+  formatSignedKg,
+  parseDecimal,
+  toInputText,
+} from '../numbers';
 
 describe('números no formato brasileiro', () => {
   it('lê vírgula ou ponto e rejeita texto inválido', () => {
@@ -17,6 +24,9 @@ describe('números no formato brasileiro', () => {
     expect(formatSignedKg(-0.34)).toBe('−0,3 kg');
     expect(formatSignedKg(-0.04)).toBe('0,0 kg');
     expect(formatInt(2450)).toBe('2.450');
+    expect(formatSignedInt(-550)).toBe('−550');
+    expect(formatSignedInt(1275)).toBe('+1.275');
+    expect(formatSignedInt(0.4)).toBe('0');
   });
 
   it('prepara números para campos editáveis', () => {

@@ -1,4 +1,10 @@
-import { EMPTY_PROFILE_FORM, readWeightKg, validateProfileForm } from '../profile-form';
+import {
+  EMPTY_PROFILE_FORM,
+  formToEnergyInput,
+  profileToFormValues,
+  readWeightKg,
+  validateProfileForm,
+} from '../profile-form';
 
 const today = '2026-09-30';
 
@@ -6,7 +12,7 @@ const filled = {
   ...EMPTY_PROFILE_FORM,
   name: ' Diogo ',
   sex: 'male' as const,
-  birthDate: '1996-05-10',
+  birthDate: '10/05/1996',
   heightCm: '178',
   activityLevel: 'very' as const,
   goal: 'lose' as const,
@@ -55,12 +61,41 @@ describe('validateProfileForm', () => {
 
   it('recusa valores fora da faixa com a faixa na mensagem', () => {
     const { errors } = validateProfileForm(
-      { ...filled, heightCm: '1,78', proteinPerKg: '5', birthDate: '2020-01-01' },
+      { ...filled, heightCm: '1,78', proteinPerKg: '5', birthDate: '01/01/2020' },
       today,
     );
     expect(errors.heightCm).toBe('Entre 120 e 230 cm');
     expect(errors.proteinPerKg).toBe('Entre 0,8 e 3,5 g/kg');
     expect(errors.birthDate).toMatch(/entre 14 e 100 anos/);
+    expect(
+      validateProfileForm({ ...filled, birthDate: '31/02/1996' }, today).errors.birthDate,
+    ).toBe('Data inválida (DD/MM/AAAA)');
+  });
+
+  it('o perfil salvo volta para o formulário igual ao digitado', () => {
+    const { data } = validateProfileForm(filled, today);
+    expect(profileToFormValues(data!)).toEqual({ ...filled, name: 'Diogo', weeklyRateKg: 0.5 });
+  });
+});
+
+describe('formToEnergyInput', () => {
+  it('sem dados pessoais completos, não há prévia', () => {
+    expect(formToEnergyInput(EMPTY_PROFILE_FORM, 82, today)).toBeNull();
+    expect(formToEnergyInput({ ...filled, heightCm: '17' }, 82, today)).toBeNull();
+  });
+
+  it('metas ainda sendo digitadas caem no padrão em vez de sumir com a prévia', () => {
+    const input = formToEnergyInput(
+      { ...filled, proteinPerKg: '2,', kcalOverride: '24' },
+      82,
+      today,
+    );
+    expect(input).toMatchObject({
+      ageYears: 30,
+      weightKg: 82,
+      proteinPerKg: 2,
+      kcalOverride: null,
+    });
   });
 });
 

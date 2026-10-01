@@ -1,0 +1,95 @@
+import { Text, View } from 'react-native';
+
+import { Card } from '@/components/ui/card';
+import { formatDecimal, formatInt, formatKg, formatSignedInt } from '@/lib/numbers';
+
+import { activityTitle, goalLabel } from '../profile/options';
+import type { EnergyInput, GoalBreakdown } from './energy';
+import { MacroTiles } from './macro-tiles';
+
+type GoalBreakdownCardProps = {
+  input: EnergyInput;
+  goals: GoalBreakdown;
+  /** De onde veio o peso usado: 'peso informado agora', 'tendência do seu peso'. */
+  weightSource: string;
+};
+
+/** A conta da meta passo a passo: TMB → gasto total → ajuste do objetivo → meta → macros. */
+export function GoalBreakdownCard({ input, goals, weightSource }: GoalBreakdownCardProps) {
+  return (
+    <Card title="Sua meta diária">
+      <Step
+        label="Taxa metabólica basal"
+        detail={goals.bmrFormula === 'katch' ? 'Katch-McArdle (massa magra)' : 'Mifflin-St Jeor'}
+        value={`${formatInt(goals.bmr)} kcal`}
+      />
+      <Step
+        label="Gasto total"
+        detail={`× ${formatDecimal(goals.activityFactor)} · ${activityTitle(input.activityLevel)}`}
+        value={`${formatInt(goals.tdee)} kcal`}
+      />
+      {input.goal !== 'maintain' ? (
+        <Step
+          label="Objetivo"
+          detail={`${goalLabel(input.goal)} ${formatDecimal(input.weeklyRateKg)} kg por semana`}
+          value={`${formatSignedInt(goals.adjustment)} kcal`}
+        />
+      ) : null}
+
+      <View className="flex-row items-baseline justify-between border-t border-line pt-3">
+        <Text className="text-base font-semibold text-fg">
+          {goals.kcalOverridden ? 'Meta (definida por você)' : 'Meta'}
+        </Text>
+        <Text className="text-3xl font-bold text-primary">
+          {formatInt(goals.kcal)}
+          <Text className="text-base font-normal text-fg-muted"> kcal</Text>
+        </Text>
+      </View>
+      {goals.kcalOverridden ? (
+        <Text className="text-sm text-fg-muted">
+          A conta daria {formatInt(goals.calculatedKcal)} kcal.
+        </Text>
+      ) : null}
+
+      <MacroTiles
+        proteinG={goals.proteinG}
+        carbsG={goals.carbsG}
+        fatG={goals.fatG}
+        details={{
+          protein: `${formatDecimal(input.proteinPerKg)} g/kg`,
+          carbs: 'o resto',
+          fat: `${formatDecimal(input.fatPerKg)} g/kg`,
+        }}
+      />
+
+      {goals.warnings.belowBmr ? (
+        <Text className="text-sm leading-5 text-warning">
+          A meta está abaixo da sua TMB. Dá para seguir, mas fique de olho em cansaço e queda de
+          rendimento no treino.
+        </Text>
+      ) : null}
+      {goals.warnings.carbsShortfall ? (
+        <Text className="text-sm leading-5 text-warning">
+          Proteína e gordura já passam da meta de calorias, então o carboidrato ficou em zero.
+          Diminua os g/kg ou aumente as calorias.
+        </Text>
+      ) : null}
+
+      <Text className="text-sm text-fg-muted">
+        Calculado com {formatKg(input.weightKg)} ({weightSource}).
+      </Text>
+    </Card>
+  );
+}
+
+function Step({ label, detail, value }: { label: string; detail: string; value: string }) {
+  return (
+    <View className="flex-row items-center justify-between gap-3">
+      <View className="flex-1">
+        <Text className="text-base text-fg">{label}</Text>
+        <Text className="text-sm text-fg-muted">{detail}</Text>
+      </View>
+      <Text className="text-base font-semibold text-fg">{value}</Text>
+    </View>
+  );
+}

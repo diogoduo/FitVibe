@@ -1,4 +1,13 @@
-import { addDays, ageOn, daysBetween, formatDayKey, formatDayLabel, toDayKey } from '../dates';
+import {
+  addDays,
+  ageOn,
+  daysBetween,
+  formatDayKey,
+  formatDayLabel,
+  maskBrDate,
+  parseBrDate,
+  toDayKey,
+} from '../dates';
 
 describe('datas como dia do calendário', () => {
   it('converte um instante para o dia local', () => {
@@ -17,6 +26,23 @@ describe('datas como dia do calendário', () => {
     expect(ageOn('1996-10-01', '2026-09-30')).toBe(29);
     expect(ageOn('1996-10-01', '2026-10-01')).toBe(30);
     expect(ageOn('2000-02-29', '2026-02-28')).toBe(25);
+  });
+
+  it('lê a data digitada no formato brasileiro', () => {
+    expect(parseBrDate('10/05/1996')).toBe('1996-05-10');
+    expect(parseBrDate('29/02/2024')).toBe('2024-02-29');
+    expect(parseBrDate('29/02/2026')).toBeNull();
+    expect(parseBrDate('10/05/96')).toBeNull();
+    expect(parseBrDate('')).toBeNull();
+  });
+
+  it('põe as barras enquanto a pessoa digita', () => {
+    expect(maskBrDate('1')).toBe('1');
+    expect(maskBrDate('100')).toBe('10/0');
+    expect(maskBrDate('10051996')).toBe('10/05/1996');
+    expect(maskBrDate('10/05/19967')).toBe('10/05/1996');
+    // Sem barra no fim: o backspace apaga dígitos normalmente
+    expect(maskBrDate('10')).toBe('10');
   });
 
   it('formata para a tela', () => {

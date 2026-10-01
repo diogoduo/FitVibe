@@ -59,6 +59,23 @@ export function formatDayKey(key: DayKey): string {
   return `${pad(day)}/${pad(month)}/${year}`;
 }
 
+/** Lê 'DD/MM/AAAA' digitado; null se incompleto ou se a data não existe (31/02). */
+export function parseBrDate(text: string): DayKey | null {
+  const match = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(text.trim());
+  if (!match) return null;
+  const [, day, month, year] = match.map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  const exists =
+    date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+  return exists ? `${year}-${pad(month)}-${pad(day)}` : null;
+}
+
+/** Máscara do campo de data enquanto a pessoa digita: '1005199' → '10/05/199'. */
+export function maskBrDate(text: string): string {
+  const digits = text.replace(/\D/g, '').slice(0, 8);
+  return [digits.slice(0, 2), digits.slice(2, 4), digits.slice(4)].filter(Boolean).join('/');
+}
+
 /** Rótulo curto para listas: 'Hoje', 'Ontem' ou '28 de set.' (com o ano se não for o atual). */
 export function formatDayLabel(key: DayKey, today: DayKey = todayKey()): string {
   const diff = daysBetween(key, today);

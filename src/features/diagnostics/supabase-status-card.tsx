@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { getSupabaseConfig } from '@/lib/supabase/config';
 import { checkSupabaseHealth, type HealthResult } from '@/lib/supabase/health';
@@ -74,14 +75,12 @@ export function SupabaseStatusCard() {
 
       <Text className="font-mono text-sm text-fg-muted">{url}</Text>
 
-      <Pressable
+      <Button
+        label="Testar de novo"
+        variant="secondary"
         onPress={retry}
         disabled={status.kind === 'checking'}
-        accessibilityRole="button"
-        className="items-center rounded-xl bg-surface-2 py-3 active:opacity-70 disabled:opacity-50"
-      >
-        <Text className="text-base font-semibold text-primary">Testar de novo</Text>
-      </Pressable>
+      />
     </Card>
   );
 }

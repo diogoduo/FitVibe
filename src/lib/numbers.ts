@@ -26,6 +26,13 @@ export function formatInt(value: number): string {
   return integer.format(value);
 }
 
+/** -550 → '−550'; 1275 → '+1.275'; 0 → '0' */
+export function formatSignedInt(value: number): string {
+  const rounded = Math.round(value);
+  if (rounded === 0) return '0';
+  return `${rounded > 0 ? '+' : MINUS}${formatInt(Math.abs(rounded))}`;
+}
+
 /** 1.725 → '1,725'; 92 → '92'; 37.5 → '37,5' */
 export function formatDecimal(value: number): string {
   return upToThreeDecimals.format(value);
@@ -44,6 +51,11 @@ export function parseDecimal(text: string): number | null {
   const normalized = text.trim().replace(',', '.');
   if (!/^\d+(\.\d+)?$/.test(normalized)) return null;
   return Number(normalized);
+}
+
+/** Arredonda para 0,1 (precisão de balança). */
+export function roundTenth(value: number): number {
+  return Math.round(value * 10) / 10;
 }
 
 /** Número → texto para preencher um campo editável (82.5 → '82,5'). */

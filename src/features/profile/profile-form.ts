@@ -1,5 +1,5 @@
 import type { ActivityLevel, GoalType, Profile, Sex } from '@/db/schema';
-import { ageOn, type DayKey } from '@/lib/dates';
+import { ageOn, formatDayKey, parseBrDate, type DayKey } from '@/lib/dates';
 import { parseDecimal, toInputText } from '@/lib/numbers';
 
 import { DEFAULT_FAT_PER_KG, DEFAULT_PROTEIN_PER_KG, type EnergyInput } from '../goals/energy';
@@ -20,11 +20,29 @@ export type ProfileData = Pick<
   | 'kcalOverride'
 >;
 
+/** Só os campos editáveis de um perfil lido do banco (sem id, datas de controle etc.). */
+export function pickProfileData(profile: Profile): ProfileData {
+  return {
+    name: profile.name,
+    sex: profile.sex,
+    birthDate: profile.birthDate,
+    heightCm: profile.heightCm,
+    bodyFatPct: profile.bodyFatPct,
+    activityLevel: profile.activityLevel,
+    goal: profile.goal,
+    weeklyRateKg: profile.weeklyRateKg,
+    proteinPerKg: profile.proteinPerKg,
+    fatPerKg: profile.fatPerKg,
+    kcalOverride: profile.kcalOverride,
+  };
+}
+
 /** Estado do formulário: números como o texto digitado, escolhas como null até escolher. */
 export type ProfileFormValues = {
   name: string;
   sex: Sex | null;
-  birthDate: DayKey | null;
+  /** Como digitado: 'DD/MM/AAAA'. */
+  birthDate: string;
   heightCm: string;
   bodyFatPct: string;
   activityLevel: ActivityLevel | null;
@@ -42,7 +60,7 @@ export type FieldErrors<F extends string = ProfileField> = Partial<Record<F, str
 export const EMPTY_PROFILE_FORM: ProfileFormValues = {
   name: '',
   sex: null,
-  birthDate: null,
+  birthDate: '',
   heightCm: '',
   bodyFatPct: '',
   activityLevel: null,
@@ -57,7 +75,7 @@ export function profileToFormValues(profile: ProfileData): ProfileFormValues {
   return {
     name: profile.name,
     sex: profile.sex,
-    birthDate: profile.birthDate,
+    birthDate: formatDayKey(profile.birthDate),
     heightCm: toInputText(profile.heightCm),
     bodyFatPct: toInputText(profile.bodyFatPct),
     activityLevel: profile.activityLevel,
@@ -123,9 +141,11 @@ export function validateProfileForm(
 
   if (!values.sex) errors.sex = 'Escolha uma opção';
 
-  if (!values.birthDate) errors.birthDate = 'Obrigatório';
+  const birthDate = parseBrDate(values.birthDate);
+  if (!values.birthDate.trim()) errors.birthDate = 'Obrigatório';
+  else if (!birthDate) errors.birthDate = 'Data inválida (DD/MM/AAAA)';
   else {
-    const age = ageOn(values.birthDate, today);
+    const age = ageOn(birthDate, today);
     if (age < LIMITS.ageYears.min || age > LIMITS.ageYears.max) {
       errors.birthDate = `A idade precisa estar entre ${LIMITS.ageYears.min} e ${LIMITS.ageYears.max} anos`;
     }
@@ -153,7 +173,7 @@ export function validateProfileForm(
     data: {
       name,
       sex: values.sex!,
-      birthDate: values.birthDate!,
+      birthDate: birthDate!,
       heightCm: valueOf(numbers.heightCm)!,
       bodyFatPct: valueOf(numbers.bodyFatPct),
       activityLevel: values.activityLevel!,
@@ -168,6 +188,39 @@ export function validateProfileForm(
 
 const valueOf = (result: ReturnType<typeof readNumber>) =>
   'value' in result ? result.value : null;
+
+/**
+ * Entrada das contas a partir do formulário ainda em edição, para a prévia das metas.
+ * Exige os dados pessoais e a rotina válidos; nos campos de metas, um valor inválido
+ * (ainda sendo digitado) cai no padrão em vez de esconder a prévia.
+ */
+export function formToEnergyInput(
+  values: ProfileFormValues,
+  weightKg: number,
+  today: DayKey,
+): EnergyInput | null {
+  const birthDate = parseBrDate(values.birthDate);
+  const heightCm = valueOf(readNumber(values.heightCm, LIMITS.heightCm));
+  const bodyFat = readNumber(values.bodyFatPct, LIMITS.bodyFatPct, { optional: true });
+  const { sex, activityLevel, goal } = values;
+  if (!sex || !birthDate || heightCm == null || 'error' in bodyFat || !activityLevel || !goal) {
+    return null;
+  }
+  return {
+    sex,
+    ageYears: ageOn(birthDate, today),
+    heightCm,
+    weightKg,
+    bodyFatPct: bodyFat.value,
+    activityLevel,
+    goal,
+    weeklyRateKg: goal === 'maintain' ? 0 : values.weeklyRateKg,
+    proteinPerKg:
+      valueOf(readNumber(values.proteinPerKg, LIMITS.proteinPerKg)) ?? DEFAULT_PROTEIN_PER_KG,
+    fatPerKg: valueOf(readNumber(values.fatPerKg, LIMITS.fatPerKg)) ?? DEFAULT_FAT_PER_KG,
+    kcalOverride: valueOf(readNumber(values.kcalOverride, LIMITS.kcal, { optional: true })),
+  };
+}
 
 /** Monta a entrada das contas a partir do perfil e do peso de referência (tendência). */
 export function toEnergyInput(profile: ProfileData, weightKg: number, today: DayKey): EnergyInput {
