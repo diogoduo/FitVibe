@@ -16,7 +16,8 @@ duo-gym-diet/
 │   ├── app/                  # telas (Expo Router: cada arquivo é uma rota)
 │   │   ├── (tabs)/           # as 5 abas
 │   │   ├── cadastro, peso, medida, perfil, historico-metas
-│   │   └── biblioteca, exercicio/, catalogo/, sessao/, prescricao/, midia/...
+│   │   ├── biblioteca, exercicio/, catalogo/, sessao/, prescricao/, midia/...
+│   │   └── registro/ (treino em andamento), resumo/, historico-treinos
 │   ├── components/ui/        # Screen, Card, Button, TextField, ChoiceChips, DateTimeField...
 │   ├── db/                   # SQLite: schema.ts, client.ts, migrations/ (geradas)
 │   ├── features/             # por funcionalidade: contas, consultas, gravações e cards
@@ -26,7 +27,8 @@ duo-gym-diet/
 │   │   ├── measurements/     # medidas e % de gordura
 │   │   ├── exercises/        # catálogo (catalog/), biblioteca e exercícios próprios
 │   │   ├── media/            # links e fotos/vídeos da galeria
-│   │   └── plan/             # plano semanal, prescrição e plano de exemplo
+│   │   ├── plan/             # plano semanal, prescrição e plano de exemplo
+│   │   └── workout/          # treino em tempo real, progressão, e1RM, recordes, descanso
 │   ├── lib/                  # datas, números (pt-BR) e Supabase
 │   ├── theme/palette.js      # cores do app (fonte única para Tailwind e código nativo)
 │   └── global.css            # entrada do Tailwind (NativeWind)
@@ -74,7 +76,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 0 | Fundação: Expo, NativeWind, tema escuro, abas, Supabase local, Jest | ✅ |
 | 1 | Banco local (SQLite + Drizzle), perfil, TMB/GET, metas de macros, peso com média móvel, medidas | ✅ |
 | 2 | Biblioteca de exercícios, mídias, plano semanal e seu treino pré-carregado | ✅ |
-| 3 | Treino em tempo real: aquecimento automático, e1RM, recordes, progressão, timer com notificação | |
+| 3 | Treino em tempo real: aquecimento automático, e1RM, recordes, progressão, timer com notificação | ✅ |
 | 4 | Dieta: TACO offline, scanner (Open Food Facts), diário por refeição, porções, água | |
 | 5 | Conta e sincronização: login, SyncQueue, Last-Write-Wins, RLS | |
 | 6 | Lembretes de água e refeições, exportação CSV e PDF | |
@@ -167,3 +169,35 @@ em nenhum aparelho.
 ✅ **Validado no PC e no iPhone:** TypeScript, lint, 96 testes, `expo-doctor` (21/21) e o bundle
 de iOS passaram no PC; no iPhone (Expo Go), plano de exemplo, prescrição, biblioteca, mídias e o
 treino do dia funcionaram.
+
+## Fase 3 — Treino em tempo real
+
+- **Começar um treino** do plano em qualquer dia (pelo Hoje, pela aba Treino ou pela tela do
+  treino). O app copia os exercícios e a prescrição do dia: mudar o plano depois não mexe no
+  histórico. Só um treino em andamento por vez; fechar o app não perde nada ("Continuar treino").
+- **Séries já preenchidas** (`src/features/workout/progression.ts`):
+  - **aquecimento automático** sobre a carga da 1ª série válida: completo = 2 × 12 a ~40% e ~55%
+    + 4 reps a ~70% e 2 a ~85%; preparação = 4 reps a ~80%;
+  - **progressão dupla série por série**: a série que bateu o topo da faixa (ou o "subir ao
+    atingir X") sobe a carga; a que não bateu repete a carga buscando +1 rep. Sem histórico, parte
+    das cargas de referência do plano;
+  - **incremento** por equipamento (halteres e barra +2 kg, polia +2,5, máquina +5, placas +1),
+    editável em cada exercício.
+- **Registro**: carga × reps (ou minutos), RIR nas séries válidas (a última já vem como "Falha") e
+  ✓. Dá para trocar o exercício pela alternativa ou por outro da biblioteca antes de começar as
+  séries, pular, pôr exercício extra e série a mais.
+- **Descanso**: começa sozinho ao marcar a série (curto depois do aquecimento), com contagem,
+  −15/+15 s, vibração e **notificação local** quando acaba (`expo-notifications`), mesmo com o
+  app em segundo plano. A tela fica acesa durante o treino (`expo-keep-awake`).
+- **e1RM** por Epley contando as reps na reserva (25 kg × 6 com RIR 1 = 7 reps até a falha).
+  **Recordes** de e1RM, maior carga e mais reps com uma carga, avisados na hora; a primeira vez no
+  exercício não conta como recorde.
+- **Resumo** ao finalizar: duração, séries, volume (kg), séries por grupo muscular (secundário vale
+  meia) e recordes. **Histórico de treinos** com resumo, edição e exclusão; na página do exercício,
+  os recordes e as últimas vezes.
+- **Testes**: 125 no Jest, incluindo dois treinos seguidos do plano de exemplo (aquecimento,
+  sugestão, recordes), troca, extra e finalizar.
+
+⚠️ **Validado no PC, falta validar no iPhone:** TypeScript, lint, 125 testes, `expo-doctor`
+(21/21) e o bundle de iOS passaram. Teclado nas séries, timer, vibração e a notificação com o app
+em segundo plano só dá para conferir no aparelho.
