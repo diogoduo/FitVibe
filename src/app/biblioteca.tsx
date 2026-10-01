@@ -1,6 +1,6 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { FlatList, Pressable, Text, View } from 'react-native';
+import { Alert, FlatList, Pressable, Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
 import { FilterChips } from '@/components/ui/filter-chips';
@@ -12,17 +12,29 @@ import { exerciseSubtitle, MUSCLE_OPTIONS } from '@/features/exercises/labels';
 import { useExercises } from '@/features/exercises/queries';
 import { materializeCatalogExercise } from '@/features/exercises/repository';
 import { addAlternative, addExerciseToSession } from '@/features/plan/repository';
+import { addExerciseToWorkout, swapWorkoutExercise } from '@/features/workout/repository';
 
-type Params = {
-  /** Modo escolha: 'sessao' adiciona ao treino `alvo`; 'alternativa' ao exercício do plano `alvo`. */
-  escolher?: 'sessao' | 'alternativa';
-  alvo?: string;
-};
+/**
+ * Modo escolha (`alvo` = onde entra o exercício escolhido):
+ * - 'sessao': no fim do treino do plano;
+ * - 'alternativa': como alternativa de um exercício do plano;
+ * - 'extra': extra no treino em andamento;
+ * - 'troca': no lugar de um exercício do treino em andamento.
+ */
+const PICK_ACTIONS = {
+  sessao: { title: 'Adicionar exercício', run: addExerciseToSession },
+  alternativa: { title: 'Escolher alternativa', run: addAlternative },
+  extra: { title: 'Exercício extra', run: addExerciseToWorkout },
+  troca: { title: 'Trocar exercício', run: swapWorkoutExercise },
+} as const;
+
+type Params = { escolher?: keyof typeof PICK_ACTIONS; alvo?: string };
 
 /** Seus exercícios + o catálogo base, com busca e filtro por grupo muscular. */
 export default function LibraryScreen() {
   const { escolher, alvo } = useLocalSearchParams<Params>();
-  const picking = (escolher === 'sessao' || escolher === 'alternativa') && !!alvo;
+  const pick = escolher && alvo ? PICK_ACTIONS[escolher] : undefined;
+  const picking = pick != null;
   const { exercises } = useExercises();
   const [query, setQuery] = useState('');
   const [muscle, setMuscle] = useState<MuscleGroup | null>(null);
@@ -30,7 +42,7 @@ export default function LibraryScreen() {
   const items = buildLibrary(exercises, query, muscle);
 
   const onPress = (item: LibraryItem) => {
-    if (!picking) {
+    if (!pick) {
       if (item.kind === 'mine')
         router.push({ pathname: '/exercicio/[id]', params: { id: item.exercise.id } });
       else router.push({ pathname: '/catalogo/[key]', params: { key: item.entry.key } });
@@ -38,16 +50,15 @@ export default function LibraryScreen() {
     }
     const exerciseId =
       item.kind === 'mine' ? item.exercise.id : materializeCatalogExercise(item.entry.key);
-    if (escolher === 'sessao') addExerciseToSession(alvo!, exerciseId);
-    else addAlternative(alvo!, exerciseId);
-    router.back();
+    try {
+      pick.run(alvo!, exerciseId);
+      router.back();
+    } catch (error) {
+      Alert.alert('Não deu', error instanceof Error ? error.message : String(error));
+    }
   };
 
-  const title = !picking
-    ? 'Biblioteca'
-    : escolher === 'sessao'
-      ? 'Adicionar exercício'
-      : 'Escolher alternativa';
+  const title = pick?.title ?? 'Biblioteca';
 
   return (
     <>

@@ -1,5 +1,7 @@
 import type { Equipment, Exercise, LoadType, MuscleGroup, ReferenceSet } from '@/db/schema';
-import { formatDecimal } from '@/lib/numbers';
+import { formatDecimal, toInputText } from '@/lib/numbers';
+
+import { readNumber } from '../profile/profile-form';
 
 import type { ExerciseData } from './repository';
 
@@ -11,6 +13,8 @@ export type ExerciseFormValues = {
   loadType: LoadType;
   unilateral: boolean;
   notes: string;
+  /** Vazio = padrão do equipamento. */
+  loadIncrement: string;
 };
 
 export const EMPTY_EXERCISE_FORM: ExerciseFormValues = {
@@ -21,6 +25,7 @@ export const EMPTY_EXERCISE_FORM: ExerciseFormValues = {
   loadType: 'kg',
   unilateral: false,
   notes: '',
+  loadIncrement: '',
 };
 
 export function exerciseToFormValues(exercise: Exercise): ExerciseFormValues {
@@ -32,19 +37,24 @@ export function exerciseToFormValues(exercise: Exercise): ExerciseFormValues {
     loadType: exercise.loadType,
     unilateral: exercise.unilateral,
     notes: exercise.notes ?? '',
+    loadIncrement: toInputText(exercise.loadIncrement),
   };
 }
 
+type ExerciseFormField = 'name' | 'primaryMuscle' | 'equipment' | 'loadIncrement';
+
 export function validateExerciseForm(values: ExerciseFormValues): {
-  errors: Partial<Record<'name' | 'primaryMuscle' | 'equipment', string>>;
+  errors: Partial<Record<ExerciseFormField, string>>;
   data: ExerciseData | null;
 } {
-  const errors: Partial<Record<'name' | 'primaryMuscle' | 'equipment', string>> = {};
+  const errors: Partial<Record<ExerciseFormField, string>> = {};
   const name = values.name.trim();
   if (!name) errors.name = 'Obrigatório';
   else if (name.length > 60) errors.name = 'Até 60 letras';
   if (!values.primaryMuscle) errors.primaryMuscle = 'Escolha o grupo principal';
   if (!values.equipment) errors.equipment = 'Escolha o equipamento';
+  const increment = readNumber(values.loadIncrement, { min: 0.25, max: 50 }, { optional: true });
+  if ('error' in increment) errors.loadIncrement = increment.error;
   if (Object.keys(errors).length > 0) return { errors, data: null };
 
   return {
@@ -58,6 +68,7 @@ export function validateExerciseForm(values: ExerciseFormValues): {
       loadType: values.loadType,
       unilateral: values.unilateral,
       notes: values.notes.trim() || null,
+      loadIncrement: 'value' in increment ? increment.value : null,
     },
   };
 }

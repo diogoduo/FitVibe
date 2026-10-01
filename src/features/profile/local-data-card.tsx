@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 import { deleteAllMediaFiles } from '../media/files';
+import { cancelRestNotification } from '../workout/rest';
 import { wipeAllData } from './repository';
 
 /** Ajustes: onde os dados ficam e o botão de apagar tudo (volta para o cadastro). */
@@ -20,6 +21,7 @@ export function LocalDataCard() {
           onPress: () => {
             wipeAllData();
             deleteAllMediaFiles();
+            cancelRestNotification();
           },
         },
       ],

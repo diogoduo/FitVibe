@@ -6,6 +6,7 @@ import type { Exercise } from '@/db/schema';
 import { useExercises } from '@/features/exercises/queries';
 import { useSession, useSessionsSlots } from '@/features/plan/queries';
 import { SlotCard } from '@/features/plan/slot-card';
+import { startOrContinueWorkout } from '@/features/workout/start';
 import { weekdayName } from '@/lib/dates';
 
 /** Um treino do plano: os exercícios na ordem, com a prescrição de cada um. */
@@ -37,6 +38,10 @@ export default function SessionScreen() {
           {weekdayName(session.weekday)} · {slots.length}{' '}
           {slots.length === 1 ? 'exercício' : 'exercícios'}
         </Text>
+
+        {slots.length > 0 ? (
+          <Button label="Começar este treino" onPress={() => startOrContinueWorkout(id)} />
+        ) : null}
 
         {slots.length === 0 ? (
           <Text className="text-base leading-6 text-fg-muted">
@@ -70,8 +75,8 @@ export default function SessionScreen() {
           onPress={() => router.push({ pathname: '/sessao-editar', params: { id } })}
         />
         <Text className="text-sm leading-5 text-fg-muted">
-          Toque num exercício para mudar séries, reps, aquecimento, descanso e alternativas. O
-          registro das séries chega na Fase 3.
+          Toque num exercício para mudar séries, reps, aquecimento, descanso e alternativas.
+          Mudanças no plano valem a partir do próximo treino que você começar.
         </Text>
       </ScrollView>
     </>

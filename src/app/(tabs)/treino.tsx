@@ -1,7 +1,6 @@
 import { router } from 'expo-router';
 import { Alert, Text } from 'react-native';
 
-import { ComingInPhase } from '@/components/coming-in-phase';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Screen } from '@/components/ui/screen';
@@ -9,6 +8,7 @@ import { useActivePlan } from '@/features/plan/queries';
 import { createEmptyPlan, deletePlan } from '@/features/plan/repository';
 import { createSamplePlan } from '@/features/plan/sample-plan';
 import { WeekCard } from '@/features/plan/week-card';
+import { ActiveWorkoutCard } from '@/features/workout/active-workout-card';
 
 export default function WorkoutScreen() {
   const { plan, loaded } = useActivePlan();
@@ -26,6 +26,7 @@ export default function WorkoutScreen() {
 
   return (
     <Screen title="Treino" subtitle={plan?.name}>
+      <ActiveWorkoutCard />
       {plan ? (
         <WeekCard plan={plan} />
       ) : (
@@ -46,13 +47,10 @@ export default function WorkoutScreen() {
         onPress={() => router.push('/biblioteca')}
       />
 
-      <ComingInPhase
-        phase={3}
-        items={[
-          'Registro das séries com aquecimento automático',
-          'e1RM, recordes e sugestão de carga (progressão dupla)',
-          'Timer de descanso com notificação',
-        ]}
+      <Button
+        label="Histórico de treinos"
+        variant="secondary"
+        onPress={() => router.push('/historico-treinos')}
       />
 
       {plan ? <Button label="Apagar plano" variant="danger" onPress={confirmDeletePlan} /> : null}

@@ -3,13 +3,18 @@ import { Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { isoWeekday, todayKey, weekdayName } from '@/lib/dates';
+import { isoWeekday, toDayKey, todayKey, weekdayName } from '@/lib/dates';
 
 import { useExercises } from '../exercises/queries';
+import { useActiveWorkout, useFinishedWorkouts } from '../workout/queries';
+import { continueWorkout, startOrContinueWorkout } from '../workout/start';
 import { useActivePlan, useActivityLogs, usePlanSessions, useSessionsSlots } from './queries';
 import { toggleActivityDone } from './repository';
 
-/** Aba Hoje: o treino do dia (com os exercícios) ou a atividade, com "marcar como feito". */
+/**
+ * Aba Hoje: o treino do dia (com os exercícios e o botão de começar) ou a atividade, com
+ * "marcar como feito".
+ */
 export function TodayPlanCard() {
   const today = todayKey();
   const weekday = isoWeekday(today);
@@ -22,6 +27,8 @@ export function TodayPlanCard() {
   );
   const { exercises } = useExercises();
   const logs = useActivityLogs(today, today);
+  const { workout: active } = useActiveWorkout();
+  const { workouts: finished } = useFinishedWorkouts();
 
   if (!loaded) return null;
 
@@ -62,10 +69,15 @@ export function TodayPlanCard() {
                 .filter(Boolean)
                 .join(' · ')}
             </Text>
-            <Button
-              label="Ver treino"
-              variant="secondary"
-              onPress={() => router.push({ pathname: '/sessao/[id]', params: { id: session.id } })}
+            <WorkoutActions
+              sessionId={session.id}
+              activeId={active?.planSessionId === session.id ? active.id : null}
+              doneTodayId={
+                finished.find(
+                  (workout) =>
+                    workout.planSessionId === session.id && toDayKey(workout.startedAt) === today,
+                )?.id ?? null
+              }
             />
           </View>
         ) : (
@@ -82,9 +94,43 @@ export function TodayPlanCard() {
           </View>
         ),
       )}
-      {slots.length > 0 ? (
-        <Text className="text-sm text-fg-muted">O registro das séries chega na Fase 3.</Text>
-      ) : null}
     </Card>
+  );
+}
+
+function WorkoutActions({
+  sessionId,
+  activeId,
+  doneTodayId,
+}: {
+  sessionId: string;
+  activeId: string | null;
+  doneTodayId: string | null;
+}) {
+  if (activeId) {
+    return <Button label="Continuar treino" onPress={() => continueWorkout(activeId)} />;
+  }
+  if (doneTodayId) {
+    return (
+      <>
+        <Text className="text-base font-semibold text-success">Feito hoje ✓</Text>
+        <Button
+          label="Ver resumo"
+          variant="secondary"
+          onPress={() => router.push({ pathname: '/resumo/[id]', params: { id: doneTodayId } })}
+        />
+      </>
+    );
+  }
+  return (
+    <View className="flex-row gap-3">
+      <Button
+        label="Ver treino"
+        variant="secondary"
+        onPress={() => router.push({ pathname: '/sessao/[id]', params: { id: sessionId } })}
+        grow
+      />
+      <Button label="Começar" onPress={() => startOrContinueWorkout(sessionId)} grow />
+    </View>
   );
 }

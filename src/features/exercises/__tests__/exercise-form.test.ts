@@ -30,7 +30,21 @@ describe('validateExerciseForm', () => {
       loadType: 'kg',
       unilateral: true,
       notes: null,
+      loadIncrement: null,
     });
+  });
+
+  it('incremento de carga opcional, com vírgula', () => {
+    const base = {
+      ...EMPTY_EXERCISE_FORM,
+      name: 'Scott Máquina',
+      primaryMuscle: 'biceps' as const,
+      equipment: 'machine' as const,
+    };
+    expect(validateExerciseForm({ ...base, loadIncrement: '2,5' }).data?.loadIncrement).toBe(2.5);
+    expect(validateExerciseForm({ ...base, loadIncrement: '0' }).errors.loadIncrement).toBe(
+      'Entre 0,25 e 50',
+    );
   });
 });
 

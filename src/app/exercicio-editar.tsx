@@ -22,7 +22,9 @@ import {
   exerciseUsage,
   updateExercise,
 } from '@/features/exercises/repository';
+import { loadIncrementFor } from '@/features/workout/progression';
 import { weekdayName } from '@/lib/dates';
+import { formatDecimal } from '@/lib/numbers';
 
 const LOAD_HINTS = {
   kg: 'Carga em kg (halteres: o peso de um halter).',
@@ -123,6 +125,24 @@ export default function EditExerciseScreen() {
           onChange={(loadType) => onChange({ loadType })}
           hint={LOAD_HINTS[values.loadType]}
         />
+        {values.loadType === 'kg' || values.loadType === 'plates' ? (
+          <TextField
+            label="Quanto a carga sobe (opcional)"
+            suffix={values.loadType === 'plates' ? 'placas' : 'kg'}
+            value={values.loadIncrement}
+            onChangeText={(loadIncrement) => onChange({ loadIncrement })}
+            placeholder={formatDecimal(
+              loadIncrementFor({
+                equipment: values.equipment ?? 'other',
+                loadType: values.loadType,
+                loadIncrement: null,
+              }),
+            )}
+            keyboardType="decimal-pad"
+            error={shown.loadIncrement}
+            hint="O salto da progressão quando você bate o topo da faixa. Vazio = padrão do equipamento."
+          />
+        ) : null}
         <ToggleField
           label="Unilateral"
           hint="Um lado de cada vez (as séries valem para cada lado)."

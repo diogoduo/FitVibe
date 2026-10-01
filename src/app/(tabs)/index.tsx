@@ -3,6 +3,7 @@ import { DailyGoalCard } from '@/features/goals/daily-goal-card';
 import { TodayPlanCard } from '@/features/plan/today-plan-card';
 import { RecalcPromptCard } from '@/features/goals/recalc-prompt-card';
 import { WeightSummaryCard } from '@/features/weight/weight-summary-card';
+import { ActiveWorkoutCard } from '@/features/workout/active-workout-card';
 
 function formatToday() {
   const text = new Date().toLocaleDateString('pt-BR', {
@@ -16,6 +17,7 @@ function formatToday() {
 export default function TodayScreen() {
   return (
     <Screen title="Hoje" subtitle={formatToday()}>
+      <ActiveWorkoutCard />
       <RecalcPromptCard />
       <DailyGoalCard />
       <TodayPlanCard />

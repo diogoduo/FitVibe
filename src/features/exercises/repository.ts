@@ -9,7 +9,14 @@ import { getCatalogExercise } from './catalog';
 /** Campos do exercício que a pessoa edita. */
 export type ExerciseData = Pick<
   Exercise,
-  'name' | 'primaryMuscle' | 'secondaryMuscles' | 'equipment' | 'loadType' | 'unilateral' | 'notes'
+  | 'name'
+  | 'primaryMuscle'
+  | 'secondaryMuscles'
+  | 'equipment'
+  | 'loadType'
+  | 'unilateral'
+  | 'notes'
+  | 'loadIncrement'
 >;
 
 /**

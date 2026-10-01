@@ -6,6 +6,7 @@ import { ExerciseDetail } from '@/features/exercises/exercise-detail';
 import { useExercise } from '@/features/exercises/queries';
 import { exerciseUsage } from '@/features/exercises/repository';
 import { MediaSection } from '@/features/media/media-section';
+import { ExerciseProgressCards } from '@/features/workout/exercise-progress-card';
 
 /** Um exercício seu: tudo do catálogo (se veio dele) + observação, referência e suas mídias. */
 export default function ExerciseScreen() {
@@ -24,6 +25,7 @@ export default function ExerciseScreen() {
     <>
       <Stack.Screen options={{ title: exercise.name }} />
       <ExerciseDetail exercise={exercise} usage={exerciseUsage(exercise.id)}>
+        <ExerciseProgressCards exercise={exercise} />
         <MediaSection exerciseId={exercise.id} />
         <Button
           label="Editar exercício"
