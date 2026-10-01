@@ -97,6 +97,18 @@ export function parseBrDate(text: string): DayKey | null {
   return exists ? `${year}-${pad(month)}-${pad(day)}` : null;
 }
 
+/** Horário 'HH:MM' válido (00:00 a 23:59), ou null. */
+export function parseTime(text: string): string | null {
+  const match = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(text.trim());
+  return match ? `${pad(Number(match[1]))}:${match[2]}` : null;
+}
+
+/** Máscara do campo de horário: '2130' → '21:30'. */
+export function maskTime(text: string): string {
+  const digits = text.replace(/\D/g, '').slice(0, 4);
+  return digits.length > 2 ? `${digits.slice(0, 2)}:${digits.slice(2)}` : digits;
+}
+
 /** Máscara do campo de data enquanto a pessoa digita: '1005199' → '10/05/199'. */
 export function maskBrDate(text: string): string {
   const digits = text.replace(/\D/g, '').slice(0, 8);

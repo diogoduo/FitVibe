@@ -1,7 +1,19 @@
 import { eq, isNotNull } from 'drizzle-orm';
 
 import { db, newId } from '@/db/client';
-import { bodyMeasurements, goalVersions, profiles, weightEntries, type Profile } from '@/db/schema';
+import {
+  activityLogs,
+  bodyMeasurements,
+  exerciseMedia,
+  exercises,
+  goalVersions,
+  planExercises,
+  planSessions,
+  plans,
+  profiles,
+  weightEntries,
+  type Profile,
+} from '@/db/schema';
 import { toDayKey, todayKey } from '@/lib/dates';
 import { roundTenth } from '@/lib/numbers';
 
@@ -52,12 +64,24 @@ export function dismissRecalc(profileId: string, trendKg: number) {
 }
 
 /**
- * Apaga tudo do celular (exclusão de verdade, não lógica). O `where` evita a otimização de
+ * Apaga tudo do banco (exclusão de verdade, não lógica). Os arquivos de mídia são apagados à
+ * parte (media/files.ts), porque não ficam no banco. O `where` evita a otimização de
  * truncate do SQLite, que não avisa o change listener e deixaria as telas desatualizadas.
  */
 export function wipeAllData() {
   db.transaction((tx) => {
-    for (const table of [weightEntries, bodyMeasurements, goalVersions, profiles]) {
+    for (const table of [
+      activityLogs,
+      planExercises,
+      planSessions,
+      plans,
+      exerciseMedia,
+      exercises,
+      weightEntries,
+      bodyMeasurements,
+      goalVersions,
+      profiles,
+    ]) {
       tx.delete(table).where(isNotNull(table.id)).run();
     }
   });

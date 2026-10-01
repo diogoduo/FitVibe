@@ -1,6 +1,5 @@
 // Gerado por scripts/build-exercise-images.mjs — não edite à mão.
 // Fotos: free-exercise-db (https://github.com/yuhonas/free-exercise-db), Unlicense.
-/* eslint-disable */
 
 export const CATALOG_IMAGES: Record<string, number[]> = {
   'Barbell_Bench_Press_-_Medium_Grip': [require('../../../../assets/exercises/Barbell_Bench_Press_-_Medium_Grip-0.webp'), require('../../../../assets/exercises/Barbell_Bench_Press_-_Medium_Grip-1.webp')],

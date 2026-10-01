@@ -3,6 +3,7 @@ import { Alert, Text } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
+import { deleteAllMediaFiles } from '../media/files';
 import { wipeAllData } from './repository';
 
 /** Ajustes: onde os dados ficam e o botão de apagar tudo (volta para o cadastro). */
@@ -10,10 +11,17 @@ export function LocalDataCard() {
   const confirmWipe = () =>
     Alert.alert(
       'Apagar todos os dados?',
-      'Perfil, metas, pesagens e medidas serão apagados deste celular. Não dá para desfazer.',
+      'Perfil, metas, pesagens, medidas, plano, exercícios e mídias serão apagados deste celular. Não dá para desfazer.',
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Apagar tudo', style: 'destructive', onPress: wipeAllData },
+        {
+          text: 'Apagar tudo',
+          style: 'destructive',
+          onPress: () => {
+            wipeAllData();
+            deleteAllMediaFiles();
+          },
+        },
       ],
     );
 

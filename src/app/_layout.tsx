@@ -47,6 +47,9 @@ export default function RootLayout() {
 /** Formulários abertos por cima das abas (folha que sobe de baixo no iOS). */
 const formSheet = { presentation: 'modal', headerShown: true } as const;
 
+/** Telas empilhadas por cima das abas, com voltar só com a seta. */
+const pushed = { headerShown: true, headerBackButtonDisplayMode: 'minimal' } as const;
+
 /**
  * Sem perfil, só o cadastro existe; com perfil, só o app. Quando o cadastro grava o perfil,
  * a guarda muda e o Expo Router leva para as abas sozinho (e de volta ao apagar os dados).
@@ -70,14 +73,16 @@ function AppStack() {
         <Stack.Screen name="peso" options={formSheet} />
         <Stack.Screen name="medida" options={formSheet} />
         <Stack.Screen name="perfil" options={formSheet} />
-        <Stack.Screen
-          name="historico-metas"
-          options={{
-            headerShown: true,
-            title: 'Histórico de metas',
-            headerBackButtonDisplayMode: 'minimal',
-          }}
-        />
+        <Stack.Screen name="historico-metas" options={{ ...pushed, title: 'Histórico de metas' }} />
+        <Stack.Screen name="biblioteca" options={pushed} />
+        <Stack.Screen name="exercicio/[id]" options={pushed} />
+        <Stack.Screen name="catalogo/[key]" options={pushed} />
+        <Stack.Screen name="sessao/[id]" options={pushed} />
+        <Stack.Screen name="exercicio-editar" options={formSheet} />
+        <Stack.Screen name="sessao-editar" options={formSheet} />
+        <Stack.Screen name="prescricao/[id]" options={formSheet} />
+        <Stack.Screen name="midia-link" options={formSheet} />
+        <Stack.Screen name="midia/[id]" options={formSheet} />
       </Stack.Protected>
       <Stack.Protected guard={!hasProfile}>
         <Stack.Screen name="cadastro" options={{ gestureEnabled: false }} />

@@ -55,7 +55,6 @@ await writeFile(
   [
     '// Gerado por scripts/build-exercise-images.mjs — não edite à mão.',
     '// Fotos: free-exercise-db (https://github.com/yuhonas/free-exercise-db), Unlicense.',
-    '/* eslint-disable */',
     '',
     'export const CATALOG_IMAGES: Record<string, number[]> = {',
     ...lines,

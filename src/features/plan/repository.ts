@@ -168,6 +168,13 @@ export function setAlternatives(slotId: string, alternativeIds: string[]) {
   db.update(planExercises).set({ alternativeIds }).where(eq(planExercises.id, slotId)).run();
 }
 
+/** Acrescenta uma alternativa (ignora o próprio exercício e repetidas). */
+export function addAlternative(slotId: string, exerciseId: string) {
+  const slot = db.select().from(planExercises).where(eq(planExercises.id, slotId)).get();
+  if (!slot || slot.exerciseId === exerciseId || slot.alternativeIds.includes(exerciseId)) return;
+  setAlternatives(slotId, [...slot.alternativeIds, exerciseId]);
+}
+
 export function removeSlot(slotId: string) {
   db.update(planExercises).set({ deletedAt: new Date() }).where(eq(planExercises.id, slotId)).run();
 }

@@ -49,6 +49,12 @@ export async function pickMediaFromLibrary(exerciseId: string): Promise<number> 
   return added;
 }
 
+/** Apaga a pasta de mídias inteira ("Apagar todos os dados"). */
+export function deleteAllMediaFiles() {
+  const directory = mediaDirectory();
+  if (directory.exists) directory.delete();
+}
+
 /** Tira a mídia do exercício e apaga o arquivo do celular. */
 export function deleteMedia(media: ExerciseMedia) {
   deleteMediaRecord(media);

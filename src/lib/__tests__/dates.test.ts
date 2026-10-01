@@ -6,7 +6,9 @@ import {
   formatDayLabel,
   isoWeekday,
   maskBrDate,
+  maskTime,
   parseBrDate,
+  parseTime,
   toDayKey,
   weekDays,
 } from '../dates';
@@ -45,6 +47,15 @@ describe('datas como dia do calendário', () => {
     expect(maskBrDate('10/05/19967')).toBe('10/05/1996');
     // Sem barra no fim: o backspace apaga dígitos normalmente
     expect(maskBrDate('10')).toBe('10');
+  });
+
+  it('horário digitado', () => {
+    expect(maskTime('2130')).toBe('21:30');
+    expect(maskTime('8')).toBe('8');
+    expect(parseTime('21:30')).toBe('21:30');
+    expect(parseTime('8:00')).toBe('08:00');
+    expect(parseTime('24:00')).toBeNull();
+    expect(parseTime('21:3')).toBeNull();
   });
 
   it('dia da semana e a semana de segunda a domingo', () => {
