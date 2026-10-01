@@ -27,6 +27,9 @@ duo-gym-diet/
 
 - Node.js ≥ 20 e Docker Desktop (para o Supabase local).
 - Celular com o app **Expo Go** (App Store / Play Store), na mesma Wi-Fi do PC.
+- Conta gratuita da Expo ([expo.dev/signup](https://expo.dev/signup)). Desde o SDK 57, o Expo Go
+  no iPhone só abre projetos em desenvolvimento se o Expo CLI e o Expo Go estiverem logados na
+  **mesma conta**.
 
 ## Primeiros passos
 
@@ -35,11 +38,13 @@ npm install
 cp .env.example .env.local   # preencha EXPO_PUBLIC_SUPABASE_KEY (veja abaixo)
 npm run db:start             # sobe o Supabase local no Docker
 npm run db:status            # mostra a "Publishable key" para o .env.local
+npx expo login               # uma vez só: loga o Expo CLI na sua conta Expo
 npm start                    # abre o Metro e mostra o QR code
 ```
 
-No iPhone, aponte a câmera para o QR code e abra no Expo Go. Na primeira vez, permita o acesso à
-**Rede Local** quando o iOS pedir.
+No Expo Go, toque no ícone de conta (canto superior direito) e entre com a mesma conta do
+`npx expo login`. Depois aponte a câmera do iPhone para o QR code do terminal. Na primeira vez,
+permita o acesso à **Rede Local** quando o iOS pedir.
 
 A aba **Ajustes** mostra se o celular alcança o Supabase. Se aparecer **Conectado**, a Fase 0
 está funcionando.
@@ -81,8 +86,8 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 - Jest (`jest-expo`) com testes da resolução de URL e do health check; ESLint e Prettier
   (com ordenação de classes do Tailwind).
 
-⚠️ **Validado no PC, falta validar no iPhone:** TypeScript, lint, 9 testes, `expo-doctor` (21/21)
-e o bundle de iOS compilado pelo Metro passaram, e o Supabase respondeu pelo IP de rede do PC.
-A aparência das telas e a conexão iPhone → PC (o iOS pode bloquear HTTP sem criptografia) só dá
-para confirmar no aparelho. Se o iOS bloquear, a saída é um túnel HTTPS
-(`cloudflared tunnel --url http://localhost:54321`) em `EXPO_PUBLIC_SUPABASE_URL`.
+✅ **Validado no PC e no iPhone:** TypeScript, lint, 9 testes, `expo-doctor` (21/21) e o bundle
+de iOS compilado pelo Metro passaram no PC; no iPhone (Expo Go), o app abre e a aba Ajustes mostra
+**Conectado** ao Supabase local por HTTP na rede local, sem precisar de túnel. Se um dia o iOS
+bloquear essa conexão, a saída é um túnel HTTPS (`cloudflared tunnel --url http://localhost:54321`)
+em `EXPO_PUBLIC_SUPABASE_URL`.
