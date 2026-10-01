@@ -21,6 +21,13 @@ export function formatSignedKg(kg: number): string {
   return `${rounded > 0 ? '+' : MINUS}${formatKg(Math.abs(rounded))}`;
 }
 
+/** -1.54 → '−1,5 cm'; 2 → '+2 cm'; valores que arredondam para zero → '0 cm'. */
+export function formatSignedCm(cm: number): string {
+  const rounded = roundTenth(cm);
+  if (rounded === 0) return formatCm(0);
+  return `${rounded > 0 ? '+' : MINUS}${formatCm(Math.abs(rounded))}`;
+}
+
 /** 2450 → '2.450' */
 export function formatInt(value: number): string {
   return integer.format(value);

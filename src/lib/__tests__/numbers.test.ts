@@ -1,6 +1,7 @@
 import {
   formatInt,
   formatKg,
+  formatSignedCm,
   formatSignedInt,
   formatSignedKg,
   parseDecimal,
@@ -23,6 +24,9 @@ describe('números no formato brasileiro', () => {
     expect(formatSignedKg(0.34)).toBe('+0,3 kg');
     expect(formatSignedKg(-0.34)).toBe('−0,3 kg');
     expect(formatSignedKg(-0.04)).toBe('0,0 kg');
+    expect(formatSignedCm(-1.54)).toBe('−1,5 cm');
+    expect(formatSignedCm(2)).toBe('+2 cm');
+    expect(formatSignedCm(0.04)).toBe('0 cm');
     expect(formatInt(2450)).toBe('2.450');
     expect(formatSignedInt(-550)).toBe('−550');
     expect(formatSignedInt(1275)).toBe('+1.275');

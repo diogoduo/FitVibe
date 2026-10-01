@@ -68,6 +68,7 @@ function AppStack() {
       <Stack.Protected guard={hasProfile}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="peso" options={formSheet} />
+        <Stack.Screen name="medida" options={formSheet} />
       </Stack.Protected>
       <Stack.Protected guard={!hasProfile}>
         <Stack.Screen name="cadastro" options={{ gestureEnabled: false }} />
