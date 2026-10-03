@@ -1,6 +1,8 @@
 import { db } from '@/db/client';
 
 import { deleteAllMediaFiles } from '../features/media/files';
+import { deleteAllOutboxPhotos } from '../features/social/outbox-files';
+import { removeMyFiles } from '../features/social/storage';
 import { getProfile } from '../features/profile/queries';
 import { wipeAllData } from '../features/profile/repository';
 import { cancelRestNotification } from '../features/workout/rest';
@@ -15,6 +17,7 @@ import {
   updateSyncState,
   type SyncDb,
 } from './engine';
+import { friendlyError } from './errors';
 import { accountHasData, supabaseRemote } from './remote';
 import { supabase } from './supabase';
 
@@ -23,6 +26,8 @@ import { supabase } from './supabase';
  * onde a sessão, o primeiro login e os erros em português se juntam.
  */
 const syncDb = db as unknown as SyncDb;
+
+export { friendlyError };
 
 export type SyncOutcome =
   | { status: 'ok'; pushed: number; pulled: number }
@@ -38,23 +43,6 @@ export type AccountResult =
   | { status: 'conflict'; userId: string; reason: 'both' | 'other-account' }
   | { status: 'error'; message: string };
 
-const AUTH_ERRORS: [RegExp, string][] = [
-  [/invalid login credentials/i, 'E-mail ou senha errados.'],
-  [/already registered|already exists/i, 'Já existe uma conta com este e-mail. Use "Entrar".'],
-  [/password should be at least|weak password/i, 'A senha precisa ter pelo menos 6 caracteres.'],
-  [/invalid.*email|unable to validate email/i, 'E-mail inválido.'],
-  [/email not confirmed/i, 'Confirme o e-mail antes de entrar.'],
-  [
-    /network request failed|failed to fetch|fetch failed|timed out/i,
-    'Sem conexão com o servidor. Confira a internet e tente de novo.',
-  ],
-];
-
-export function friendlyError(error: unknown): string {
-  const message = error instanceof Error ? error.message : String(error);
-  return AUTH_ERRORS.find(([pattern]) => pattern.test(message))?.[1] ?? message;
-}
-
 // "Sincronizando…" para a tela (useSyncExternalStore em hooks.ts).
 let syncing = false;
 const listeners = new Set<() => void>();
@@ -66,6 +54,13 @@ export function subscribeSyncing(listener: () => void) {
 function setSyncing(value: boolean) {
   syncing = value;
   listeners.forEach((listener) => listener());
+}
+
+// Quem quer saber quando uma sincronização terminou bem (o social publica o resumo do dia).
+const syncedListeners = new Set<() => void>();
+export function subscribeSynced(listener: () => void) {
+  syncedListeners.add(listener);
+  return () => syncedListeners.delete(listener);
 }
 
 let running: Promise<SyncOutcome> | null = null;
@@ -85,6 +80,7 @@ export function syncNow(): Promise<SyncOutcome> {
       const pushed = await push(syncDb, remote);
       const pulled = await pull(syncDb, remote);
       updateSyncState(syncDb, { lastSyncAt: new Date(), lastError: null });
+      syncedListeners.forEach((listener) => listener());
       return { status: 'ok', pushed, pulled };
     } catch (error) {
       const message = friendlyError(error);
@@ -168,6 +164,7 @@ export async function resumeAccount(): Promise<AccountResult> {
 export function wipeDevice() {
   wipeAllData();
   deleteAllMediaFiles();
+  deleteAllOutboxPhotos();
   cancelRestNotification();
   resetSync(syncDb);
 }
@@ -203,6 +200,14 @@ export async function signOut(mode: 'keep' | 'wipe'): Promise<AccountResult> {
 /** Exclui a conta no servidor (com todos os dados dela) e limpa este celular. */
 export async function deleteAccount(): Promise<AccountResult> {
   if (!supabase) return { status: 'error', message: 'Servidor não configurado.' };
+  const { data } = await supabase.auth.getSession();
+  if (!data.session) return { status: 'error', message: 'Entre na conta de novo.' };
+  try {
+    // As fotos do perfil e dos posts não somem sozinhas com a conta.
+    await removeMyFiles(supabase, data.session.user.id);
+  } catch (error) {
+    return { status: 'error', message: friendlyError(error) };
+  }
   const { error } = await supabase.rpc('delete_my_account');
   if (error) return { status: 'error', message: friendlyError(error) };
   await supabase.auth.signOut();

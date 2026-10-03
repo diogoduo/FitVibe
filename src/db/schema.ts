@@ -484,6 +484,30 @@ export const syncCursors = sqliteTable('sync_cursors', {
   rowId: text('row_id').notNull(),
 });
 
+export const POST_KINDS = ['meal', 'workout', 'goals', 'day', 'photo'] as const;
+export type PostKind = (typeof POST_KINDS)[number];
+
+/**
+ * Posts esperando envio (feitos sem internet ou que falharam). Só deste celular: sem
+ * updated_at/deleted_at, não entra na sincronização, e a linha some depois de enviada.
+ */
+export const postOutbox = sqliteTable('post_outbox', {
+  id: text('id').primaryKey(),
+  /** Conta que postou: depois de trocar de conta, o post não vai para a conta errada. */
+  userId: text('user_id').notNull(),
+  kind: text('kind', { enum: POST_KINDS }).notNull(),
+  data: text('data', { mode: 'json' }).$type<Record<string, unknown>>().notNull(),
+  caption: text('caption'),
+  day: text('day'),
+  /** Foto já comprimida, em <documentos>/outbox. */
+  photoFile: text('photo_file'),
+  photoWidth: integer('photo_width'),
+  photoHeight: integer('photo_height'),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
+  attempts: integer('attempts').notNull().default(0),
+  lastError: text('last_error'),
+});
+
 export type Profile = typeof profiles.$inferSelect;
 export type GoalVersion = typeof goalVersions.$inferSelect;
 export type WeightEntry = typeof weightEntries.$inferSelect;
@@ -503,3 +527,4 @@ export type Meal = typeof meals.$inferSelect;
 export type DiaryEntry = typeof diaryEntries.$inferSelect;
 export type SavedMeal = typeof savedMeals.$inferSelect;
 export type WaterLog = typeof waterLogs.$inferSelect;
+export type OutboxPost = typeof postOutbox.$inferSelect;

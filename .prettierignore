@@ -2,3 +2,5 @@
 src/db/migrations/
 src/features/exercises/catalog/images.ts
 src/features/foods/taco/taco.json
+# Catálogo de exercícios escrito à mão, com formatação compacta própria
+src/features/exercises/catalog/catalog.json

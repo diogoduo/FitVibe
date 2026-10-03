@@ -12,13 +12,7 @@ import { createTestDb, type TestDb } from '@/db/test-db';
 
 import { pendingCount, pull, push, type SyncDb } from '../engine';
 import { supabaseRemote } from '../remote';
-import {
-  deleteTestAccounts,
-  hasSyncServer,
-  testClient,
-  testEmail,
-  TEST_PASSWORD,
-} from '../test-server';
+import { deleteTestAccounts, hasSyncServer, signUpTestUser } from '../test-server';
 
 const suite = hasSyncServer ? describe : describe.skip;
 
@@ -26,12 +20,7 @@ const asSync = (db: TestDb) => db as unknown as SyncDb;
 const uuid = () => globalThis.crypto.randomUUID();
 const at = (minute: number) => new Date(Date.UTC(2026, 9, 3, 10, minute));
 
-async function newUser(): Promise<SupabaseClient> {
-  const client = testClient();
-  const { error } = await client.auth.signUp({ email: testEmail(), password: TEST_PASSWORD });
-  if (error) throw error;
-  return client;
-}
+const newUser = async (): Promise<SupabaseClient> => (await signUpTestUser()).client;
 
 const profileRow = (id: string) => ({
   id,
@@ -117,14 +106,12 @@ suite('sincronização com o Supabase local', () => {
     const seen = await stranger.from('profiles').select('id');
     expect(seen.data).toEqual([]);
     // Tentar sobrescrever o registro de outra conta falha.
-    const hijack = await stranger
-      .from('profiles')
-      .upsert({
-        ...profileRow(profileId),
-        name: 'Invasor',
-        created_at: at(0).toISOString(),
-        updated_at: at(50).toISOString(),
-      });
+    const hijack = await stranger.from('profiles').upsert({
+      ...profileRow(profileId),
+      name: 'Invasor',
+      created_at: at(0).toISOString(),
+      updated_at: at(50).toISOString(),
+    });
     expect(hijack.error).not.toBeNull();
 
     expect((await owner.rpc('delete_my_account')).error).toBeNull();
