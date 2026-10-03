@@ -201,9 +201,9 @@ treino do dia funcionaram.
 - **Testes**: 125 no Jest, incluindo dois treinos seguidos do plano de exemplo (aquecimento,
   sugestão, recordes), troca, extra e finalizar.
 
-⚠️ **Validado no PC, falta validar no iPhone:** TypeScript, lint, 125 testes, `expo-doctor`
-(21/21) e o bundle de iOS passaram. Teclado nas séries, timer, vibração e a notificação com o app
-em segundo plano só dá para conferir no aparelho.
+✅ **Validado no PC e no iPhone:** TypeScript, lint, 125 testes, `expo-doctor` (21/21) e o bundle
+de iOS passaram no PC; no iPhone (Expo Go), o registro das séries, o timer com a notificação, a
+progressão (↑) e os recordes funcionaram.
 
 ## Fase 4 — Dieta
 
@@ -216,6 +216,9 @@ em segundo plano só dá para conferir no aparelho.
   cadastro com o código preenchido, e da próxima vez o leitor já reconhece.
 - **Alimentos seus** com os valores do rótulo por 100 g ou por porção (o app converte e guarda a
   porção). **Porções salvas** por alimento ("1 pão francês = 50 g") e **favoritos**.
+- **Bebidas em ml**: cada alimento é medido em g ou ml (valores por 100 g ou 100 ml). Produtos do
+  Open Food Facts com porção/embalagem em ml entram em ml com a porção do rótulo ("lata 350 ml");
+  bebidas, sucos e leites fluidos da TACO também (a TACO mede por peso: 1 ml conta como 1 g).
 - **Busca** única nas três fontes, sem diferenciar acento: favoritos e recentes no topo, depois
   quem começa com o texto. O preparo (cru, cozido, grelhado...) aparece em destaque.
 - **Diário por refeição** (6 padrão, editáveis em Ajustes): cada registro guarda uma cópia do
@@ -224,9 +227,10 @@ em segundo plano só dá para conferir no aparelho.
 - **Meta × consumo** do dia escolhido (com a meta que valia naquele dia, do histórico de metas),
   fibra e aviso ao passar. **Água**: meta de 35 ml por kg de peso de tendência (ou definida à mão
   em Perfil e metas), +250 / +500 / outro valor e desfazer.
-- **Testes**: 148 no Jest, incluindo a TACO, a busca, a leitura da resposta do Open Food Facts, o
-  formulário do rótulo e as gravações do diário.
+- **Testes**: 151 no Jest, incluindo a TACO, a busca, a leitura da resposta do Open Food Facts
+  (inclusive bebidas em ml), o formulário do rótulo e as gravações do diário.
 
-⚠️ **Validado no PC, falta validar no iPhone:** TypeScript, lint, 148 testes, `expo-doctor`
-(21/21) e o bundle de iOS passaram. Câmera e leitura do código, a consulta ao Open Food Facts e o
-teclado nos formulários só dá para conferir no aparelho.
+✅ **Validado no PC e no iPhone:** TypeScript, lint, testes, `expo-doctor` (21/21) e o bundle de
+iOS passaram no PC; no iPhone (Expo Go), diário, busca, porções, água e o leitor de código com o
+Open Food Facts funcionaram. A unidade em ml veio de um teste no aparelho (refrigerante lido pelo
+código não aceitava porção em ml).
