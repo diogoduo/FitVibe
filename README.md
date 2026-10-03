@@ -1,4 +1,6 @@
-# DuoGym&Diet
+# FitVibe
+
+Feito pela **Duo**.
 
 App de treino e dieta para quem faz musculação e quer controlar tudo sozinho: plano semanal,
 registro de cada série (carga, reps, RIR e e1RM), progressão de carga, diário alimentar por

@@ -9,7 +9,7 @@ import type { FoodUnit, Per100 } from '@/db/schema';
 const API = 'https://world.openfoodfacts.org/api/v2/product';
 const FIELDS =
   'code,product_name,product_name_pt,brands,nutriments,serving_quantity,serving_quantity_unit,product_quantity_unit,quantity';
-const USER_AGENT = `DuoGymDiet/${Constants.expoConfig?.version ?? '1.0'} (app pessoal de treino e dieta)`;
+const USER_AGENT = `FitVibe/${Constants.expoConfig?.version ?? '1.0'} (app pessoal de treino e dieta)`;
 
 export type OffProduct = {
   barcode: string;
