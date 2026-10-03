@@ -22,12 +22,13 @@ describe('validateFoodForm', () => {
       name: 'Barra de proteína',
       brand: 'Marca',
       barcode: null,
+      unit: 'g',
       kcal: 400,
       protein: 44.4,
       carbs: 20,
       fat: 14,
       fiber: 0,
-      portionG: null,
+      portionSize: null,
     });
   });
 
@@ -35,7 +36,7 @@ describe('validateFoodForm', () => {
     const { data } = validateFoodForm({
       ...filled,
       basis: 'portion',
-      portionG: '45',
+      portionSize: '45',
       kcal: '180',
       protein: '20',
       carbs: '9',
@@ -46,7 +47,7 @@ describe('validateFoodForm', () => {
       kcal: 400,
       protein: 44.4,
       fat: 14,
-      portionG: 45,
+      portionSize: 45,
       barcode: '7891234567895',
     });
   });

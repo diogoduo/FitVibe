@@ -23,7 +23,7 @@ type Params = {
   registro?: string;
 };
 
-/** Quantidade de um alimento: gramas ou porção salva, com os valores na hora. */
+/** Quantidade de um alimento (g ou ml) ou porção salva, com os valores na hora. */
 export default function FoodAmountScreen() {
   const params = useLocalSearchParams<Params>();
   const rows = useFoodRows();
@@ -38,6 +38,7 @@ export default function FoodAmountScreen() {
         name: entry.name,
         detail: null,
         prep: null,
+        unit: entry.unit,
         per100: entry,
         barcode: null,
       }
@@ -57,7 +58,7 @@ export default function FoodAmountScreen() {
       key={editing ? `registro:${entry!.id}` : food.key}
       food={food}
       entryId={editing ? entry!.id : null}
-      initialGrams={editing ? entry!.grams : null}
+      initialAmount={editing ? entry!.grams : null}
       mealId={params.refeicao ?? null}
       day={params.dia ?? null}
       ownFood={parseFoodKey(food.key)?.source === 'food'}
@@ -68,27 +69,30 @@ export default function FoodAmountScreen() {
 function AmountForm({
   food,
   entryId,
-  initialGrams,
+  initialAmount,
   mealId,
   day,
   ownFood,
 }: {
   food: AnyFood;
   entryId: string | null;
-  initialGrams: number | null;
+  initialAmount: number | null;
   mealId: string | null;
   day: string | null;
   ownFood: boolean;
 }) {
   const portions = usePortions(food.key);
   const favorites = useFavoriteKeys();
-  const [gramsText, setGramsText] = useState(initialGrams != null ? toInputText(initialGrams) : '');
+  const unit = food.unit;
+  const [amountText, setAmountText] = useState(
+    initialAmount != null ? toInputText(initialAmount) : '',
+  );
   const [showError, setShowError] = useState(false);
-  const [newPortion, setNewPortion] = useState<{ name: string; grams: string } | null>(null);
+  const [newPortion, setNewPortion] = useState<{ name: string; amount: string } | null>(null);
 
-  const grams = parseDecimal(gramsText);
-  const valid = grams != null && grams > 0 && grams <= 5000;
-  const values = nutrientsFor(food.per100, valid ? grams : 0);
+  const amount = parseDecimal(amountText);
+  const valid = amount != null && amount > 0 && amount <= 5000;
+  const values = nutrientsFor(food.per100, valid ? amount : 0);
   const favorite = favorites.has(food.key);
 
   const save = () => {
@@ -96,8 +100,8 @@ function AmountForm({
       setShowError(true);
       return;
     }
-    if (entryId) updateEntryGrams(entryId, grams);
-    else if (mealId && day) addEntry({ day, mealId, food, grams });
+    if (entryId) updateEntryGrams(entryId, amount);
+    else if (mealId && day) addEntry({ day, mealId, food, grams: amount });
     router.back();
   };
 
@@ -108,13 +112,18 @@ function AmountForm({
   };
 
   const savePortion = () => {
-    const portionGrams = newPortion ? parseDecimal(newPortion.grams) : null;
-    if (!newPortion?.name.trim() || portionGrams == null || portionGrams <= 0) {
-      Alert.alert('Porção incompleta', 'Dê um nome (ex.: 1 pão francês) e os gramas.');
+    const portionAmount = newPortion ? parseDecimal(newPortion.amount) : null;
+    if (!newPortion?.name.trim() || portionAmount == null || portionAmount <= 0) {
+      Alert.alert(
+        'Porção incompleta',
+        unit === 'ml'
+          ? 'Dê um nome (ex.: 1 lata) e quantos ml.'
+          : 'Dê um nome (ex.: 1 pão francês) e os gramas.',
+      );
       return;
     }
-    addPortion(food.key, newPortion.name.trim(), portionGrams);
-    setGramsText(toInputText(portionGrams));
+    addPortion(food.key, newPortion.name.trim(), portionAmount);
+    setAmountText(toInputText(portionAmount));
     setNewPortion(null);
   };
 
@@ -133,8 +142,9 @@ function AmountForm({
             <Text className="text-xl font-semibold text-fg">{food.name}</Text>
             {food.detail ? <Text className="text-sm text-fg-muted">{food.detail}</Text> : null}
             <Text className="text-sm text-fg-muted">
-              Por 100 g: {formatInt(food.per100.kcal)} kcal · P {formatDecimal(food.per100.protein)}{' '}
-              · C {formatDecimal(food.per100.carbs)} · G {formatDecimal(food.per100.fat)}
+              Por 100 {unit}: {formatInt(food.per100.kcal)} kcal · P{' '}
+              {formatDecimal(food.per100.protein)} · C {formatDecimal(food.per100.carbs)} · G{' '}
+              {formatDecimal(food.per100.fat)}
             </Text>
           </View>
           <Pressable
@@ -151,32 +161,37 @@ function AmountForm({
 
         <TextField
           label="Quantidade"
-          suffix="g"
-          value={gramsText}
-          onChangeText={setGramsText}
+          suffix={unit}
+          value={amountText}
+          onChangeText={setAmountText}
           keyboardType="decimal-pad"
           autoFocus={!entryId}
-          error={showError && !valid ? 'Coloque os gramas' : undefined}
+          error={showError && !valid ? 'Coloque a quantidade' : undefined}
+          hint={
+            unit === 'ml' && food.source === 'taco'
+              ? 'A TACO mede por peso; aqui 1 ml conta como 1 g.'
+              : undefined
+          }
         />
 
         <View className="flex-row flex-wrap gap-2">
           {portions.map((portion) => (
             <Pressable
               key={portion.id}
-              onPress={() => setGramsText(toInputText(portion.grams))}
+              onPress={() => setAmountText(toInputText(portion.grams))}
               onLongPress={() => confirmDeletePortion(portion)}
               accessibilityRole="button"
-              accessibilityHint="Preenche os gramas; toque e segure para apagar a porção"
+              accessibilityHint="Preenche a quantidade; toque e segure para apagar a porção"
               className="rounded-full border border-line bg-surface-2 px-3 py-2 active:opacity-70"
             >
               <Text className="text-sm text-fg">
-                {portion.name} ({formatDecimal(portion.grams)} g)
+                {portion.name} ({formatDecimal(portion.grams)} {unit})
               </Text>
             </Pressable>
           ))}
           {newPortion == null ? (
             <Pressable
-              onPress={() => setNewPortion({ name: '', grams: gramsText })}
+              onPress={() => setNewPortion({ name: '', amount: amountText })}
               accessibilityRole="button"
               className="rounded-full border border-dashed border-primary px-3 py-2 active:opacity-70"
             >
@@ -191,14 +206,14 @@ function AmountForm({
               label="Nome"
               value={newPortion.name}
               onChangeText={(name) => setNewPortion({ ...newPortion, name })}
-              placeholder="Ex.: 1 pão francês, 1 concha"
+              placeholder={unit === 'ml' ? 'Ex.: 1 lata, 1 copo' : 'Ex.: 1 pão francês, 1 concha'}
               autoFocus
             />
             <TextField
-              label="Quanto pesa"
-              suffix="g"
-              value={newPortion.grams}
-              onChangeText={(text) => setNewPortion({ ...newPortion, grams: text })}
+              label={unit === 'ml' ? 'Quanto tem' : 'Quanto pesa'}
+              suffix={unit}
+              value={newPortion.amount}
+              onChangeText={(text) => setNewPortion({ ...newPortion, amount: text })}
               keyboardType="decimal-pad"
             />
             <View className="flex-row gap-3">
@@ -216,7 +231,7 @@ function AmountForm({
         <Card>
           <View className="flex-row items-baseline justify-between">
             <Text className="text-base text-fg-muted">
-              {valid ? `${formatDecimal(grams)} g` : 'Quantidade'}
+              {valid ? `${formatDecimal(amount)} ${unit}` : 'Quantidade'}
             </Text>
             <Text className="text-3xl font-bold text-fg">
               {formatInt(values.kcal)}

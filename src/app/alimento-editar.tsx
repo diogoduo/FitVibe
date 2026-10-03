@@ -34,6 +34,8 @@ type Params = {
   proteina?: string;
   carbo?: string;
   gordura?: string;
+  /** 'ml' quando o leitor viu que é bebida. */
+  unidade?: 'g' | 'ml';
   /** Para seguir direto para a quantidade depois de salvar. */
   refeicao?: string;
   dia?: string;
@@ -45,9 +47,9 @@ const NOTICES = {
   incomplete: 'O Open Food Facts não tem todos os valores deste produto. Confira com o rótulo.',
 } as const;
 
-const BASIS_OPTIONS: { value: FoodFormValues['basis']; label: string }[] = [
-  { value: '100g', label: 'Por 100 g' },
-  { value: 'portion', label: 'Por porção' },
+const UNIT_OPTIONS: { value: FoodFormValues['unit']; label: string }[] = [
+  { value: 'g', label: 'Gramas (g)' },
+  { value: 'ml', label: 'Mililitros (ml)' },
 ];
 
 /** Criar ou editar um alimento seu, com os valores do rótulo. */
@@ -66,6 +68,7 @@ export default function EditFoodScreen() {
           protein: params.proteina ?? '',
           carbs: params.carbo ?? '',
           fat: params.gordura ?? '',
+          unit: params.unidade === 'ml' ? 'ml' : 'g',
         },
   );
   const [showErrors, setShowErrors] = useState(false);
@@ -80,15 +83,15 @@ export default function EditFoodScreen() {
       setShowErrors(true);
       return;
     }
-    const { portionG, ...food } = data;
+    const { portionSize, ...food } = data;
     if (existing) {
       updateFood(existing.id, food);
-      if (portionG) addPortion(rowKey(existing.id), 'Porção do rótulo', portionG);
+      if (portionSize) addPortion(rowKey(existing.id), 'Porção do rótulo', portionSize);
       router.back();
       return;
     }
     const key = createFood(food);
-    if (portionG) addPortion(key, 'Porção do rótulo', portionG);
+    if (portionSize) addPortion(key, 'Porção do rótulo', portionSize);
     if (params.refeicao && params.dia) {
       router.replace({
         pathname: '/alimento',
@@ -115,6 +118,11 @@ export default function EditFoodScreen() {
   };
 
   const perPortion = values.basis === 'portion';
+  const unit = values.unit;
+  const basisOptions: { value: FoodFormValues['basis']; label: string }[] = [
+    { value: '100', label: `Por 100 ${unit}` },
+    { value: 'portion', label: 'Por porção' },
+  ];
 
   return (
     <>
@@ -149,24 +157,35 @@ export default function EditFoodScreen() {
           hint="Com o código, o leitor reconhece o produto da próxima vez."
         />
         <ChoiceChips
+          label="Medido em"
+          options={UNIT_OPTIONS}
+          value={unit}
+          onChange={(next) => onChange({ unit: next })}
+          hint={
+            unit === 'ml'
+              ? 'Bebidas: quantidade e porções em ml (ex.: 1 lata = 350 ml).'
+              : undefined
+          }
+        />
+        <ChoiceChips
           label="Valores do rótulo"
-          options={BASIS_OPTIONS}
+          options={basisOptions}
           value={values.basis}
           onChange={(basis) => onChange({ basis })}
           hint={
             perPortion
-              ? 'O app converte para 100 g e guarda a porção para você tocar depois.'
+              ? `O app converte para 100 ${unit} e guarda a porção para você tocar depois.`
               : undefined
           }
         />
         {perPortion ? (
           <TextField
             label="Tamanho da porção"
-            suffix="g"
-            value={values.portionG}
-            onChangeText={(portionG) => onChange({ portionG })}
+            suffix={unit}
+            value={values.portionSize}
+            onChangeText={(portionSize) => onChange({ portionSize })}
             keyboardType="decimal-pad"
-            error={shown.portionG}
+            error={shown.portionSize}
           />
         ) : null}
         <TextField

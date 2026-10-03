@@ -7,13 +7,19 @@ import {
   foodPortions,
   foods,
   type FoodKey,
+  type FoodUnit,
   type Per100,
 } from '@/db/schema';
 
 import { rowKey } from './food';
 import type { OffProduct } from './open-food-facts';
 
-export type FoodData = { name: string; brand: string | null; barcode: string | null } & Per100;
+export type FoodData = {
+  name: string;
+  brand: string | null;
+  barcode: string | null;
+  unit: FoodUnit;
+} & Per100;
 
 /** Alimento seu (valores por 100 g). Devolve a chave 'food:<id>'. */
 export function createFood(data: FoodData): FoodKey {
@@ -63,16 +69,17 @@ export function saveOffProduct(product: OffProduct): FoodKey {
         name: product.name,
         brand: product.brand,
         barcode: product.barcode,
+        unit: product.unit,
         ...product.per100,
       })
       .run();
-    if (product.servingG) {
+    if (product.serving) {
       tx.insert(foodPortions)
         .values({
           id: newId(),
           foodKey: rowKey(id),
           name: 'Porção do rótulo',
-          grams: product.servingG,
+          grams: product.serving,
         })
         .run();
     }

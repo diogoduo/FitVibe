@@ -1,22 +1,25 @@
 import Constants from 'expo-constants';
 
-import type { Per100 } from '@/db/schema';
+import type { FoodUnit, Per100 } from '@/db/schema';
 
 /**
  * Open Food Facts (base aberta de produtos, licença ODbL): busca um produto pelo código de
  * barras. Leitura não precisa de chave; a API pede um User-Agent que identifique o app.
  */
 const API = 'https://world.openfoodfacts.org/api/v2/product';
-const FIELDS = 'code,product_name,product_name_pt,brands,nutriments,serving_quantity';
+const FIELDS =
+  'code,product_name,product_name_pt,brands,nutriments,serving_quantity,serving_quantity_unit,product_quantity_unit,quantity';
 const USER_AGENT = `DuoGymDiet/${Constants.expoConfig?.version ?? '1.0'} (app pessoal de treino e dieta)`;
 
 export type OffProduct = {
   barcode: string;
   name: string;
   brand: string | null;
+  /** Bebidas vêm em ml: o Open Food Facts guarda os valores delas por 100 ml. */
+  unit: FoodUnit;
   per100: Per100;
-  /** Porção do rótulo em gramas, quando informada. */
-  servingG: number | null;
+  /** Porção do rótulo, na unidade do produto, quando informada. */
+  serving: number | null;
 };
 
 export type OffLookup =
@@ -30,6 +33,15 @@ const num = (value: unknown): number | null => {
   return typeof parsed === 'number' && Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 };
 const round1 = (value: number) => Math.round(value * 10) / 10;
+
+/** Bebida: porção ou embalagem em ml/l ("350 ml", "2 L"). */
+function isLiquid(product: Record<string, unknown>): boolean {
+  const units = [product.serving_quantity_unit, product.product_quantity_unit]
+    .filter((value): value is string => typeof value === 'string')
+    .map((value) => value.trim().toLowerCase());
+  if (units.some((unit) => unit === 'ml' || unit === 'l' || unit === 'cl')) return true;
+  return typeof product.quantity === 'string' && /\d\s*(ml|cl|l)\b/i.test(product.quantity);
+}
 
 /**
  * Lê a resposta da API. Produto sem calorias (ou sem macros) volta como 'incomplete' para a
@@ -67,7 +79,8 @@ export function parseOffResponse(barcode: string, json: unknown): OffLookup {
       fat: round1(fat ?? 0),
       fiber: round1(num(n['fiber_100g']) ?? 0),
     },
-    servingG: num(product.serving_quantity),
+    unit: isLiquid(product) ? 'ml' : 'g',
+    serving: num(product.serving_quantity),
   };
   const complete = kcal != null && protein != null && carbs != null && fat != null;
   return complete

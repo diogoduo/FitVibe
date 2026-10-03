@@ -1,17 +1,19 @@
-import type { Food } from '@/db/schema';
+import type { Food, FoodUnit } from '@/db/schema';
 import { formatDecimal, toInputText } from '@/lib/numbers';
 
 import { readNumber } from '../profile/profile-form';
 import { per100FromPortion } from './nutrition';
 import type { FoodData } from './repository';
 
-/** Valores digitados como no rótulo: por 100 g ou por porção de X g. */
+/** Valores digitados como no rótulo: por 100 g/ml ou por porção de X g/ml. */
 export type FoodFormValues = {
   name: string;
   brand: string;
   barcode: string;
-  basis: '100g' | 'portion';
-  portionG: string;
+  /** Sólido em g, bebida em ml. */
+  unit: FoodUnit;
+  basis: '100' | 'portion';
+  portionSize: string;
   kcal: string;
   protein: string;
   carbs: string;
@@ -19,14 +21,15 @@ export type FoodFormValues = {
   fiber: string;
 };
 
-export type FoodFormField = Exclude<keyof FoodFormValues, 'basis'>;
+export type FoodFormField = Exclude<keyof FoodFormValues, 'basis' | 'unit'>;
 
 export const EMPTY_FOOD_FORM: FoodFormValues = {
   name: '',
   brand: '',
   barcode: '',
-  basis: '100g',
-  portionG: '',
+  unit: 'g',
+  basis: '100',
+  portionSize: '',
   kcal: '',
   protein: '',
   carbs: '',
@@ -39,8 +42,9 @@ export function foodToFormValues(food: Food): FoodFormValues {
     name: food.name,
     brand: food.brand ?? '',
     barcode: food.barcode ?? '',
-    basis: '100g',
-    portionG: '',
+    unit: food.unit,
+    basis: '100',
+    portionSize: '',
     kcal: formatDecimal(food.kcal),
     protein: toInputText(food.protein),
     carbs: toInputText(food.carbs),
@@ -52,12 +56,12 @@ export function foodToFormValues(food: Food): FoodFormValues {
 const GRAMS = { min: 0, max: 100 };
 
 /**
- * Valida e converte para 100 g. Com "por porção", devolve também os gramas da porção (vira
- * uma porção salva do alimento).
+ * Valida e converte para 100 g (ou 100 ml). Com "por porção", devolve também o tamanho da
+ * porção, que vira uma porção salva do alimento.
  */
 export function validateFoodForm(values: FoodFormValues): {
   errors: Partial<Record<FoodFormField, string>>;
-  data: (FoodData & { portionG: number | null }) | null;
+  data: (FoodData & { portionSize: number | null }) | null;
 } {
   const errors: Partial<Record<FoodFormField, string>> = {};
   const name = values.name.trim();
@@ -69,9 +73,9 @@ export function validateFoodForm(values: FoodFormValues): {
 
   const portion =
     values.basis === 'portion'
-      ? readNumber(values.portionG, { min: 1, max: 2000 }, { unit: 'g' })
+      ? readNumber(values.portionSize, { min: 1, max: 3000 }, { unit: values.unit })
       : null;
-  if (portion && 'error' in portion) errors.portionG = portion.error;
+  if (portion && 'error' in portion) errors.portionSize = portion.error;
   // Por porção, os gramas de cada nutriente podem passar de 100 (uma porção de 150 g).
   const gramsRange = values.basis === 'portion' ? { min: 0, max: 2000 } : GRAMS;
   const read = (field: 'kcal' | 'protein' | 'carbs' | 'fat' | 'fiber', optional = false) => {
@@ -90,16 +94,17 @@ export function validateFoodForm(values: FoodFormValues): {
   };
   if (Object.keys(errors).length > 0) return { errors, data: null };
 
-  const portionG = portion && 'value' in portion ? portion.value : null;
-  const per100 = portionG ? per100FromPortion(label, portionG) : label;
+  const portionSize = portion && 'value' in portion ? portion.value : null;
+  const per100 = portionSize ? per100FromPortion(label, portionSize) : label;
   return {
     errors,
     data: {
       name,
       brand: values.brand.trim() || null,
       barcode: barcode || null,
+      unit: values.unit,
       ...per100,
-      portionG,
+      portionSize,
     },
   };
 }

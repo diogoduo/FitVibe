@@ -347,6 +347,10 @@ export type Per100 = { kcal: number; protein: number; carbs: number; fat: number
 export const FOOD_SOURCES = ['custom', 'off'] as const;
 export type FoodSource = (typeof FOOD_SOURCES)[number];
 
+/** Unidade da quantidade: gramas ou mililitros (bebidas). Os valores são por 100 g ou 100 ml. */
+export const FOOD_UNITS = ['g', 'ml'] as const;
+export type FoodUnit = (typeof FOOD_UNITS)[number];
+
 const per100Columns = {
   kcal: real('kcal').notNull(),
   protein: real('protein').notNull(),
@@ -355,7 +359,7 @@ const per100Columns = {
   fiber: real('fiber').notNull(),
 };
 
-/** Alimentos seus e produtos do Open Food Facts guardados no celular (valores por 100 g). */
+/** Alimentos seus e produtos do Open Food Facts guardados no celular (valores por 100 g/ml). */
 export const foods = sqliteTable(
   'foods',
   {
@@ -364,18 +368,20 @@ export const foods = sqliteTable(
     name: text('name').notNull(),
     brand: text('brand'),
     barcode: text('barcode'),
+    unit: text('unit', { enum: FOOD_UNITS }).notNull().default('g'),
     ...per100Columns,
   },
   (t) => [index('foods_barcode_idx').on(t.barcode)],
 );
 
-/** Porções salvas de um alimento ("1 pão francês = 50 g"). */
+/** Porções salvas de um alimento ("1 pão francês = 50 g", "1 lata = 350 ml"); na unidade dele. */
 export const foodPortions = sqliteTable(
   'food_portions',
   {
     ...syncColumns,
     foodKey: text('food_key').notNull(),
     name: text('name').notNull(),
+    /** Quantidade na unidade do alimento (g ou ml). */
     grams: real('grams').notNull(),
   },
   (t) => [index('food_portions_food_key_idx').on(t.foodKey)],
@@ -406,13 +412,21 @@ export const diaryEntries = sqliteTable(
     mealId: text('meal_id').notNull(),
     foodKey: text('food_key').notNull(),
     name: text('name').notNull(),
+    /** Quantidade na unidade do alimento (g ou ml). */
     grams: real('grams').notNull(),
+    unit: text('unit', { enum: FOOD_UNITS }).notNull().default('g'),
     ...per100Columns,
   },
   (t) => [index('diary_entries_day_idx').on(t.day)],
 );
 
-export type SavedMealItem = { foodKey: FoodKey; name: string; grams: number } & Per100;
+export type SavedMealItem = {
+  foodKey: FoodKey;
+  name: string;
+  grams: number;
+  /** Ausente nas refeições salvas antes de existir ml: gramas. */
+  unit?: FoodUnit;
+} & Per100;
 
 /** Refeição salva para repetir com um toque ("Café padrão"). */
 export const savedMeals = sqliteTable('saved_meals', {

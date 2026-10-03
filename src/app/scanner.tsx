@@ -51,6 +51,7 @@ export default function ScannerScreen() {
             proteina: toInputText(result.product.per100.protein || null),
             carbo: toInputText(result.product.per100.carbs || null),
             gordura: toInputText(result.product.per100.fat || null),
+            unidade: result.product.unit,
           }
         : {};
     router.replace({

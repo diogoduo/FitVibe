@@ -83,6 +83,7 @@ export function addEntry(input: { day: DayKey; mealId: string; food: AnyFood; gr
           ? `${input.food.name} (${input.food.detail})`
           : input.food.name,
       grams: input.grams,
+      unit: input.food.unit,
       ...input.food.per100,
     })
     .run();
@@ -118,6 +119,7 @@ const copyOf = (entry: DiaryEntry, day: DayKey, mealId: string) => ({
   foodKey: entry.foodKey,
   name: entry.name,
   grams: entry.grams,
+  unit: entry.unit,
   kcal: entry.kcal,
   protein: entry.protein,
   carbs: entry.carbs,
@@ -144,6 +146,7 @@ export function saveMeal(name: string, day: DayKey, mealId: string) {
     foodKey: entry.foodKey,
     name: entry.name,
     grams: entry.grams,
+    unit: entry.unit,
     kcal: entry.kcal,
     protein: entry.protein,
     carbs: entry.carbs,
@@ -160,7 +163,7 @@ export function addSavedMeal(savedMealId: string, day: DayKey, mealId: string) {
   db.transaction((tx) => {
     for (const item of saved.items) {
       tx.insert(diaryEntries)
-        .values({ id: newId(), day, mealId, ...item })
+        .values({ id: newId(), day, mealId, ...item, unit: item.unit ?? 'g' })
         .run();
     }
   });

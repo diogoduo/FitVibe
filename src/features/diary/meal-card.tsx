@@ -21,7 +21,7 @@ export function MealCard({ meal, day, entries, canCopyYesterday }: MealCardProps
   const total = sumNutrients(entries);
 
   const confirmDelete = (entry: DiaryEntry) =>
-    Alert.alert('Tirar do diário?', `${entry.name}, ${formatDecimal(entry.grams)} g.`, [
+    Alert.alert('Tirar do diário?', `${entry.name}, ${formatDecimal(entry.grams)} ${entry.unit}.`, [
       { text: 'Cancelar', style: 'cancel' },
       { text: 'Tirar', style: 'destructive', onPress: () => deleteEntry(entry.id) },
     ]);
@@ -53,7 +53,9 @@ export function MealCard({ meal, day, entries, canCopyYesterday }: MealCardProps
             <Text className="text-base text-fg" numberOfLines={2}>
               {entry.name}
             </Text>
-            <Text className="text-sm text-fg-muted">{formatDecimal(entry.grams)} g</Text>
+            <Text className="text-sm text-fg-muted">
+              {formatDecimal(entry.grams)} {entry.unit}
+            </Text>
           </View>
           <Text className="text-base text-fg-muted">
             {formatInt(nutrientsFor(entry, entry.grams).kcal)} kcal

@@ -1,6 +1,15 @@
 import type { Food } from '@/db/schema';
 
-import { fromTaco, getTacoFood, parseFoodKey, resolveFood, rowKey, TACO, tacoKey } from '../food';
+import {
+  fromTaco,
+  getTacoFood,
+  isLiquidTaco,
+  parseFoodKey,
+  resolveFood,
+  rowKey,
+  TACO,
+  tacoKey,
+} from '../food';
 import { nutrientsFor, per100FromPortion, sumNutrients, waterGoalMl } from '../nutrition';
 import { parseOffResponse } from '../open-food-facts';
 import { searchFoods } from '../search';
@@ -14,6 +23,7 @@ const row = (overrides: Partial<Food>): Food => ({
   name: 'Whey Concentrado',
   brand: 'Marca X',
   barcode: null,
+  unit: 'g',
   kcal: 400,
   protein: 80,
   carbs: 8,
@@ -42,6 +52,17 @@ describe('TACO e chaves de alimento', () => {
       detail: 'Marca X',
     });
     expect(resolveFood('food:nada', [])).toBeNull();
+  });
+
+  it('bebidas, sucos e leites fluidos da TACO vão em ml; pó e condensado, em g', () => {
+    const unit = (id: number) => fromTaco(getTacoFood(id)!).unit;
+    expect(unit(480)).toBe('ml'); // Refrigerante, tipo cola
+    expect(unit(458)).toBe('ml'); // Leite, de vaca, integral
+    expect(unit(215)).toBe('ml'); // Laranja, pêra, suco
+    expect(unit(459)).toBe('g'); // Leite, de vaca, integral, pó
+    expect(unit(453)).toBe('g'); // Leite, condensado
+    expect(unit(3)).toBe('g'); // Arroz
+    expect(TACO.filter(isLiquidTaco).length).toBeGreaterThan(20);
   });
 
   it('destaca o preparo, inclusive quando a TACO não declara', () => {
@@ -143,10 +164,32 @@ describe('parseOffResponse (Open Food Facts)', () => {
         barcode: '789',
         name: 'Iogurte natural integral',
         brand: 'Nestlé',
-        servingG: 170,
+        unit: 'g',
+        serving: 170,
         per100: { kcal: 62, protein: 3.6, carbs: 4.9, fat: 3.1, fiber: 0 },
       },
     });
+  });
+
+  it('refrigerante: valores por 100 ml e a lata como porção', () => {
+    const soda = {
+      product_name: 'Guaraná',
+      brands: 'Antarctica',
+      quantity: '350 ml',
+      serving_quantity: 350,
+      serving_quantity_unit: 'ml',
+      nutriments: {
+        'energy-kcal_100g': 40,
+        proteins_100g: 0,
+        carbohydrates_100g: 10,
+        fat_100g: 0,
+      },
+    };
+    const result = parseOffResponse('789', { status: 1, product: soda });
+    expect(result.status === 'found' && result.product).toMatchObject({ unit: 'ml', serving: 350 });
+    const onlyQuantity = { ...soda, serving_quantity_unit: undefined, quantity: '2 L' };
+    const fromQuantity = parseOffResponse('789', { status: 1, product: onlyQuantity });
+    expect(fromQuantity.status === 'found' && fromQuantity.product.unit).toBe('ml');
   });
 
   it('só com kJ converte para kcal', () => {

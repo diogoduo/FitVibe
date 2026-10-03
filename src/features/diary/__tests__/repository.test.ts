@@ -125,6 +125,51 @@ describe('diário', () => {
   });
 });
 
+describe('bebidas em ml', () => {
+  it('o registro guarda a unidade; refeição salva antiga (sem unidade) vira gramas', () => {
+    const lunch = mealList()[1].id;
+    const cola = fromTaco(getTacoFood(480)!);
+    addEntry({ day: '2026-10-03', mealId: lunch, food: cola, grams: 350 });
+    expect(entriesOn('2026-10-03')[0]).toMatchObject({ grams: 350, unit: 'ml' });
+
+    const soda = {
+      barcode: '7891991000833',
+      name: 'Guaraná',
+      brand: null,
+      unit: 'ml' as const,
+      serving: 350,
+      per100: { kcal: 40, protein: 0, carbs: 10, fat: 0, fiber: 0 },
+    };
+    const key = saveOffProduct(soda);
+    expect(findFoodByBarcode(soda.barcode)?.unit).toBe('ml');
+    expect(mockDb.select().from(foodPortions).all()).toEqual([
+      expect.objectContaining({ foodKey: key, grams: 350 }),
+    ]);
+
+    mockDb
+      .insert(savedMeals)
+      .values({
+        id: 'antiga',
+        name: 'Antiga',
+        items: [
+          {
+            foodKey: 'taco:3',
+            name: 'Arroz',
+            grams: 100,
+            kcal: 128,
+            protein: 2.5,
+            carbs: 28,
+            fat: 0.2,
+            fiber: 1.6,
+          },
+        ],
+      })
+      .run();
+    addSavedMeal('antiga', '2026-10-04', lunch);
+    expect(entriesOn('2026-10-04')[0].unit).toBe('g');
+  });
+});
+
 describe('água', () => {
   it('soma e desfaz o último', () => {
     addWater('2026-10-02', 250);
@@ -145,7 +190,8 @@ describe('alimentos seus e do código de barras', () => {
     barcode: '7891000100103',
     name: 'Leite em pó',
     brand: 'Ninho',
-    servingG: 26,
+    unit: 'g' as const,
+    serving: 26,
     per100: { kcal: 500, protein: 25, carbs: 38, fat: 27, fiber: 0 },
   };
 
@@ -166,6 +212,7 @@ describe('alimentos seus e do código de barras', () => {
       name: 'Pão caseiro',
       brand: null,
       barcode: null,
+      unit: 'g',
       kcal: 270,
       protein: 9,
       carbs: 50,

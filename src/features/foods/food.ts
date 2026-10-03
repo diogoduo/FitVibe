@@ -1,4 +1,4 @@
-import type { Food, FoodKey, Per100 } from '@/db/schema';
+import type { Food, FoodKey, FoodUnit, Per100 } from '@/db/schema';
 
 import data from './taco/taco.json';
 
@@ -6,7 +6,7 @@ import data from './taco/taco.json';
  * Alimentos de três fontes, numa forma só:
  * - TACO (4ª ed., NEPA/UNICAMP), embutida no app: chave 'taco:<número>';
  * - seus alimentos e produtos do Open Food Facts (tabela `foods`): chave 'food:<id>'.
- * Todos os valores são por 100 g.
+ * Os valores são por 100 g, ou por 100 ml nas bebidas.
  */
 export type TacoFood = Per100 & {
   id: number;
@@ -26,6 +26,8 @@ export type AnyFood = {
   /** Marca (produtos) ou categoria (TACO). */
   detail: string | null;
   prep: string | null;
+  /** g ou ml: unidade da quantidade e das porções; os valores são por 100 dessa unidade. */
+  unit: FoodUnit;
   per100: Per100;
   barcode: string | null;
 };
@@ -71,6 +73,18 @@ function detectPrep(food: TacoFood): string | null {
   return PREP_WORDS.find(([pattern]) => pattern.test(food.name))?.[1] ?? null;
 }
 
+const LIQUID_NAME = /suco|^Leite, de (vaca|cabra|coco)|^Bebida láctea|^Leite, fermentado/i;
+
+/**
+ * Bebidas, sucos e leites fluidos da TACO vão em ml. A TACO mede por peso: nesses alimentos o
+ * app conta 1 ml como 1 g (a diferença de densidade fica em poucos %).
+ */
+export function isLiquidTaco(food: TacoFood): boolean {
+  // Leite em pó e condensado não são bebida. Sem \b: ele não trata o "ó" como letra.
+  if (/, pó(,|$)|condensado/i.test(food.name)) return false;
+  return food.category.startsWith('Bebidas') || LIQUID_NAME.test(food.name);
+}
+
 export function fromTaco(food: TacoFood): AnyFood {
   return {
     key: tacoKey(food.id),
@@ -78,6 +92,7 @@ export function fromTaco(food: TacoFood): AnyFood {
     name: food.name,
     detail: food.category,
     prep: detectPrep(food),
+    unit: isLiquidTaco(food) ? 'ml' : 'g',
     per100: per100Of(food),
     barcode: null,
   };
@@ -90,6 +105,7 @@ export function fromRow(food: Food): AnyFood {
     name: food.name,
     detail: food.brand,
     prep: null,
+    unit: food.unit,
     per100: per100Of(food),
     barcode: food.barcode,
   };

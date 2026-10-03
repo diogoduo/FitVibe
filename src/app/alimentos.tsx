@@ -158,7 +158,9 @@ export default function FoodSearchScreen() {
                 ) : null}
               </View>
             </View>
-            <Text className="text-sm text-fg-muted">{formatInt(item.per100.kcal)} kcal/100 g</Text>
+            <Text className="text-sm text-fg-muted">
+              {formatInt(item.per100.kcal)} kcal/100 {item.unit}
+            </Text>
           </Pressable>
         )}
       />
