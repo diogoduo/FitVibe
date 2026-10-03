@@ -1,4 +1,4 @@
-import { index, integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { index, integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 /**
  * Esquema do banco local (SQLite). As migrações em src/db/migrations são geradas a partir
@@ -449,6 +449,40 @@ export const waterLogs = sqliteTable(
   },
   (t) => [index('water_logs_day_idx').on(t.day)],
 );
+
+// ── Fase 5: controle da sincronização (só no celular; não sincroniza) ────────────────────
+
+/**
+ * Fila de envio: preenchida por gatilhos do SQLite em toda inclusão ou alteração das tabelas
+ * sincronizadas (src/db/migrations/*_gatilhos_sincronizacao.sql). Guarda o `updated_at` da
+ * mudança: se o registro mudar de novo durante o envio, a entrada nova não é apagada.
+ */
+export const syncQueue = sqliteTable(
+  'sync_queue',
+  {
+    tableName: text('table_name').notNull(),
+    rowId: text('row_id').notNull(),
+    queuedUpdatedAt: integer('queued_updated_at').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.tableName, t.rowId] })],
+);
+
+/** Uma linha só (id 1). `applying` = 1 enquanto o app aplica o que veio do servidor. */
+export const syncState = sqliteTable('sync_state', {
+  id: integer('id').primaryKey(),
+  applying: integer('applying').notNull().default(0),
+  /** Conta (Supabase) dona dos dados deste celular; null antes do primeiro login. */
+  userId: text('user_id'),
+  lastSyncAt: integer('last_sync_at', { mode: 'timestamp_ms' }),
+  lastError: text('last_error'),
+});
+
+/** Até onde cada tabela já foi baixada do servidor (carimbo e id do último registro). */
+export const syncCursors = sqliteTable('sync_cursors', {
+  tableName: text('table_name').primaryKey(),
+  serverUpdatedAt: text('server_updated_at').notNull(),
+  rowId: text('row_id').notNull(),
+});
 
 export type Profile = typeof profiles.$inferSelect;
 export type GoalVersion = typeof goalVersions.$inferSelect;

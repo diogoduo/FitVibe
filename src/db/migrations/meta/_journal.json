@@ -43,6 +43,20 @@
       "when": 1791048781922,
       "tag": "0005_observacoes_do_plano",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1791050142510,
+      "tag": "0006_controle_sincronizacao",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1791050143647,
+      "tag": "0007_gatilhos_sincronizacao",
+      "breakpoints": true
     }
   ]
 }

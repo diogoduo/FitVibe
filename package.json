@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~57.0.21",
+    "@supabase/supabase-js": "^2.117.2",
     "drizzle-orm": "^0.45.3",
     "eslint-config-expo": "~57.0.2",
     "expo": "~57.0.26",
@@ -19,6 +20,7 @@
     "expo-image-picker": "~57.0.20",
     "expo-keep-awake": "~57.0.2",
     "expo-linking": "~57.0.11",
+    "expo-network": "~57.0.2",
     "expo-notifications": "~57.0.21",
     "expo-router": "~57.0.24",
     "expo-splash-screen": "~57.0.9",
@@ -66,10 +68,13 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
-    "db:start": "supabase start",
-    "db:stop": "supabase stop",
-    "db:status": "supabase status",
-    "db:generate": "drizzle-kit generate"
+    "db:start": "node scripts/supabase-local.mjs start",
+    "db:stop": "node scripts/supabase-local.mjs stop",
+    "db:status": "node scripts/supabase-local.mjs status",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node scripts/supabase-local.mjs migrate",
+    "db:sync-sql": "node scripts/build-sync-sql.mts",
+    "test:sync": "node scripts/test-sync.mjs"
   },
   "private": true,
   "jest": {
