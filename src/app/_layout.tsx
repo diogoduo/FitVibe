@@ -91,6 +91,13 @@ function AppStack() {
         <Stack.Screen name="sessao/[id]" options={pushed} />
         <Stack.Screen name="registro/[id]" options={pushed} />
         <Stack.Screen name="resumo/[id]" options={pushed} />
+        <Stack.Screen name="alimentos" options={pushed} />
+        <Stack.Screen name="alimento" options={formSheet} />
+        <Stack.Screen name="alimento-editar" options={formSheet} />
+        <Stack.Screen name="scanner" options={{ ...formSheet, title: 'Ler código' }} />
+        <Stack.Screen name="agua" options={formSheet} />
+        <Stack.Screen name="refeicao-salvar" options={formSheet} />
+        <Stack.Screen name="refeicoes" options={{ ...pushed, title: 'Refeições do dia' }} />
         <Stack.Screen
           name="historico-treinos"
           options={{ ...pushed, title: 'Histórico de treinos' }}

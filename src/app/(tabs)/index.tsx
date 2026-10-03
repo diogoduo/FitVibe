@@ -1,6 +1,7 @@
 import { Screen } from '@/components/ui/screen';
 import { DailyGoalCard } from '@/features/goals/daily-goal-card';
 import { TodayPlanCard } from '@/features/plan/today-plan-card';
+import { WaterCard } from '@/features/diary/water-card';
 import { RecalcPromptCard } from '@/features/goals/recalc-prompt-card';
 import { WeightSummaryCard } from '@/features/weight/weight-summary-card';
 import { ActiveWorkoutCard } from '@/features/workout/active-workout-card';
@@ -21,6 +22,7 @@ export default function TodayScreen() {
       <RecalcPromptCard />
       <DailyGoalCard />
       <TodayPlanCard />
+      <WaterCard />
       <WeightSummaryCard />
     </Screen>
   );

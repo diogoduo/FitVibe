@@ -1,43 +1,50 @@
 import { Text, View } from 'react-native';
 
 import { Card } from '@/components/ui/card';
+import { ProgressBar } from '@/components/ui/progress-bar';
+import { todayKey, type DayKey } from '@/lib/dates';
 import { formatInt } from '@/lib/numbers';
 
-import { useCurrentGoal } from './queries';
+import { useDiaryDay } from '../diary/queries';
+import { sumNutrients } from '../foods/nutrition';
+import { useGoalVersions } from './queries';
+import { goalForDay } from './rules';
 
-/** Consumo do dia. Fica em zero até o diário de dieta existir (Fase 4). */
-const EATEN = { kcal: 0, proteinG: 0, carbsG: 0, fatG: 0 };
-
-/** Aba Hoje: a meta de calorias e macros que vale hoje, com o quanto já foi consumido. */
-export function DailyGoalCard() {
-  const { goal } = useCurrentGoal();
+/**
+ * A meta de calorias e macros que valia no dia, contra o que foi comido. Passar da meta muda a
+ * cor da barra (sem bronca). Fibra aparece só como total, sem meta.
+ */
+export function DailyGoalCard({ day = todayKey() }: { day?: DayKey }) {
+  const { versions } = useGoalVersions();
+  const entries = useDiaryDay(day);
+  const goal = goalForDay(versions, day);
   if (!goal) return null;
 
+  const eaten = sumNutrients(entries);
+  const left = goal.kcal - eaten.kcal;
+
   return (
-    <Card title="Meta do dia">
+    <Card title={day === todayKey() ? 'Meta do dia' : 'Meta do dia selecionado'}>
       <View className="flex-row items-baseline justify-between">
         <Text className="text-3xl font-bold text-fg">
-          {formatInt(EATEN.kcal)}
+          {formatInt(eaten.kcal)}
           <Text className="text-base font-normal text-fg-muted">
             {' '}
             / {formatInt(goal.kcal)} kcal
           </Text>
         </Text>
-        <Text className="text-sm text-fg-muted">
-          faltam {formatInt(Math.max(0, goal.kcal - EATEN.kcal))}
+        <Text className={`text-sm ${left < 0 ? 'text-warning' : 'text-fg-muted'}`}>
+          {left >= 0 ? `faltam ${formatInt(left)}` : `${formatInt(-left)} acima`}
         </Text>
       </View>
-      <ProgressBar value={EATEN.kcal} max={goal.kcal} />
+      <ProgressBar value={eaten.kcal} max={goal.kcal} />
 
       <View className="gap-3 pt-1">
-        <Macro name="Proteína" eaten={EATEN.proteinG} target={goal.proteinG} />
-        <Macro name="Carboidrato" eaten={EATEN.carbsG} target={goal.carbsG} />
-        <Macro name="Gordura" eaten={EATEN.fatG} target={goal.fatG} />
+        <Macro name="Proteína" eaten={eaten.protein} target={goal.proteinG} />
+        <Macro name="Carboidrato" eaten={eaten.carbs} target={goal.carbsG} />
+        <Macro name="Gordura" eaten={eaten.fat} target={goal.fatG} />
       </View>
-
-      <Text className="text-sm leading-5 text-fg-muted">
-        O que você comer entra aqui quando o diário de dieta chegar (Fase 4).
-      </Text>
+      <Text className="text-sm text-fg-muted">Fibra: {formatInt(eaten.fiber)} g</Text>
     </Card>
   );
 }
@@ -52,15 +59,6 @@ function Macro({ name, eaten, target }: { name: string; eaten: number; target: n
         </Text>
       </View>
       <ProgressBar value={eaten} max={target} />
-    </View>
-  );
-}
-
-function ProgressBar({ value, max }: { value: number; max: number }) {
-  const percent = max > 0 ? Math.min(100, (value / max) * 100) : 0;
-  return (
-    <View className="h-2 overflow-hidden rounded-full bg-surface-2">
-      <View className="h-full rounded-full bg-primary" style={{ width: `${percent}%` }} />
     </View>
   );
 }

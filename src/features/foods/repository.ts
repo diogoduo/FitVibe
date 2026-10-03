@@ -32,6 +32,10 @@ export function deleteFood(id: string) {
   db.update(foods).set({ deletedAt: new Date() }).where(eq(foods.id, id)).run();
 }
 
+export function getFoodRow(id: string) {
+  return db.select().from(foods).where(eq(foods.id, id)).get() ?? null;
+}
+
 /** O alimento guardado com esse código de barras (seu ou do Open Food Facts), se houver. */
 export function findFoodByBarcode(barcode: string) {
   return (

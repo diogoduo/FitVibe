@@ -4,6 +4,7 @@ import { Platform, Text } from 'react-native';
 import { Card } from '@/components/ui/card';
 import { Screen } from '@/components/ui/screen';
 import { SupabaseStatusCard } from '@/features/diagnostics/supabase-status-card';
+import { DataSourcesCard, DietSettingsCard } from '@/features/diary/diet-settings-card';
 import { LocalDataCard } from '@/features/profile/local-data-card';
 import { ProfileSummaryCard } from '@/features/profile/profile-summary-card';
 
@@ -14,8 +15,10 @@ export default function SettingsScreen() {
   return (
     <Screen title="Ajustes">
       <ProfileSummaryCard />
+      <DietSettingsCard />
       <SupabaseStatusCard />
       <LocalDataCard />
+      <DataSourcesCard />
       <Card title="Sobre">
         <Text className="text-base text-fg">DuoGym&Diet {appVersion}</Text>
         <Text className="text-sm text-fg-muted">
