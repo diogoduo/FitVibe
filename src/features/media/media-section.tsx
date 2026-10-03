@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import type { ExerciseMedia } from '@/db/schema';
 
-import { deleteMedia, mediaFileUri, pickMediaFromLibrary } from './files';
+import { deleteMedia, mediaFileExists, mediaFileUri, pickMediaFromLibrary } from './files';
 import { linkLabel } from './links';
 import { useExerciseMedia } from './queries';
 
@@ -70,7 +70,9 @@ export function MediaSection({ exerciseId }: { exerciseId: string }) {
               accessibilityLabel={item.kind === 'video' ? 'Vídeo' : 'Foto'}
               className="h-24 w-24 items-center justify-center overflow-hidden rounded-xl bg-surface-2 active:opacity-70"
             >
-              {item.kind === 'image' ? (
+              {!mediaFileExists(item.fileName!) ? (
+                <Text className="px-2 text-center text-xs text-fg-muted">Em outro celular</Text>
+              ) : item.kind === 'image' ? (
                 <Image
                   source={{ uri: mediaFileUri(item.fileName!) }}
                   style={{ width: '100%', height: '100%' }}

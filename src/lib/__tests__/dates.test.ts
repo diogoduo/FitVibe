@@ -4,6 +4,7 @@ import {
   daysBetween,
   formatDayKey,
   formatDayLabel,
+  formatTimeAgo,
   isoWeekday,
   maskBrDate,
   maskTime,
@@ -79,5 +80,22 @@ describe('datas como dia do calendário', () => {
     expect(formatDayLabel('2026-09-29', '2026-09-30')).toBe('Ontem');
     expect(formatDayLabel('2026-09-28', '2026-09-30')).toMatch(/^28 de set/);
     expect(formatDayLabel('2025-09-28', '2026-09-30')).toMatch(/2025/);
+  });
+});
+
+describe('formatTimeAgo', () => {
+  const now = new Date(2026, 9, 3, 18, 0);
+  const minutesAgo = (minutes: number) => new Date(now.getTime() - minutes * 60_000);
+
+  it('minutos e horas no mesmo dia', () => {
+    expect(formatTimeAgo(minutesAgo(0), now)).toBe('agora mesmo');
+    expect(formatTimeAgo(minutesAgo(5), now)).toBe('há 5 min');
+    expect(formatTimeAgo(minutesAgo(59), now)).toBe('há 59 min');
+    expect(formatTimeAgo(minutesAgo(150), now)).toBe('há 2 h');
+  });
+
+  it('dias anteriores com o horário', () => {
+    expect(formatTimeAgo(new Date(2026, 9, 2, 14, 30), now)).toBe('ontem às 14:30');
+    expect(formatTimeAgo(new Date(2026, 8, 28, 9, 0), now)).toMatch(/^28 de set.* às 09:00$/);
   });
 });

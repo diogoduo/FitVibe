@@ -133,3 +133,14 @@ export function formatDayLabel(key: DayKey, today: DayKey = todayKey()): string 
 export function formatTime(date: Date): string {
   return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
+
+/** 'agora mesmo', 'há 5 min', 'há 2 h', 'ontem às 14:30', '28 de set. às 09:00'. */
+export function formatTimeAgo(date: Date, now: Date): string {
+  const minutes = Math.floor((now.getTime() - date.getTime()) / 60_000);
+  if (minutes < 1) return 'agora mesmo';
+  if (minutes < 60) return `há ${minutes} min`;
+  const day = toDayKey(date);
+  const today = toDayKey(now);
+  if (day === today && minutes < 12 * 60) return `há ${Math.floor(minutes / 60)} h`;
+  return `${formatDayLabel(day, today).toLowerCase()} às ${formatTime(date)}`;
+}

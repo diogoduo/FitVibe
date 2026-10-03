@@ -15,6 +15,12 @@ type TextFieldProps = Pick<
   | 'maxLength'
   | 'multiline'
   | 'textContentType'
+  | 'secureTextEntry'
+  | 'autoComplete'
+  | 'autoCorrect'
+  | 'returnKeyType'
+  | 'onSubmitEditing'
+  | 'editable'
 > & {
   label: string;
   /** Unidade mostrada à direita do texto (kg, cm, %). */

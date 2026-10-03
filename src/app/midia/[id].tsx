@@ -6,7 +6,7 @@ import { Alert, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/button';
-import { deleteMedia, mediaFileUri } from '@/features/media/files';
+import { deleteMedia, mediaFileExists, mediaFileUri } from '@/features/media/files';
 import { getMedia } from '@/features/media/queries';
 
 /** Foto ou vídeo de um exercício em tela cheia, com o botão de excluir. */
@@ -40,7 +40,14 @@ export default function MediaViewerScreen() {
   return (
     <View className="flex-1 bg-black" style={{ paddingBottom: insets.bottom + 16 }}>
       <Stack.Screen options={{ title: media.kind === 'video' ? 'Vídeo' : 'Foto' }} />
-      {media.kind === 'video' ? (
+      {!mediaFileExists(media.fileName) ? (
+        <View className="flex-1 justify-center bg-background px-6">
+          <Text className="text-center text-base leading-6 text-fg-muted">
+            Esta mídia foi adicionada em outro celular. Fotos e vídeos dos exercícios ficam só no
+            aparelho onde foram adicionados; a conta guarda apenas o registro.
+          </Text>
+        </View>
+      ) : media.kind === 'video' ? (
         <VideoPlayer uri={uri} />
       ) : (
         <Image source={{ uri }} style={{ flex: 1 }} contentFit="contain" />

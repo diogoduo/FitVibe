@@ -11,6 +11,7 @@ import { db } from '@/db/client';
 import { DatabaseErrorScreen } from '@/db/database-error-screen';
 import migrations from '@/db/migrations/migrations';
 import { useProfile } from '@/features/profile/queries';
+import { SyncProvider } from '@/sync/sync-provider';
 import { palette } from '@/theme/palette';
 
 // A tela de abertura fica até o banco local estar migrado e o perfil carregado.
@@ -50,7 +51,14 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={navigationTheme}>
       <StatusBar style="light" />
-      {error ? <DatabaseErrorScreen error={error} /> : success ? <AppStack /> : null}
+      {error ? (
+        <DatabaseErrorScreen error={error} />
+      ) : success ? (
+        <>
+          <SyncProvider />
+          <AppStack />
+        </>
+      ) : null}
     </ThemeProvider>
   );
 }
@@ -111,6 +119,8 @@ function AppStack() {
       <Stack.Protected guard={!hasProfile}>
         <Stack.Screen name="cadastro" options={{ gestureEnabled: false }} />
       </Stack.Protected>
+      {/* Fora das guardas: abre dos Ajustes e do cadastro, e sobrevive à troca de dados. */}
+      <Stack.Screen name="conta" options={formSheet} />
     </Stack>
   );
 }

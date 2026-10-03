@@ -2,36 +2,42 @@ import { Alert, Text } from 'react-native';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { signOut, wipeDevice } from '@/sync/account';
+import { useSession } from '@/sync/hooks';
 
-import { deleteAllMediaFiles } from '../media/files';
-import { cancelRestNotification } from '../workout/rest';
-import { wipeAllData } from './repository';
-
-/** Ajustes: onde os dados ficam e o botão de apagar tudo (volta para o cadastro). */
+/** Ajustes: onde os dados ficam e o botão de apagar tudo deste celular (volta para o cadastro). */
 export function LocalDataCard() {
+  const { session } = useSession();
+
+  const wipe = async () => {
+    if (!session) {
+      wipeDevice();
+      return;
+    }
+    // Com conta: envia o que falta, sai e apaga. Os dados continuam salvos na conta.
+    const result = await signOut('wipe');
+    if (result.status === 'error') Alert.alert('Não deu para apagar', result.message);
+  };
+
   const confirmWipe = () =>
     Alert.alert(
-      'Apagar todos os dados?',
-      'Perfil, metas, pesagens, medidas, plano, exercícios e mídias serão apagados deste celular. Não dá para desfazer.',
+      'Apagar todos os dados deste celular?',
+      session
+        ? 'Perfil, metas, pesagens, treinos, dieta e mídias saem deste celular e você sai da conta. O que já está na conta continua lá.'
+        : 'Perfil, metas, pesagens, treinos, dieta e mídias serão apagados. Sem conta, não dá para desfazer.',
       [
         { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Apagar tudo',
-          style: 'destructive',
-          onPress: () => {
-            wipeAllData();
-            deleteAllMediaFiles();
-            cancelRestNotification();
-          },
-        },
+        { text: 'Apagar tudo', style: 'destructive', onPress: () => void wipe() },
       ],
     );
 
   return (
     <Card title="Seus dados">
       <Text className="text-base leading-6 text-fg-muted">
-        Tudo fica salvo só neste celular e funciona sem internet. A cópia no servidor chega com a
-        conta e a sincronização (Fase 5).
+        Tudo fica salvo neste celular e funciona sem internet.{' '}
+        {session
+          ? 'Com a conta, uma cópia vai para o servidor sempre que houver conexão. Fotos e vídeos dos exercícios ficam só no celular onde foram adicionados.'
+          : 'Crie uma conta para ter uma cópia no servidor.'}
       </Text>
       <Button label="Apagar todos os dados" variant="danger" onPress={confirmWipe} />
     </Card>

@@ -1,5 +1,6 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Alert, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,8 @@ import {
 import { createProfile } from '@/features/profile/repository';
 import { waterGoalMl } from '@/features/foods/nutrition';
 import { todayKey } from '@/lib/dates';
+import { useSession } from '@/sync/hooks';
+import { supabase } from '@/sync/supabase';
 
 const STEPS: { title: string; subtitle: string; fields: ProfileField[] }[] = [
   {
@@ -42,6 +45,7 @@ const STEPS: { title: string; subtitle: string; fields: ProfileField[] }[] = [
 /** Cadastro inicial em 3 etapas. Só aparece enquanto não existe perfil (ver _layout). */
 export default function SignUpScreen() {
   const insets = useSafeAreaInsets();
+  const { session } = useSession();
   const [step, setStep] = useState(0);
   const [values, setValues] = useState(EMPTY_PROFILE_FORM);
   const [weightText, setWeightText] = useState('');
@@ -107,6 +111,23 @@ export default function SignUpScreen() {
         </Text>
         <Text className="text-3xl font-bold text-fg">{current.title}</Text>
         <Text className="text-base leading-6 text-fg-muted">{current.subtitle}</Text>
+        {step === 0 && supabase ? (
+          session ? (
+            <Text className="text-sm leading-5 text-fg-muted">
+              Conectado como {session.user.email}. O cadastro vai para a conta.
+            </Text>
+          ) : (
+            <Pressable
+              onPress={() => router.push('/conta')}
+              accessibilityRole="link"
+              className="self-start py-1 active:opacity-70"
+            >
+              <Text className="text-base font-semibold text-primary">
+                Já usa o app? Entrar na conta
+              </Text>
+            </Pressable>
+          )
+        ) : null}
       </View>
 
       {/* key: cada etapa começa rolada para o topo */}

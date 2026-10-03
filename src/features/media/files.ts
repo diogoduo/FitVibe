@@ -16,6 +16,14 @@ export function mediaFileUri(fileName: string): string {
   return new File(mediaDirectory(), fileName).uri;
 }
 
+/**
+ * O arquivo está neste celular? A conta sincroniza o registro da mídia, mas a foto ou o vídeo
+ * fica só no celular onde foi adicionado.
+ */
+export function mediaFileExists(fileName: string): boolean {
+  return new File(mediaDirectory(), fileName).exists;
+}
+
 function extensionOf(name: string | null | undefined) {
   const match = name ? /\.[a-z0-9]{2,5}$/i.exec(name) : null;
   return match ? match[0].toLowerCase() : null;
