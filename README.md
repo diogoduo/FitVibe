@@ -33,12 +33,14 @@ duo-gym-diet/
 │   │   ├── foods/            # TACO (taco/), busca, Open Food Facts, alimentos próprios
 │   │   └── diary/            # refeições, diário, refeições salvas, água
 │   ├── lib/                  # datas, números (pt-BR) e Supabase
+│   ├── sync/                 # conta e sincronização (motor, Supabase, telas de status)
 │   ├── theme/palette.js      # cores do app (fonte única para Tailwind e código nativo)
 │   └── global.css            # entrada do Tailwind (NativeWind)
 ├── assets/exercises/         # fotos do catálogo (WebP, geradas pelo script)
-├── scripts/                  # build-exercise-images.mjs, build-taco.mjs
+├── scripts/                  # catálogo, TACO, SQL da sincronização, Supabase local, testes
 ├── drizzle.config.ts         # drizzle-kit (gera as migrações do SQLite)
 ├── supabase/config.toml      # Supabase local (Docker)
+├── supabase/migrations/      # esquema do servidor (gerado de src/db/schema.ts)
 └── tailwind.config.js        # tokens de cor como variáveis CSS
 ```
 
@@ -57,6 +59,7 @@ npm install
 cp .env.example .env.local   # preencha EXPO_PUBLIC_SUPABASE_KEY (veja abaixo)
 npm run db:start             # sobe o Supabase local no Docker
 npm run db:status            # mostra a "Publishable key" para o .env.local
+npm run db:migrate           # cria as tabelas da sincronização no Supabase local
 npx expo login               # uma vez só: loga o Expo CLI na sua conta Expo
 npm start                    # abre o Metro e mostra o QR code
 ```
@@ -68,8 +71,10 @@ permita o acesso à **Rede Local** quando o iOS pedir.
 Na primeira vez, o app abre no cadastro. A aba **Ajustes** mostra se o celular alcança o
 Supabase (**Conectado**).
 
-Outros comandos: `npm test` (Jest), `npm run typecheck`, `npm run lint`, `npm run db:stop` e
-`npm run db:generate` (gera a migração do SQLite depois de mudar `src/db/schema.ts`).
+Outros comandos: `npm test` (Jest), `npm run test:sync` (testes contra o Supabase local),
+`npm run typecheck`, `npm run lint`, `npm run db:stop`, `npm run db:generate` (gera a migração
+do SQLite depois de mudar `src/db/schema.ts`) e `npm run db:sync-sql` (regera o SQL do servidor e
+os gatilhos da fila a partir do esquema).
 O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 
 ## Plano de desenvolvimento
@@ -81,10 +86,16 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 2 | Biblioteca de exercícios, mídias, plano semanal e seu treino pré-carregado | ✅ |
 | 3 | Treino em tempo real: aquecimento automático, e1RM, recordes, progressão, timer com notificação | ✅ |
 | 4 | Dieta: TACO offline, scanner (Open Food Facts), diário por refeição, porções, água | ✅ |
-| 5 | Conta e sincronização: login, SyncQueue, Last-Write-Wins, RLS | |
-| 6 | Lembretes de água e refeições, exportação CSV e PDF | |
-| 7 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | |
-| 8 | Meta calórica adaptativa, fotos de progresso, tema claro, acabamento | |
+| 5 | Conta e sincronização: login, fila de envio, última alteração vence, RLS | ⚠️ |
+| 6 | Social: perfil com @usuário, seguir (com aprovação), feed, posts com foto e legenda, curtidas, comentários, bloquear | |
+| 7 | Notificações dentro do app: sininho com contador, lista e aviso com o app aberto | |
+| 8 | Lembretes de água e refeições, exportação CSV e PDF | |
+| 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | |
+| 10 | Meta calórica adaptativa, fotos de progresso, tema claro, acabamento | |
+
+Tudo no plano gratuito: Supabase Free e Expo Go, sem conta paga da Apple. Por isso as
+notificações da Fase 7 aparecem só dentro do app (push com o app fechado exige build próprio e a
+conta de desenvolvedor da Apple).
 
 ## Fase 0 — Fundação
 
@@ -234,3 +245,61 @@ progressão (↑) e os recordes funcionaram.
 iOS passaram no PC; no iPhone (Expo Go), diário, busca, porções, água e o leitor de código com o
 Open Food Facts funcionaram. A unidade em ml veio de um teste no aparelho (refrigerante lido pelo
 código não aceitava porção em ml).
+
+## Fase 5 — Conta e sincronização
+
+- **Conta opcional** (e-mail e senha, Supabase Auth). Sem conta, o app continua 100% local. A
+  sessão fica salva no próprio SQLite (`expo-sqlite/localStorage`).
+- **Fila de envio por gatilhos**: cada inserção ou alteração nas 20 tabelas sincronizadas cai em
+  `sync_queue` (gatilhos SQLite gerados do esquema). Exclusões são marcadas (`deleted_at`), não
+  apagadas, para a exclusão chegar no outro celular.
+- **Última alteração vence**: cada registro tem `updated_at` do celular; o servidor recusa uma
+  versão mais antiga do que a que já tem (gatilho `sync_before_write`), e o celular só aplica o que
+  veio do servidor se for mais novo. Uma alteração feita durante o envio não se perde.
+- **Download incremental**: por tabela, pelo carimbo do servidor (`server_updated_at`) com cursor
+  (carimbo, id), páginas de 500 e 60 s de sobreposição para não perder nada.
+- **Quando sincroniza**: ao abrir o app, ao voltar para ele, quando a internet volta e 5 s depois
+  de cada alteração. Ajustes → Conta mostra quando foi a última vez, o que falta enviar, erros e o
+  botão **Sincronizar agora**.
+- **Primeiro login**: conta vazia recebe tudo do celular; celular vazio baixa tudo da conta; os
+  dois com dados (ou dados de outra conta no celular) → o app pergunta se troca os do celular
+  pelos da conta. Dá para entrar já no cadastro ("Já usa o app? Entrar na conta").
+- **Sair**: mantendo os dados no celular, ou apagando deste celular (só depois de enviar o que
+  falta). **Excluir conta** apaga a conta e tudo dela no servidor (`delete_my_account`).
+- **Segurança**: RLS em todas as tabelas (cada conta só lê e grava o que é seu); o app usa só a
+  chave **publishable**. A secreta (service_role) nunca entra no app.
+- **Um esquema só**: `npm run db:sync-sql` gera o SQL do servidor
+  (`supabase/migrations/…_sincronizacao.sql`) e os gatilhos do celular a partir de
+  `src/db/schema.ts`, e um teste confere que os arquivos estão atualizados.
+- **Fotos e vídeos dos exercícios** continuam só no celular onde foram adicionados (o registro
+  sincroniza; no outro celular aparece "Em outro celular").
+- **Testes**: 172 no Jest, incluindo o motor com dois celulares simulados, e 4 de integração
+  contra o Supabase local de verdade (`npm run test:sync`): dois celulares, última alteração
+  vence, paginação, RLS, primeiro login nos três casos, sair mantendo/apagando e excluir a conta.
+
+### Supabase local sem a CLI
+
+Neste PC o Windows bloqueia o executável da CLI do Supabase (Controle de Aplicativos). Os
+contêineres criados na Fase 0 são controlados direto pelo Docker em
+`scripts/supabase-local.mjs` (`db:start`, `db:stop`, `db:status`, `db:migrate`), e as migrações
+ficam registradas na mesma tabela que a CLI usa.
+
+### Passar para a nuvem (Supabase Free)
+
+1. Crie um projeto em [supabase.com](https://supabase.com) (plano Free).
+2. **SQL Editor** → cole e rode `supabase/migrations/20261003120000_sincronizacao.sql`.
+3. **Authentication → Sign In / Providers → Email**: desligue **Confirm email** (o envio de
+   e-mails do plano grátis é limitado a poucos por hora).
+4. **Project Settings → API Keys**: copie a URL do projeto e a **publishable key** para o
+   `.env.local`:
+   ```
+   EXPO_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+   EXPO_PUBLIC_SUPABASE_KEY=sb_publishable_...
+   ```
+5. Reinicie o `npm start`. Com a nuvem, o app sincroniza também fora da Wi-Fi de casa.
+
+O plano Free pausa o projeto depois de 7 dias sem uso (reativa no painel) e tem 500 MB de banco
+e 1 GB de arquivos, de sobra para duas pessoas.
+
+⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
+(21/21) e o bundle de iOS passaram no PC.
