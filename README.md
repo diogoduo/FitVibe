@@ -33,7 +33,9 @@ duo-gym-diet/
 │   │   ├── plan/             # plano semanal, prescrição e plano de exemplo
 │   │   ├── workout/          # treino em tempo real, progressão, e1RM, recordes, descanso
 │   │   ├── foods/            # TACO (taco/), busca, Open Food Facts, alimentos próprios
-│   │   └── diary/            # refeições, diário, refeições salvas, água
+│   │   ├── diary/            # refeições, diário, refeições salvas, água
+│   │   ├── account/          # conta nos Ajustes e a escolha de dados no primeiro login
+│   │   └── social/           # perfil público, feed, posts, curtidas, comentários, fila de posts
 │   ├── lib/                  # datas, números (pt-BR) e Supabase
 │   ├── sync/                 # conta e sincronização (motor, Supabase, telas de status)
 │   ├── theme/palette.js      # cores do app (fonte única para Tailwind e código nativo)
@@ -90,7 +92,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 3 | Treino em tempo real: aquecimento automático, e1RM, recordes, progressão, timer com notificação | ✅ |
 | 4 | Dieta: TACO offline, scanner (Open Food Facts), diário por refeição, porções, água | ✅ |
 | 5 | Conta e sincronização: login, fila de envio, última alteração vence, RLS | ⚠️ |
-| 6 | Social: perfil com @usuário, seguir (com aprovação), feed, posts com foto e legenda, curtidas, comentários, bloquear | |
+| 6 | Social: perfil com @usuário, seguir (com aprovação), feed, posts com foto e legenda, curtidas, comentários, bloquear | ⚠️ |
 | 7 | Notificações dentro do app: sininho com contador, lista e aviso com o app aberto | |
 | 8 | Lembretes de água e refeições, exportação CSV e PDF | |
 | 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | |
@@ -312,6 +314,41 @@ pelo SQL Editor, na ordem dos arquivos.
 
 O plano Free pausa o projeto depois de 7 dias sem uso (reativa no painel) e tem 500 MB de banco
 e 1 GB de arquivos, de sobra para duas pessoas.
+
+⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
+(21/21) e o bundle de iOS passaram no PC.
+
+## Fase 6 — Social
+
+- **Abas**: Hoje · Treino · Dieta · **Feed** · **Perfil**. O Progresso fica dentro do Perfil e os
+  Ajustes no ⚙️ do Perfil.
+- **Perfil público** (precisa de conta): foto, nome, @usuário, bio e contagens (posts,
+  seguidores, seguindo). Começa **privado**: seguir vira pedido, e a pessoa aceita ou recusa em
+  Perfil → "pedidos para seguir você". Ficar público aceita os pedidos pendentes.
+- **O dia no perfil**: depois de cada sincronização, o celular publica o resumo de hoje com o que
+  a pessoa escolheu mostrar (treino, dieta e água, peso; o peso começa desligado). Quem pode ver
+  o perfil vê o dia mais recente.
+- **Posts**: refeição (do cartão da refeição na Dieta), treino (do resumo do treino), metas, "meu
+  dia" ou só foto, sempre com legenda e foto opcional (câmera ou galeria, reduzida para 1080 px em
+  JPEG). O post guarda uma cópia dos dados: editar o diário depois não muda o post.
+- **Sem internet**: o post entra numa fila no celular (`post_outbox`) e vai sozinho depois; o
+  feed mostra "esperando internet", com tentar de novo e descartar. O id vem do celular, então
+  reenviar não duplica.
+- **Feed** (eu + quem sigo), curtir (responde na hora e desfaz se o servidor recusar),
+  comentários (apaga quem escreveu ou o dono do post), buscar pessoas por @ ou nome, listas de
+  seguidores, remover seguidor, **bloquear** (desfaz o seguir nos dois sentidos e esconde o perfil)
+  e a lista de bloqueados nos Ajustes.
+- **Regras no servidor**, não no app (`supabase/migrations/…_social.sql`): RLS em todas as tabelas
+  e funções `can_view`, `posts_page`, `profile_view` etc. As fotos dos posts ficam num bucket
+  privado: só quem pode ver o perfil recebe o link (assinado, vale 1 h). Fotos de perfil ficam
+  num bucket público, como no Instagram. Excluir a conta apaga as fotos também.
+- **Dados do servidor nas telas** com React Query (cache, recarregar ao voltar ao app e ao puxar a
+  lista); trocar de conta limpa o cache.
+- **Testes**: 181 no Jest (inclui as cópias dos dados para os posts e a fila) e 10 de integração
+  contra o Supabase, 6 deles das regras do social: privado × aceito, curtidas e comentários,
+  bloqueio, privado → público, fotos e @usuário repetido.
+
+Para a nuvem: rode também `supabase/migrations/20261003180000_social.sql` no SQL Editor.
 
 ⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
 (21/21) e o bundle de iOS passaram no PC.
