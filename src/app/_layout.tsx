@@ -1,5 +1,6 @@
 import '@/global.css';
 
+import { QueryClientProvider } from '@tanstack/react-query';
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
 import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
 import * as Notifications from 'expo-notifications';
@@ -11,6 +12,8 @@ import { db } from '@/db/client';
 import { DatabaseErrorScreen } from '@/db/database-error-screen';
 import migrations from '@/db/migrations/migrations';
 import { useProfile } from '@/features/profile/queries';
+import { SocialProvider } from '@/features/social/social-provider';
+import { queryClient } from '@/lib/query-client';
 import { SyncProvider } from '@/sync/sync-provider';
 import { palette } from '@/theme/palette';
 
@@ -49,17 +52,20 @@ export default function RootLayout() {
   }, [error]);
 
   return (
-    <ThemeProvider value={navigationTheme}>
-      <StatusBar style="light" />
-      {error ? (
-        <DatabaseErrorScreen error={error} />
-      ) : success ? (
-        <>
-          <SyncProvider />
-          <AppStack />
-        </>
-      ) : null}
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={navigationTheme}>
+        <StatusBar style="light" />
+        {error ? (
+          <DatabaseErrorScreen error={error} />
+        ) : success ? (
+          <>
+            <SyncProvider />
+            <SocialProvider />
+            <AppStack />
+          </>
+        ) : null}
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
@@ -115,6 +121,15 @@ function AppStack() {
         <Stack.Screen name="prescricao/[id]" options={formSheet} />
         <Stack.Screen name="midia-link" options={formSheet} />
         <Stack.Screen name="midia/[id]" options={formSheet} />
+        <Stack.Screen name="ajustes" options={{ ...pushed, title: '' }} />
+        <Stack.Screen name="editar-perfil" options={formSheet} />
+        <Stack.Screen name="novo-post" options={formSheet} />
+        <Stack.Screen name="u/[username]" options={pushed} />
+        <Stack.Screen name="post/[id]" options={pushed} />
+        <Stack.Screen name="buscar" options={pushed} />
+        <Stack.Screen name="solicitacoes" options={pushed} />
+        <Stack.Screen name="conexoes" options={pushed} />
+        <Stack.Screen name="bloqueados" options={pushed} />
       </Stack.Protected>
       <Stack.Protected guard={!hasProfile}>
         <Stack.Screen name="cadastro" options={{ gestureEnabled: false }} />

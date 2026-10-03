@@ -17,13 +17,13 @@ export default function TabsLayout() {
         <NativeTabs.Trigger.Label>Dieta</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="fork.knife" md="restaurant" />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="progresso">
-        <NativeTabs.Trigger.Label>Progresso</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="chart.line.uptrend.xyaxis" md="monitoring" />
+      <NativeTabs.Trigger name="feed">
+        <NativeTabs.Trigger.Label>Feed</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="square.stack.fill" md="dynamic_feed" />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="ajustes">
-        <NativeTabs.Trigger.Label>Ajustes</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="gearshape.fill" md="settings" />
+      <NativeTabs.Trigger name="meu-perfil">
+        <NativeTabs.Trigger.Label>Perfil</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="person.crop.circle.fill" md="account_circle" />
       </NativeTabs.Trigger>
     </NativeTabs>
   );

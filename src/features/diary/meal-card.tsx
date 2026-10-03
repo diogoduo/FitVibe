@@ -14,10 +14,12 @@ type MealCardProps = {
   entries: DiaryEntry[];
   /** A mesma refeição no dia anterior tem alimentos (mostra "Copiar de ontem"). */
   canCopyYesterday: boolean;
+  /** Com conta: mostra "Postar". */
+  canPost?: boolean;
 };
 
 /** Uma refeição do dia: alimentos com gramas e kcal, totais e as ações. */
-export function MealCard({ meal, day, entries, canCopyYesterday }: MealCardProps) {
+export function MealCard({ meal, day, entries, canCopyYesterday, canPost }: MealCardProps) {
   const total = sumNutrients(entries);
 
   const confirmDelete = (entry: DiaryEntry) =>
@@ -68,6 +70,17 @@ export function MealCard({ meal, day, entries, canCopyYesterday }: MealCardProps
           <MealAction
             label="Copiar de ontem"
             onPress={() => copyMeal(meal.id, addDays(day, -1), day)}
+          />
+        ) : null}
+        {canPost && entries.length > 0 ? (
+          <MealAction
+            label="Postar"
+            onPress={() =>
+              router.push({
+                pathname: '/novo-post',
+                params: { tipo: 'meal', refeicao: meal.id, dia: day },
+              })
+            }
           />
         ) : null}
         {entries.length > 0 ? (

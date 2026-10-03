@@ -6,13 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { formatTimeAgo } from '@/lib/dates';
 import { useNow } from '@/lib/use-now';
-import {
-  deleteAccount,
-  resumeAccount,
-  signOut,
-  syncNow,
-  type AccountResult,
-} from '@/sync/account';
+import { deleteAccount, resumeAccount, signOut, syncNow, type AccountResult } from '@/sync/account';
 import { useSession, useSyncStatus } from '@/sync/hooks';
 import { supabase } from '@/sync/supabase';
 import { palette } from '@/theme/palette';
@@ -96,7 +90,10 @@ export function AccountCard() {
         : 'Tudo o que está aqui já está salvo na conta.',
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Sair e manter neste celular', onPress: () => run('Saindo…', () => signOut('keep')) },
+        {
+          text: 'Sair e manter neste celular',
+          onPress: () => run('Saindo…', () => signOut('keep')),
+        },
         {
           text: 'Sair e apagar deste celular',
           style: 'destructive',

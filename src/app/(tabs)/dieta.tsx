@@ -7,6 +7,7 @@ import { ensureDefaultMeals } from '@/features/diary/repository';
 import { MealCard } from '@/features/diary/meal-card';
 import { WaterCard } from '@/features/diary/water-card';
 import { DailyGoalCard } from '@/features/goals/daily-goal-card';
+import { useMySocialProfile } from '@/features/social/queries';
 import { addDays, formatDayLabel, todayKey } from '@/lib/dates';
 
 /** O diário: o dia (← →), meta × consumo, água e as refeições com o que foi comido. */
@@ -16,6 +17,7 @@ export default function DietScreen() {
   const entries = useDiaryDay(day);
   const yesterday = useDiaryDay(addDays(day, -1));
   const today = todayKey();
+  const canPost = useMySocialProfile().data != null;
 
   // Refeições padrão na primeira vez (e depois de apagar os dados).
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function DietScreen() {
           day={day}
           entries={entries.filter((entry) => entry.mealId === meal.id)}
           canCopyYesterday={yesterday.some((entry) => entry.mealId === meal.id)}
+          canPost={canPost}
         />
       ))}
       {visibleMeals.length === 0 && meals.length > 0 ? (

@@ -39,14 +39,14 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "O FitVibe usa a câmera para ler o código de barras dos alimentos.",
+          "cameraPermission": "O FitVibe usa a câmera para ler o código de barras dos alimentos e tirar fotos para os seus posts.",
           "recordAudioAndroid": false
         }
       ],
       [
         "expo-image-picker",
         {
-          "photosPermission": "O FitVibe usa suas fotos e vídeos para guardar demonstrações nos exercícios.",
+          "photosPermission": "O FitVibe usa suas fotos e vídeos nos posts, na foto de perfil e nas demonstrações dos exercícios.",
           "cameraPermission": false,
           "microphonePermission": false
         }

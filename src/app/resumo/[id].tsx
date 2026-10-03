@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import type { MuscleGroup } from '@/db/schema';
 import { MUSCLE_LABELS } from '@/features/exercises/labels';
 import { useAllExercises } from '@/features/exercises/queries';
+import { useMySocialProfile } from '@/features/social/queries';
 import { formatSet, formatWorkoutDuration } from '@/features/workout/format';
 import { useWorkout, useWorkoutEntries, useWorkoutSets } from '@/features/workout/queries';
 import { RECORD_LABELS, setsPerMuscle } from '@/features/workout/records';
@@ -20,6 +21,7 @@ export default function WorkoutSummaryScreen() {
   const entries = useWorkoutEntries(id);
   const sets = useWorkoutSets(entries.map((entry) => entry.id));
   const exercises = useAllExercises();
+  const canPost = useMySocialProfile().data != null;
 
   if (!workout?.finishedAt || workout.deletedAt) {
     return loaded ? (
@@ -135,6 +137,14 @@ export default function WorkoutSummaryScreen() {
           ))}
         </Card>
 
+        {canPost ? (
+          <Button
+            label="Postar treino"
+            onPress={() =>
+              router.push({ pathname: '/novo-post', params: { tipo: 'workout', treino: id } })
+            }
+          />
+        ) : null}
         <Button
           label="Editar registro"
           variant="secondary"
