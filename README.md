@@ -92,7 +92,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 3 | Treino em tempo real: aquecimento automático, e1RM, recordes, progressão, timer com notificação | ✅ |
 | 4 | Dieta: TACO offline, scanner (Open Food Facts), diário por refeição, porções, água | ✅ |
 | 5 | Conta e sincronização: login, fila de envio, última alteração vence, RLS | ✅ |
-| 6 | Social: perfil com @usuário, seguir (com aprovação), feed, posts com foto e legenda, curtidas, comentários, bloquear | ⚠️ |
+| 6 | Social: perfil com @usuário, seguir (com aprovação), feed, posts com foto e legenda, curtidas, comentários, bloquear | ✅ |
 | 7 | Notificações dentro do app: sininho com contador, lista e aviso com o app aberto | |
 | 8 | Lembretes de água e refeições, exportação CSV e PDF | |
 | 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | |
@@ -351,5 +351,7 @@ sincronização com o Supabase na nuvem funcionaram.
 
 Para a nuvem: rode também `supabase/migrations/20261003180000_social.sql` no SQL Editor.
 
-⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
-(21/21) e o bundle de iOS passaram no PC.
+✅ **Validado no PC e no iPhone:** TypeScript, lint, testes, os 10 testes de integração (no
+Supabase local e na nuvem), `expo-doctor` (21/21) e o bundle de iOS passaram no PC; nos dois
+iPhones, perfil, seguir com aprovação, posts com foto, curtidas, comentários e o dia no perfil
+funcionaram.
