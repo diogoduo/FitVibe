@@ -17,7 +17,8 @@ duo-gym-diet/
 │   │   ├── (tabs)/           # as 5 abas
 │   │   ├── cadastro, peso, medida, perfil, historico-metas
 │   │   ├── biblioteca, exercicio/, catalogo/, sessao/, prescricao/, midia/...
-│   │   └── registro/ (treino em andamento), resumo/, historico-treinos
+│   │   ├── registro/ (treino em andamento), resumo/, historico-treinos
+│   │   └── alimentos, alimento, alimento-editar, scanner, agua, refeicoes...
 │   ├── components/ui/        # Screen, Card, Button, TextField, ChoiceChips, DateTimeField...
 │   ├── db/                   # SQLite: schema.ts, client.ts, migrations/ (geradas)
 │   ├── features/             # por funcionalidade: contas, consultas, gravações e cards
@@ -28,12 +29,14 @@ duo-gym-diet/
 │   │   ├── exercises/        # catálogo (catalog/), biblioteca e exercícios próprios
 │   │   ├── media/            # links e fotos/vídeos da galeria
 │   │   ├── plan/             # plano semanal, prescrição e plano de exemplo
-│   │   └── workout/          # treino em tempo real, progressão, e1RM, recordes, descanso
+│   │   ├── workout/          # treino em tempo real, progressão, e1RM, recordes, descanso
+│   │   ├── foods/            # TACO (taco/), busca, Open Food Facts, alimentos próprios
+│   │   └── diary/            # refeições, diário, refeições salvas, água
 │   ├── lib/                  # datas, números (pt-BR) e Supabase
 │   ├── theme/palette.js      # cores do app (fonte única para Tailwind e código nativo)
 │   └── global.css            # entrada do Tailwind (NativeWind)
 ├── assets/exercises/         # fotos do catálogo (WebP, geradas pelo script)
-├── scripts/                  # build-exercise-images.mjs
+├── scripts/                  # build-exercise-images.mjs, build-taco.mjs
 ├── drizzle.config.ts         # drizzle-kit (gera as migrações do SQLite)
 ├── supabase/config.toml      # Supabase local (Docker)
 └── tailwind.config.js        # tokens de cor como variáveis CSS
@@ -77,7 +80,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 1 | Banco local (SQLite + Drizzle), perfil, TMB/GET, metas de macros, peso com média móvel, medidas | ✅ |
 | 2 | Biblioteca de exercícios, mídias, plano semanal e seu treino pré-carregado | ✅ |
 | 3 | Treino em tempo real: aquecimento automático, e1RM, recordes, progressão, timer com notificação | ✅ |
-| 4 | Dieta: TACO offline, scanner (Open Food Facts), diário por refeição, porções, água | |
+| 4 | Dieta: TACO offline, scanner (Open Food Facts), diário por refeição, porções, água | ✅ |
 | 5 | Conta e sincronização: login, SyncQueue, Last-Write-Wins, RLS | |
 | 6 | Lembretes de água e refeições, exportação CSV e PDF | |
 | 7 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | |
@@ -201,3 +204,29 @@ treino do dia funcionaram.
 ⚠️ **Validado no PC, falta validar no iPhone:** TypeScript, lint, 125 testes, `expo-doctor`
 (21/21) e o bundle de iOS passaram. Teclado nas séries, timer, vibração e a notificação com o app
 em segundo plano só dá para conferir no aparelho.
+
+## Fase 4 — Dieta
+
+- **TACO 4ª edição** (597 alimentos, NEPA/UNICAMP, 2011) embutida no app em JSON, gerada por
+  `scripts/build-taco.mjs` a partir do CSV do projeto [brolesi/taco](https://github.com/brolesi/taco)
+  (fixado num commit). Por 100 g: kcal, proteína, carboidrato, gordura e fibra.
+- **Código de barras** (`expo-camera`): procura primeiro no celular e depois no
+  [Open Food Facts](https://openfoodfacts.org) (licença ODbL, sem chave); o produto fica salvo no
+  celular com a porção do rótulo. Produto não encontrado, incompleto ou sem internet: abre o
+  cadastro com o código preenchido, e da próxima vez o leitor já reconhece.
+- **Alimentos seus** com os valores do rótulo por 100 g ou por porção (o app converte e guarda a
+  porção). **Porções salvas** por alimento ("1 pão francês = 50 g") e **favoritos**.
+- **Busca** única nas três fontes, sem diferenciar acento: favoritos e recentes no topo, depois
+  quem começa com o texto. O preparo (cru, cozido, grelhado...) aparece em destaque.
+- **Diário por refeição** (6 padrão, editáveis em Ajustes): cada registro guarda uma cópia do
+  nome e dos valores, então editar ou apagar o alimento depois não muda o passado. **Copiar de
+  ontem** e **refeições salvas** ("Café padrão") para repetir com um toque.
+- **Meta × consumo** do dia escolhido (com a meta que valia naquele dia, do histórico de metas),
+  fibra e aviso ao passar. **Água**: meta de 35 ml por kg de peso de tendência (ou definida à mão
+  em Perfil e metas), +250 / +500 / outro valor e desfazer.
+- **Testes**: 148 no Jest, incluindo a TACO, a busca, a leitura da resposta do Open Food Facts, o
+  formulário do rótulo e as gravações do diário.
+
+⚠️ **Validado no PC, falta validar no iPhone:** TypeScript, lint, 148 testes, `expo-doctor`
+(21/21) e o bundle de iOS passaram. Câmera e leitura do código, a consulta ao Open Food Facts e o
+teclado nos formulários só dá para conferir no aparelho.
