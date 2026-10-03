@@ -12,7 +12,13 @@ import { createTestDb, type TestDb } from '@/db/test-db';
 
 import { pendingCount, pull, push, type SyncDb } from '../engine';
 import { supabaseRemote } from '../remote';
-import { hasSyncServer, testClient, testEmail, TEST_PASSWORD } from '../test-server';
+import {
+  deleteTestAccounts,
+  hasSyncServer,
+  testClient,
+  testEmail,
+  TEST_PASSWORD,
+} from '../test-server';
 
 const suite = hasSyncServer ? describe : describe.skip;
 
@@ -45,6 +51,7 @@ const profileRow = (id: string) => ({
 
 suite('sincronização com o Supabase local', () => {
   jest.setTimeout(30_000);
+  afterAll(deleteTestAccounts);
 
   it('dois celulares da mesma conta, a última alteração vence, paginação real', async () => {
     const client = await newUser();

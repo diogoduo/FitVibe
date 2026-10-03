@@ -74,7 +74,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node scripts/supabase-local.mjs migrate",
     "db:sync-sql": "node scripts/build-sync-sql.mts",
-    "test:sync": "node scripts/test-sync.mjs"
+    "test:sync": "node scripts/test-sync.mjs",
+    "test:sync:cloud": "node scripts/test-sync.mjs --cloud"
   },
   "private": true,
   "jest": {

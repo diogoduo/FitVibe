@@ -46,7 +46,7 @@ const AUTH_ERRORS: [RegExp, string][] = [
   [/email not confirmed/i, 'Confirme o e-mail antes de entrar.'],
   [
     /network request failed|failed to fetch|fetch failed|timed out/i,
-    'Sem conexão com o servidor. Confira a internet (no servidor local: mesmo Wi-Fi e o Docker ligado).',
+    'Sem conexão com o servidor. Confira a internet e tente de novo.',
   ],
 ];
 

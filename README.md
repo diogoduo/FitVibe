@@ -73,7 +73,8 @@ permita o acesso à **Rede Local** quando o iOS pedir.
 Na primeira vez, o app abre no cadastro. A aba **Ajustes** mostra se o celular alcança o
 Supabase (**Conectado**).
 
-Outros comandos: `npm test` (Jest), `npm run test:sync` (testes contra o Supabase local),
+Outros comandos: `npm test` (Jest), `npm run test:sync` e `npm run test:sync:cloud` (testes de
+integração contra o Supabase local ou o da nuvem; criam contas temporárias e as excluem no fim),
 `npm run typecheck`, `npm run lint`, `npm run db:stop`, `npm run db:generate` (gera a migração
 do SQLite depois de mudar `src/db/schema.ts`) e `npm run db:sync-sql` (regera o SQL do servidor e
 os gatilhos da fila a partir do esquema).
@@ -276,8 +277,9 @@ código não aceitava porção em ml).
 - **Fotos e vídeos dos exercícios** continuam só no celular onde foram adicionados (o registro
   sincroniza; no outro celular aparece "Em outro celular").
 - **Testes**: 172 no Jest, incluindo o motor com dois celulares simulados, e 4 de integração
-  contra o Supabase local de verdade (`npm run test:sync`): dois celulares, última alteração
-  vence, paginação, RLS, primeiro login nos três casos, sair mantendo/apagando e excluir a conta.
+  contra um Supabase de verdade, local e na nuvem (`npm run test:sync` / `test:sync:cloud`): dois
+  celulares, última alteração vence, paginação, RLS, primeiro login nos três casos, sair
+  mantendo/apagando e excluir a conta.
 
 ### Supabase local sem a CLI
 
@@ -286,7 +288,10 @@ contêineres criados na Fase 0 são controlados direto pelo Docker em
 `scripts/supabase-local.mjs` (`db:start`, `db:stop`, `db:status`, `db:migrate`), e as migrações
 ficam registradas na mesma tabela que a CLI usa.
 
-### Passar para a nuvem (Supabase Free)
+### Supabase na nuvem (Free)
+
+O app usa o projeto **FitVibe** (organização Duo, região us-east-1), já com o esquema aplicado e
+a confirmação de e-mail desligada; o `.env.local` aponta para ele. Para montar outro projeto:
 
 1. Crie um projeto em [supabase.com](https://supabase.com) (plano Free).
 2. **SQL Editor** → cole e rode `supabase/migrations/20261003120000_sincronizacao.sql`.
@@ -298,7 +303,12 @@ ficam registradas na mesma tabela que a CLI usa.
    EXPO_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
    EXPO_PUBLIC_SUPABASE_KEY=sb_publishable_...
    ```
-5. Reinicie o `npm start`. Com a nuvem, o app sincroniza também fora da Wi-Fi de casa.
+5. Reinicie com `npx expo start --clear` (sem o `--clear`, o Metro guarda os valores antigos do
+   `.env.local`) e rode `npm run test:sync:cloud`. Com a nuvem, o app sincroniza também
+   fora da Wi-Fi de casa.
+
+Mudanças futuras no esquema do servidor (novas migrações em `supabase/migrations`) também vão
+pelo SQL Editor, na ordem dos arquivos.
 
 O plano Free pausa o projeto depois de 7 dias sem uso (reativa no painel) e tem 500 MB de banco
 e 1 GB de arquivos, de sobra para duas pessoas.

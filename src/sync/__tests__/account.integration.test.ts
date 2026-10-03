@@ -10,7 +10,13 @@ import { eq } from 'drizzle-orm';
 import { profiles, syncState, weightEntries } from '@/db/schema';
 import { createTestDb, type TestDb } from '@/db/test-db';
 
-import { hasSyncServer, testClient, testEmail, TEST_PASSWORD } from '../test-server';
+import {
+  deleteTestAccounts,
+  hasSyncServer,
+  testClient,
+  testEmail,
+  TEST_PASSWORD,
+} from '../test-server';
 
 let mockDb: TestDb;
 let mockClient: SupabaseClient;
@@ -68,6 +74,7 @@ const linkedUserOf = (phone: Phone) => phone.db.select().from(syncState).get()?.
 
 suite('conta: entrar, sair e excluir (Supabase local)', () => {
   jest.setTimeout(60_000);
+  afterAll(deleteTestAccounts);
 
   it('conta nova recebe o celular; celular vazio baixa; os dois com dados perguntam', async () => {
     const email = testEmail();

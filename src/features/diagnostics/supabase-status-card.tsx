@@ -67,8 +67,10 @@ export function SupabaseStatusCard() {
         <>
           <StatusLine color={palette.dark.danger} label="Sem conexão" />
           <Text className="text-base leading-6 text-fg-muted">
-            {status.result.reason}. Confira se o PC e o iPhone estão na mesma Wi-Fi, se o Supabase
-            está rodando (npm run db:start) e se o Expo Go tem permissão de Rede Local.
+            {status.result.reason}.{' '}
+            {url?.startsWith('https:')
+              ? 'Confira a internet. No plano grátis, o Supabase pausa o projeto depois de 7 dias sem uso: reative no painel.'
+              : 'Confira se o PC e o iPhone estão na mesma Wi-Fi, se o Supabase está rodando (npm run db:start) e se o Expo Go tem permissão de Rede Local.'}
           </Text>
         </>
       )}
