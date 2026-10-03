@@ -22,6 +22,13 @@
       "when": 1790830577605,
       "tag": "0002_treinos_feitos",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1790995691655,
+      "tag": "0003_dieta",
+      "breakpoints": true
     }
   ]
 }

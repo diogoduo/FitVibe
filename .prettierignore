@@ -1,3 +1,4 @@
 # Gerado pelo drizzle-kit (npm run db:generate)
 src/db/migrations/
 src/features/exercises/catalog/images.ts
+src/features/foods/taco/taco.json

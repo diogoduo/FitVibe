@@ -17,6 +17,7 @@ import {
 } from '@/features/profile/profile-form';
 import { getProfile, useReferenceWeight } from '@/features/profile/queries';
 import { updateProfile } from '@/features/profile/repository';
+import { waterGoalMl } from '@/features/foods/nutrition';
 import { todayKey } from '@/lib/dates';
 
 /** Editar o perfil e as metas. Salvar cria uma versão nova da meta a partir de hoje. */
@@ -75,6 +76,7 @@ export default function EditProfileScreen() {
             errors={shownErrors}
             onChange={onChange}
             calculatedKcal={goals?.calculatedKcal ?? null}
+            defaultWaterMl={waterGoalMl(null, weightKg)}
           />
         </Card>
 

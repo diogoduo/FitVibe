@@ -45,6 +45,7 @@ const data: ProfileData = {
   proteinPerKg: 2,
   fatPerKg: 0.8,
   kcalOverride: null,
+  waterGoalMl: null,
 };
 
 const goals = () => mockDb.select().from(goalVersions).all();

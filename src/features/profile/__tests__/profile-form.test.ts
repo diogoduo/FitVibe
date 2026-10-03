@@ -43,6 +43,7 @@ describe('validateProfileForm', () => {
       proteinPerKg: 2,
       fatPerKg: 0.8,
       kcalOverride: null,
+      waterGoalMl: null,
     });
   });
 

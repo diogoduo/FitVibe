@@ -18,6 +18,7 @@ export type ProfileData = Pick<
   | 'proteinPerKg'
   | 'fatPerKg'
   | 'kcalOverride'
+  | 'waterGoalMl'
 >;
 
 /** Só os campos editáveis de um perfil lido do banco (sem id, datas de controle etc.). */
@@ -34,6 +35,7 @@ export function pickProfileData(profile: Profile): ProfileData {
     proteinPerKg: profile.proteinPerKg,
     fatPerKg: profile.fatPerKg,
     kcalOverride: profile.kcalOverride,
+    waterGoalMl: profile.waterGoalMl,
   };
 }
 
@@ -52,6 +54,8 @@ export type ProfileFormValues = {
   fatPerKg: string;
   /** Vazio = usar as calorias calculadas. */
   kcalOverride: string;
+  /** Vazio = 35 ml por kg. */
+  waterGoalMl: string;
 };
 
 export type ProfileField = keyof ProfileFormValues;
@@ -69,6 +73,7 @@ export const EMPTY_PROFILE_FORM: ProfileFormValues = {
   proteinPerKg: toInputText(DEFAULT_PROTEIN_PER_KG),
   fatPerKg: toInputText(DEFAULT_FAT_PER_KG),
   kcalOverride: '',
+  waterGoalMl: '',
 };
 
 export function profileToFormValues(profile: ProfileData): ProfileFormValues {
@@ -84,6 +89,7 @@ export function profileToFormValues(profile: ProfileData): ProfileFormValues {
     proteinPerKg: toInputText(profile.proteinPerKg),
     fatPerKg: toInputText(profile.fatPerKg),
     kcalOverride: toInputText(profile.kcalOverride),
+    waterGoalMl: toInputText(profile.waterGoalMl),
   };
 }
 
@@ -95,6 +101,7 @@ export const LIMITS = {
   proteinPerKg: { min: 0.8, max: 3.5 },
   fatPerKg: { min: 0.3, max: 2 },
   kcal: { min: 1000, max: 6000 },
+  waterMl: { min: 500, max: 8000 },
 } as const;
 
 type Range = { min: number; max: number };
@@ -157,6 +164,7 @@ export function validateProfileForm(
     proteinPerKg: readNumber(values.proteinPerKg, LIMITS.proteinPerKg, { unit: 'g/kg' }),
     fatPerKg: readNumber(values.fatPerKg, LIMITS.fatPerKg, { unit: 'g/kg' }),
     kcalOverride: readNumber(values.kcalOverride, LIMITS.kcal, { optional: true, unit: 'kcal' }),
+    waterGoalMl: readNumber(values.waterGoalMl, LIMITS.waterMl, { optional: true, unit: 'ml' }),
   };
   for (const [field, result] of Object.entries(numbers)) {
     if ('error' in result) errors[field as ProfileField] = result.error;
@@ -168,6 +176,7 @@ export function validateProfileForm(
   if (Object.keys(errors).length > 0) return { errors, data: null };
 
   const kcalOverride = valueOf(numbers.kcalOverride);
+  const waterGoalMl = valueOf(numbers.waterGoalMl);
   return {
     errors,
     data: {
@@ -182,6 +191,7 @@ export function validateProfileForm(
       proteinPerKg: valueOf(numbers.proteinPerKg)!,
       fatPerKg: valueOf(numbers.fatPerKg)!,
       kcalOverride: kcalOverride == null ? null : Math.round(kcalOverride),
+      waterGoalMl: waterGoalMl == null ? null : Math.round(waterGoalMl),
     },
   };
 }

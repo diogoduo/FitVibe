@@ -18,6 +18,7 @@ import {
   type ProfileFormValues,
 } from '@/features/profile/profile-form';
 import { createProfile } from '@/features/profile/repository';
+import { waterGoalMl } from '@/features/foods/nutrition';
 import { todayKey } from '@/lib/dates';
 
 const STEPS: { title: string; subtitle: string; fields: ProfileField[] }[] = [
@@ -147,6 +148,7 @@ export default function SignUpScreen() {
               errors={shownErrors}
               onChange={onChange}
               calculatedKcal={goals?.calculatedKcal ?? null}
+              defaultWaterMl={waterGoalMl(null, weightKg)}
             />
           </>
         ) : null}

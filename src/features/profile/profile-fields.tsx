@@ -126,7 +126,12 @@ export function TargetFields({
   errors,
   onChange,
   calculatedKcal,
-}: FieldsProps & { calculatedKcal: number | null }) {
+  defaultWaterMl,
+}: FieldsProps & {
+  calculatedKcal: number | null;
+  /** 35 ml por kg, para mostrar como sugestão no campo de água. */
+  defaultWaterMl: number | null;
+}) {
   return (
     <>
       <TextField
@@ -154,6 +159,16 @@ export function TargetFields({
         keyboardType="number-pad"
         error={errors.kcalOverride}
         hint="Deixe vazio para usar a conta. O carboidrato se ajusta sozinho."
+      />
+      <TextField
+        label="Água por dia (opcional)"
+        suffix="ml"
+        value={values.waterGoalMl}
+        onChangeText={(waterGoalMl) => onChange({ waterGoalMl })}
+        placeholder={defaultWaterMl != null ? formatInt(defaultWaterMl) : undefined}
+        keyboardType="number-pad"
+        error={errors.waterGoalMl}
+        hint="Deixe vazio para usar 35 ml por kg do seu peso."
       />
     </>
   );

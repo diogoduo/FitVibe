@@ -52,6 +52,8 @@ export const profiles = sqliteTable('profiles', {
   kcalOverride: integer('kcal_override'),
   /** Tendência de peso em que o usuário dispensou o aviso de recálculo das metas. */
   recalcDismissedAtKg: real('recalc_dismissed_at_kg'),
+  /** Meta de água definida à mão (ml/dia); null = 35 ml por kg de peso de tendência. */
+  waterGoalMl: integer('water_goal_ml'),
 });
 
 /**
@@ -331,6 +333,104 @@ export const workoutSets = sqliteTable(
   (t) => [index('workout_sets_workout_exercise_id_idx').on(t.workoutExerciseId)],
 );
 
+// ── Fase 4: dieta ─────────────────────────────────────────────────────────────────────────
+
+/**
+ * Referência a um alimento de qualquer fonte: 'taco:123' (tabela embutida no app) ou
+ * 'food:<id>' (linha de `foods`: seus alimentos e produtos lidos pelo código de barras).
+ */
+export type FoodKey = string;
+
+/** Valores por 100 g. */
+export type Per100 = { kcal: number; protein: number; carbs: number; fat: number; fiber: number };
+
+export const FOOD_SOURCES = ['custom', 'off'] as const;
+export type FoodSource = (typeof FOOD_SOURCES)[number];
+
+const per100Columns = {
+  kcal: real('kcal').notNull(),
+  protein: real('protein').notNull(),
+  carbs: real('carbs').notNull(),
+  fat: real('fat').notNull(),
+  fiber: real('fiber').notNull(),
+};
+
+/** Alimentos seus e produtos do Open Food Facts guardados no celular (valores por 100 g). */
+export const foods = sqliteTable(
+  'foods',
+  {
+    ...syncColumns,
+    source: text('source', { enum: FOOD_SOURCES }).notNull(),
+    name: text('name').notNull(),
+    brand: text('brand'),
+    barcode: text('barcode'),
+    ...per100Columns,
+  },
+  (t) => [index('foods_barcode_idx').on(t.barcode)],
+);
+
+/** Porções salvas de um alimento ("1 pão francês = 50 g"). */
+export const foodPortions = sqliteTable(
+  'food_portions',
+  {
+    ...syncColumns,
+    foodKey: text('food_key').notNull(),
+    name: text('name').notNull(),
+    grams: real('grams').notNull(),
+  },
+  (t) => [index('food_portions_food_key_idx').on(t.foodKey)],
+);
+
+export const foodFavorites = sqliteTable('food_favorites', {
+  ...syncColumns,
+  foodKey: text('food_key').notNull(),
+});
+
+/** As refeições do dia (Café da manhã, Almoço...), na ordem; escondidas não aparecem. */
+export const meals = sqliteTable('meals', {
+  ...syncColumns,
+  name: text('name').notNull(),
+  sortOrder: integer('sort_order').notNull(),
+  hidden: integer('hidden', { mode: 'boolean' }).notNull(),
+});
+
+/**
+ * Um alimento comido num dia e numa refeição. Guarda uma cópia do nome e dos valores por 100 g:
+ * editar ou apagar o alimento depois não muda o que já foi registrado.
+ */
+export const diaryEntries = sqliteTable(
+  'diary_entries',
+  {
+    ...syncColumns,
+    day: text('day').notNull(),
+    mealId: text('meal_id').notNull(),
+    foodKey: text('food_key').notNull(),
+    name: text('name').notNull(),
+    grams: real('grams').notNull(),
+    ...per100Columns,
+  },
+  (t) => [index('diary_entries_day_idx').on(t.day)],
+);
+
+export type SavedMealItem = { foodKey: FoodKey; name: string; grams: number } & Per100;
+
+/** Refeição salva para repetir com um toque ("Café padrão"). */
+export const savedMeals = sqliteTable('saved_meals', {
+  ...syncColumns,
+  name: text('name').notNull(),
+  items: text('items', { mode: 'json' }).$type<SavedMealItem[]>().notNull(),
+});
+
+export const waterLogs = sqliteTable(
+  'water_logs',
+  {
+    ...syncColumns,
+    day: text('day').notNull(),
+    ml: integer('ml').notNull(),
+  },
+  (t) => [index('water_logs_day_idx').on(t.day)],
+);
+
 export type Profile = typeof profiles.$inferSelect;
 export type GoalVersion = typeof goalVersions.$inferSelect;
 export type WeightEntry = typeof weightEntries.$inferSelect;
@@ -344,3 +444,9 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type Workout = typeof workouts.$inferSelect;
 export type WorkoutExercise = typeof workoutExercises.$inferSelect;
 export type WorkoutSet = typeof workoutSets.$inferSelect;
+export type Food = typeof foods.$inferSelect;
+export type FoodPortion = typeof foodPortions.$inferSelect;
+export type Meal = typeof meals.$inferSelect;
+export type DiaryEntry = typeof diaryEntries.$inferSelect;
+export type SavedMeal = typeof savedMeals.$inferSelect;
+export type WaterLog = typeof waterLogs.$inferSelect;
