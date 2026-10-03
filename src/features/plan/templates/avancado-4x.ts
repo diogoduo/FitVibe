@@ -1,38 +1,14 @@
-import { db, newId } from '@/db/client';
-import {
-  exercises,
-  type Equipment,
-  type LoadType,
-  type MuscleGroup,
-  type ReferenceSet,
-  type WarmupType,
-} from '@/db/schema';
+import type { WarmupType } from '@/db/schema';
 
-import type { Prescription } from './prescription';
-import { addExerciseToSession, addSession, createEmptyPlan, getActivePlan } from './repository';
+import type { Prescription } from '../prescription';
+import { byReps, fixed, sets, timed, type PlanTemplate, type TemplateExercise } from './template';
 
 /**
- * O plano de exemplo: o treino real do autor do app (divisão, método e cargas de referência).
+ * O treino real do autor do app (divisão, método e cargas de referência).
  * Método: 2 séries válidas por exercício, a 1ª com RIR 1 e a 2ª até a falha; o 1º exercício de
  * cada grupo tem aquecimento completo, os demais 1 série de preparação (alguns vão direto).
  * Faixas: 5–8 nos compostos, 8–12 nos isoladores. Progressão dupla.
  */
-type SampleExercise = {
-  name: string;
-  /** Exercício do catálogo com as fotos e o "como fazer" (null quando não há equivalente). */
-  catalogKey: string | null;
-  primary: MuscleGroup;
-  secondary?: MuscleGroup[];
-  equipment: Equipment;
-  load?: LoadType;
-  unilateral?: boolean;
-  notes?: string;
-  reference?: ReferenceSet[];
-};
-
-const sets = (...pairs: [number, number][]): ReferenceSet[] =>
-  pairs.map(([load, reps]) => ({ load, reps }));
-
 const EXERCISES = {
   supinoInclinadoMaquina: {
     name: 'Supino Inclinado Máquina',
@@ -242,19 +218,13 @@ const EXERCISES = {
     primary: 'triceps',
     equipment: 'cable',
   },
-} satisfies Record<string, SampleExercise>;
+} satisfies Record<string, TemplateExercise>;
 
 type ExerciseRef = keyof typeof EXERCISES;
 
-const base = {
-  durationMinSec: null,
-  durationMaxSec: null,
-  progressionTopReps: null,
-} as const;
-
 /** Composto: 2 válidas de 5–8 (RIR 1, depois falha), 3 min de descanso. */
 const compound = (warmup: WarmupType): Prescription => ({
-  ...base,
+  ...byReps,
   setsCount: 2,
   repsMin: 5,
   repsMax: 8,
@@ -266,7 +236,7 @@ const compound = (warmup: WarmupType): Prescription => ({
 
 /** Isolador: 2 válidas de 8–12 (RIR 1, depois falha), 2 min de descanso. */
 const isolation = (warmup: WarmupType, progressionTopReps: number | null = null): Prescription => ({
-  ...base,
+  ...byReps,
   setsCount: 2,
   repsMin: 8,
   repsMax: 12,
@@ -277,145 +247,72 @@ const isolation = (warmup: WarmupType, progressionTopReps: number | null = null)
   progressionTopReps,
 });
 
-/** Séries fixas (abdominais, lombar): 3 × N com 1 min de descanso, sem alvo de esforço. */
-const fixed = (setsCount: number, reps: number): Prescription => ({
-  ...base,
-  setsCount,
-  repsMin: reps,
-  repsMax: reps,
-  rirTarget: null,
-  lastSetToFailure: false,
-  warmup: 'none',
-  restSec: 60,
-});
-
-type SampleSlot = [ExerciseRef, Prescription, ExerciseRef[]?];
-
-type SampleSession =
-  | { weekday: number; kind: 'workout'; name: string; slots: SampleSlot[] }
-  | { weekday: number; kind: 'activity'; name: string; time: string };
-
-export const SAMPLE_WEEK: SampleSession[] = [
-  {
-    weekday: 1,
-    kind: 'workout',
-    name: 'Peito, Ombro e Tríceps',
-    slots: [
-      ['supinoInclinadoMaquina', compound('full')],
-      ['peckDeck', isolation('prep')],
-      ['desenvolvimentoMaquina', compound('full')],
-      ['elevacaoLateralMaquina', isolation('prep')],
-      ['tricepsPulleyApoiado', isolation('full')],
-      ['tricepsFrancesUnilateral', isolation('none')],
-      ['abdominalMaquina', fixed(3, 10)],
-    ],
-  },
-  {
-    weekday: 2,
-    kind: 'workout',
-    name: 'Perna',
-    slots: [
-      ['legLinearHammer', compound('full')],
-      ['stiff', compound('prep')],
-      ['legExtensionHammer', isolation('prep')],
-      ['legCurl', isolation('prep')],
-      ['panturrilhaNoLeg', isolation('full')],
-      ['abdominalObliquos', fixed(3, 20)],
-    ],
-  },
-  {
-    weekday: 3,
-    kind: 'workout',
-    name: 'Costas e Bíceps',
-    slots: [
-      ['pulleyFrente', compound('full')],
-      ['remadaCavalinho', compound('prep')],
-      ['pulldownCorda', isolation('prep')],
-      ['crucifixoInverso', isolation('prep', 15)],
-      ['scottMaquina', isolation('full')],
-      ['bayesian', isolation('none')],
-      ['bancoRomano', fixed(3, 10)],
-      [
-        'esteira',
-        {
-          ...base,
-          setsCount: 1,
-          repsMin: null,
-          repsMax: null,
-          durationMinSec: 15 * 60,
-          durationMaxSec: 20 * 60,
-          rirTarget: null,
-          lastSetToFailure: false,
-          warmup: 'none',
-          restSec: 0,
-        },
+export const AVANCADO_4X: PlanTemplate<ExerciseRef> = {
+  id: 'avancado-4x',
+  name: 'Treino 4x + futebol',
+  description:
+    'Divisão de 4 treinos (peito/ombro/tríceps, perna, costas/bíceps e upper) com futebol na quinta e no domingo, 2 séries válidas (RIR 1 e falha) e as cargas de referência.',
+  notes: null,
+  exercises: EXERCISES,
+  week: [
+    {
+      weekday: 1,
+      kind: 'workout',
+      name: 'Peito, Ombro e Tríceps',
+      slots: [
+        ['supinoInclinadoMaquina', compound('full')],
+        ['peckDeck', isolation('prep')],
+        ['desenvolvimentoMaquina', compound('full')],
+        ['elevacaoLateralMaquina', isolation('prep')],
+        ['tricepsPulleyApoiado', isolation('full')],
+        ['tricepsFrancesUnilateral', isolation('none')],
+        ['abdominalMaquina', fixed(3, 10)],
       ],
-    ],
-  },
-  { weekday: 4, kind: 'activity', name: 'Futebol', time: '21:30' },
-  {
-    weekday: 5,
-    kind: 'workout',
-    name: 'Upper',
-    slots: [
-      ['supinoInclinadoHalteres', compound('full')],
-      ['supinoRetoMaquina', compound('prep'), ['crossover']],
-      ['pulleyFrente', compound('full')],
-      ['remadaUnilateralMaquina', compound('prep')],
-      ['elevacaoLateral', isolation('prep')],
-      ['posteriorOmbroUnilateral', isolation('none')],
-      ['bayesian', isolation('prep')],
-      ['tricepsFrancesCorda', isolation('none')],
-    ],
-  },
-  { weekday: 7, kind: 'activity', name: 'Futebol', time: '08:00' },
-];
-
-/** "Usar plano de exemplo": cria os exercícios, o plano e a semana inteira de uma vez. */
-export function createSamplePlan() {
-  db.transaction((tx) => {
-    if (getActivePlan(tx)) throw new Error('Já existe um plano ativo.');
-
-    const ids = {} as Record<ExerciseRef, string>;
-    for (const [ref, exercise] of Object.entries(EXERCISES) as [ExerciseRef, SampleExercise][]) {
-      ids[ref] = newId();
-      tx.insert(exercises)
-        .values({
-          id: ids[ref],
-          name: exercise.name,
-          primaryMuscle: exercise.primary,
-          secondaryMuscles: exercise.secondary ?? [],
-          equipment: exercise.equipment,
-          loadType: exercise.load ?? 'kg',
-          unilateral: exercise.unilateral ?? false,
-          notes: exercise.notes ?? null,
-          catalogKey: exercise.catalogKey,
-          referenceSets: exercise.reference ?? null,
-        })
-        .run();
-    }
-
-    const planId = createEmptyPlan(tx);
-    for (const session of SAMPLE_WEEK) {
-      const sessionId = addSession(
-        planId,
-        {
-          weekday: session.weekday,
-          kind: session.kind,
-          name: session.name,
-          time: session.kind === 'activity' ? session.time : null,
-        },
-        tx,
-      );
-      if (session.kind !== 'workout') continue;
-      for (const [ref, prescription, alternatives = []] of session.slots) {
-        addExerciseToSession(
-          sessionId,
-          ids[ref],
-          { prescription, alternativeIds: alternatives.map((alt) => ids[alt]) },
-          tx,
-        );
-      }
-    }
-  });
-}
+    },
+    {
+      weekday: 2,
+      kind: 'workout',
+      name: 'Perna',
+      slots: [
+        ['legLinearHammer', compound('full')],
+        ['stiff', compound('prep')],
+        ['legExtensionHammer', isolation('prep')],
+        ['legCurl', isolation('prep')],
+        ['panturrilhaNoLeg', isolation('full')],
+        ['abdominalObliquos', fixed(3, 20)],
+      ],
+    },
+    {
+      weekday: 3,
+      kind: 'workout',
+      name: 'Costas e Bíceps',
+      slots: [
+        ['pulleyFrente', compound('full')],
+        ['remadaCavalinho', compound('prep')],
+        ['pulldownCorda', isolation('prep')],
+        ['crucifixoInverso', isolation('prep', 15)],
+        ['scottMaquina', isolation('full')],
+        ['bayesian', isolation('none')],
+        ['bancoRomano', fixed(3, 10)],
+        ['esteira', timed(1, 15 * 60, 20 * 60, 0)],
+      ],
+    },
+    { weekday: 4, kind: 'activity', name: 'Futebol', time: '21:30' },
+    {
+      weekday: 5,
+      kind: 'workout',
+      name: 'Upper',
+      slots: [
+        ['supinoInclinadoHalteres', compound('full')],
+        ['supinoRetoMaquina', compound('prep'), ['crossover']],
+        ['pulleyFrente', compound('full')],
+        ['remadaUnilateralMaquina', compound('prep')],
+        ['elevacaoLateral', isolation('prep')],
+        ['posteriorOmbroUnilateral', isolation('none')],
+        ['bayesian', isolation('prep')],
+        ['tricepsFrancesCorda', isolation('none')],
+      ],
+    },
+    { weekday: 7, kind: 'activity', name: 'Futebol', time: '08:00' },
+  ],
+};

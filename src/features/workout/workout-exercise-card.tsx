@@ -116,7 +116,11 @@ export function WorkoutExerciseCard({
         ) : null}
       </Pressable>
 
-      {exercise?.notes ? <Text className="text-sm text-warning">{exercise.notes}</Text> : null}
+      {exercise?.notes ? (
+        <Text className="text-sm text-warning" numberOfLines={3}>
+          {exercise.notes}
+        </Text>
+      ) : null}
 
       {last ? (
         <Text className="text-sm text-fg-muted">

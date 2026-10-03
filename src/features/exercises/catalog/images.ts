@@ -89,6 +89,7 @@ export const CATALOG_IMAGES: Record<string, number[]> = {
   'Smith_Single-Leg_Split_Squat': [require('../../../../assets/exercises/Smith_Single-Leg_Split_Squat-0.webp'), require('../../../../assets/exercises/Smith_Single-Leg_Split_Squat-1.webp')],
   'Barbell_Walking_Lunge': [require('../../../../assets/exercises/Barbell_Walking_Lunge-0.webp'), require('../../../../assets/exercises/Barbell_Walking_Lunge-1.webp')],
   'Dumbbell_Step_Ups': [require('../../../../assets/exercises/Dumbbell_Step_Ups-0.webp'), require('../../../../assets/exercises/Dumbbell_Step_Ups-1.webp')],
+  'Plie_Dumbbell_Squat': [require('../../../../assets/exercises/Plie_Dumbbell_Squat-0.webp'), require('../../../../assets/exercises/Plie_Dumbbell_Squat-1.webp')],
   'Lying_Leg_Curls': [require('../../../../assets/exercises/Lying_Leg_Curls-0.webp'), require('../../../../assets/exercises/Lying_Leg_Curls-1.webp')],
   'Seated_Leg_Curl': [require('../../../../assets/exercises/Seated_Leg_Curl-0.webp'), require('../../../../assets/exercises/Seated_Leg_Curl-1.webp')],
   'Standing_Leg_Curl': [require('../../../../assets/exercises/Standing_Leg_Curl-0.webp'), require('../../../../assets/exercises/Standing_Leg_Curl-1.webp')],

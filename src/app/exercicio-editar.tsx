@@ -154,7 +154,7 @@ export default function EditExerciseScreen() {
           value={values.notes}
           onChangeText={(notes) => onChange({ notes })}
           placeholder="Ex.: técnica/lombar, polia pesada, banco no 3"
-          maxLength={200}
+          maxLength={800}
           multiline
           hint="Aparece no exercício e durante o treino."
         />

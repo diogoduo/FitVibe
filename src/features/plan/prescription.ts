@@ -24,6 +24,11 @@ export const WARMUP_OPTIONS: { value: WarmupType; label: string; hint: string }[
     label: 'Completo',
     hint: '2 séries de 12 de aquecimento + 2 de preparação. Para o 1º exercício de cada grupo.',
   },
+  {
+    value: 'light',
+    label: 'Leve',
+    hint: '1 série leve de 12 reps (uns 50% da carga) antes das válidas.',
+  },
   { value: 'prep', label: 'Preparação', hint: '1 série de preparação antes das válidas.' },
   { value: 'none', label: 'Direto', hint: 'Começa direto nas séries válidas.' },
 ];
@@ -109,6 +114,7 @@ export function describePrescription(p: Prescription): {
 
   const details: string[] = [];
   if (p.warmup === 'full') details.push('aquecimento completo');
+  if (p.warmup === 'light') details.push('aquecimento leve');
   if (p.warmup === 'prep') details.push('1 de preparação');
   if (p.warmup === 'none' && p.durationMinSec == null) details.push('direto');
   if (p.restSec > 0) details.push(`descanso ${formatDuration(p.restSec)}`);

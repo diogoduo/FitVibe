@@ -14,7 +14,7 @@ import {
   moveSlot,
   toggleActivityDone,
 } from '../repository';
-import { createSamplePlan } from '../sample-plan';
+import { AVANCADO_4X, createPlanFromTemplate } from '../templates';
 
 let mockDb: TestDb;
 let mockIdCounter = 0;
@@ -42,7 +42,7 @@ const exerciseNamed = (name: string) =>
   mockDb.select().from(exercises).where(eq(exercises.name, name)).get()!;
 
 describe('plano de exemplo', () => {
-  beforeEach(() => createSamplePlan());
+  beforeEach(() => createPlanFromTemplate(AVANCADO_4X));
 
   it('monta a semana: 4 treinos, futebol quinta 21h30 e domingo 8h, sábado livre', () => {
     const week = aliveSessions().map((s) => [s.weekday, s.kind, s.name, s.time]);
@@ -102,7 +102,7 @@ describe('plano de exemplo', () => {
   });
 
   it('não cria um segundo plano por cima do primeiro', () => {
-    expect(() => createSamplePlan()).toThrow('Já existe um plano ativo.');
+    expect(() => createPlanFromTemplate(AVANCADO_4X)).toThrow('Já existe um plano ativo.');
   });
 
   it('apagar o plano apaga sessões e exercícios do plano, mas não os seus exercícios', () => {

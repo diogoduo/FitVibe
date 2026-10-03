@@ -3,7 +3,10 @@
     "key": "Barbell_Bench_Press_-_Medium_Grip",
     "name": "Supino reto com barra",
     "primary": "chest",
-    "secondary": ["triceps", "front_delts"],
+    "secondary": [
+      "triceps",
+      "front_delts"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -17,7 +20,10 @@
     "key": "Barbell_Incline_Bench_Press_-_Medium_Grip",
     "name": "Supino inclinado com barra",
     "primary": "chest",
-    "secondary": ["front_delts", "triceps"],
+    "secondary": [
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -31,7 +37,10 @@
     "key": "Decline_Barbell_Bench_Press",
     "name": "Supino declinado com barra",
     "primary": "chest",
-    "secondary": ["triceps", "front_delts"],
+    "secondary": [
+      "triceps",
+      "front_delts"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -44,7 +53,10 @@
     "key": "Dumbbell_Bench_Press",
     "name": "Supino reto com halteres",
     "primary": "chest",
-    "secondary": ["triceps", "front_delts"],
+    "secondary": [
+      "triceps",
+      "front_delts"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -57,7 +69,10 @@
     "key": "Incline_Dumbbell_Press",
     "name": "Supino inclinado com halteres",
     "primary": "chest",
-    "secondary": ["front_delts", "triceps"],
+    "secondary": [
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -70,7 +85,9 @@
     "key": "Dumbbell_Flyes",
     "name": "Crucifixo reto com halteres",
     "primary": "chest",
-    "secondary": ["front_delts"],
+    "secondary": [
+      "front_delts"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -83,7 +100,9 @@
     "key": "Incline_Dumbbell_Flyes",
     "name": "Crucifixo inclinado com halteres",
     "primary": "chest",
-    "secondary": ["front_delts"],
+    "secondary": [
+      "front_delts"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -109,7 +128,9 @@
     "key": "Cable_Crossover",
     "name": "Crossover (polia alta)",
     "primary": "chest",
-    "secondary": ["front_delts"],
+    "secondary": [
+      "front_delts"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -122,7 +143,9 @@
     "key": "Low_Cable_Crossover",
     "name": "Crossover (polia baixa)",
     "primary": "chest",
-    "secondary": ["front_delts"],
+    "secondary": [
+      "front_delts"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -135,7 +158,10 @@
     "key": "Leverage_Chest_Press",
     "name": "Supino reto máquina",
     "primary": "chest",
-    "secondary": ["triceps", "front_delts"],
+    "secondary": [
+      "triceps",
+      "front_delts"
+    ],
     "equipment": "machine",
     "load": "kg",
     "steps": [
@@ -148,7 +174,10 @@
     "key": "Leverage_Incline_Chest_Press",
     "name": "Supino inclinado máquina",
     "primary": "chest",
-    "secondary": ["front_delts", "triceps"],
+    "secondary": [
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "machine",
     "load": "kg",
     "steps": [
@@ -161,7 +190,10 @@
     "key": "Smith_Machine_Incline_Bench_Press",
     "name": "Supino inclinado no Smith",
     "primary": "chest",
-    "secondary": ["front_delts", "triceps"],
+    "secondary": [
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "smith",
     "load": "kg",
     "steps": [
@@ -174,7 +206,10 @@
     "key": "Pushups",
     "name": "Flexão de braço",
     "primary": "chest",
-    "secondary": ["triceps", "front_delts"],
+    "secondary": [
+      "triceps",
+      "front_delts"
+    ],
     "equipment": "bodyweight",
     "load": "bodyweight",
     "steps": [
@@ -187,7 +222,10 @@
     "key": "Dips_-_Chest_Version",
     "name": "Paralelas (foco no peito)",
     "primary": "chest",
-    "secondary": ["triceps", "front_delts"],
+    "secondary": [
+      "triceps",
+      "front_delts"
+    ],
     "equipment": "bodyweight",
     "load": "bodyweight",
     "steps": [
@@ -200,7 +238,10 @@
     "key": "Straight-Arm_Dumbbell_Pullover",
     "name": "Pullover com halter",
     "primary": "chest",
-    "secondary": ["back", "triceps"],
+    "secondary": [
+      "back",
+      "triceps"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -213,7 +254,10 @@
     "key": "Wide-Grip_Lat_Pulldown",
     "name": "Puxada frente aberta (pulley)",
     "primary": "back",
-    "secondary": ["biceps", "rear_delts"],
+    "secondary": [
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -226,7 +270,9 @@
     "key": "Close-Grip_Front_Lat_Pulldown",
     "name": "Puxada frente fechada",
     "primary": "back",
-    "secondary": ["biceps"],
+    "secondary": [
+      "biceps"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -239,7 +285,9 @@
     "key": "V-Bar_Pulldown",
     "name": "Puxada com triângulo",
     "primary": "back",
-    "secondary": ["biceps"],
+    "secondary": [
+      "biceps"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -252,7 +300,9 @@
     "key": "Underhand_Cable_Pulldowns",
     "name": "Puxada supinada",
     "primary": "back",
-    "secondary": ["biceps"],
+    "secondary": [
+      "biceps"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -265,7 +315,10 @@
     "key": "Pullups",
     "name": "Barra fixa (pronada)",
     "primary": "back",
-    "secondary": ["biceps", "rear_delts"],
+    "secondary": [
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "bodyweight",
     "load": "bodyweight",
     "steps": [
@@ -278,7 +331,9 @@
     "key": "Chin-Up",
     "name": "Barra fixa supinada",
     "primary": "back",
-    "secondary": ["biceps"],
+    "secondary": [
+      "biceps"
+    ],
     "equipment": "bodyweight",
     "load": "bodyweight",
     "steps": [
@@ -291,7 +346,10 @@
     "key": "Seated_Cable_Rows",
     "name": "Remada baixa (triângulo)",
     "primary": "back",
-    "secondary": ["biceps", "rear_delts"],
+    "secondary": [
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -304,7 +362,11 @@
     "key": "Bent_Over_Barbell_Row",
     "name": "Remada curvada com barra",
     "primary": "back",
-    "secondary": ["biceps", "rear_delts", "lower_back"],
+    "secondary": [
+      "biceps",
+      "rear_delts",
+      "lower_back"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -317,7 +379,10 @@
     "key": "One-Arm_Dumbbell_Row",
     "name": "Remada unilateral com halter (serrote)",
     "primary": "back",
-    "secondary": ["biceps", "rear_delts"],
+    "secondary": [
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "unilateral": true,
@@ -331,7 +396,11 @@
     "key": "T-Bar_Row_with_Handle",
     "name": "Remada cavalinho",
     "primary": "back",
-    "secondary": ["biceps", "rear_delts", "traps"],
+    "secondary": [
+      "biceps",
+      "rear_delts",
+      "traps"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -344,7 +413,10 @@
     "key": "Leverage_Iso_Row",
     "name": "Remada máquina",
     "primary": "back",
-    "secondary": ["biceps", "rear_delts"],
+    "secondary": [
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "machine",
     "load": "kg",
     "steps": [
@@ -357,7 +429,10 @@
     "key": "Leverage_High_Row",
     "name": "Remada alta articulada",
     "primary": "back",
-    "secondary": ["biceps", "rear_delts"],
+    "secondary": [
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "machine",
     "load": "kg",
     "steps": [
@@ -396,7 +471,10 @@
     "key": "Seated_One-arm_Cable_Pulley_Rows",
     "name": "Remada unilateral na polia",
     "primary": "back",
-    "secondary": ["biceps", "rear_delts"],
+    "secondary": [
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "cable",
     "load": "kg",
     "unilateral": true,
@@ -410,7 +488,9 @@
     "key": "One_Arm_Lat_Pulldown",
     "name": "Puxada unilateral",
     "primary": "back",
-    "secondary": ["biceps"],
+    "secondary": [
+      "biceps"
+    ],
     "equipment": "cable",
     "load": "kg",
     "unilateral": true,
@@ -450,7 +530,9 @@
     "key": "Upright_Barbell_Row",
     "name": "Remada alta com barra",
     "primary": "side_delts",
-    "secondary": ["traps"],
+    "secondary": [
+      "traps"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -463,7 +545,10 @@
     "key": "Seated_Barbell_Military_Press",
     "name": "Desenvolvimento com barra (sentado)",
     "primary": "front_delts",
-    "secondary": ["side_delts", "triceps"],
+    "secondary": [
+      "side_delts",
+      "triceps"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -476,7 +561,10 @@
     "key": "Dumbbell_Shoulder_Press",
     "name": "Desenvolvimento com halteres",
     "primary": "front_delts",
-    "secondary": ["side_delts", "triceps"],
+    "secondary": [
+      "side_delts",
+      "triceps"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -489,7 +577,10 @@
     "key": "Arnold_Dumbbell_Press",
     "name": "Desenvolvimento Arnold",
     "primary": "front_delts",
-    "secondary": ["side_delts", "triceps"],
+    "secondary": [
+      "side_delts",
+      "triceps"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -502,7 +593,10 @@
     "key": "Machine_Shoulder_Military_Press",
     "name": "Desenvolvimento máquina",
     "primary": "front_delts",
-    "secondary": ["side_delts", "triceps"],
+    "secondary": [
+      "side_delts",
+      "triceps"
+    ],
     "equipment": "machine",
     "load": "kg",
     "steps": [
@@ -515,7 +609,10 @@
     "key": "Smith_Machine_Overhead_Shoulder_Press",
     "name": "Desenvolvimento no Smith",
     "primary": "front_delts",
-    "secondary": ["side_delts", "triceps"],
+    "secondary": [
+      "side_delts",
+      "triceps"
+    ],
     "equipment": "smith",
     "load": "kg",
     "steps": [
@@ -541,7 +638,9 @@
     "key": "Cable_Seated_Lateral_Raise",
     "name": "Elevação lateral na polia",
     "primary": "side_delts",
-    "secondary": ["traps"],
+    "secondary": [
+      "traps"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -580,7 +679,9 @@
     "key": "Reverse_Machine_Flyes",
     "name": "Crucifixo inverso na máquina (voador invertido)",
     "primary": "rear_delts",
-    "secondary": ["traps"],
+    "secondary": [
+      "traps"
+    ],
     "equipment": "machine",
     "load": "kg",
     "steps": [
@@ -606,7 +707,9 @@
     "key": "Seated_Bent-Over_Rear_Delt_Raise",
     "name": "Crucifixo inverso com halteres (sentado)",
     "primary": "rear_delts",
-    "secondary": ["traps"],
+    "secondary": [
+      "traps"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -619,7 +722,9 @@
     "key": "Face_Pull",
     "name": "Face pull",
     "primary": "rear_delts",
-    "secondary": ["traps"],
+    "secondary": [
+      "traps"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -632,7 +737,9 @@
     "key": "Barbell_Curl",
     "name": "Rosca direta com barra",
     "primary": "biceps",
-    "secondary": ["forearms"],
+    "secondary": [
+      "forearms"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -645,7 +752,9 @@
     "key": "EZ-Bar_Curl",
     "name": "Rosca direta com barra W",
     "primary": "biceps",
-    "secondary": ["forearms"],
+    "secondary": [
+      "forearms"
+    ],
     "equipment": "ez_bar",
     "load": "kg",
     "steps": [
@@ -658,7 +767,9 @@
     "key": "Dumbbell_Alternate_Bicep_Curl",
     "name": "Rosca alternada com halteres",
     "primary": "biceps",
-    "secondary": ["forearms"],
+    "secondary": [
+      "forearms"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -671,7 +782,9 @@
     "key": "Hammer_Curls",
     "name": "Rosca martelo",
     "primary": "biceps",
-    "secondary": ["forearms"],
+    "secondary": [
+      "forearms"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -737,7 +850,9 @@
     "key": "Standing_Biceps_Cable_Curl",
     "name": "Rosca na polia (barra)",
     "primary": "biceps",
-    "secondary": ["forearms"],
+    "secondary": [
+      "forearms"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -750,7 +865,9 @@
     "key": "Cable_Hammer_Curls_-_Rope_Attachment",
     "name": "Rosca martelo na corda",
     "primary": "biceps",
-    "secondary": ["forearms"],
+    "secondary": [
+      "forearms"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -897,7 +1014,10 @@
     "key": "Close-Grip_Barbell_Bench_Press",
     "name": "Supino fechado",
     "primary": "triceps",
-    "secondary": ["chest", "front_delts"],
+    "secondary": [
+      "chest",
+      "front_delts"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -910,7 +1030,10 @@
     "key": "Dips_-_Triceps_Version",
     "name": "Paralelas (foco no tríceps)",
     "primary": "triceps",
-    "secondary": ["chest", "front_delts"],
+    "secondary": [
+      "chest",
+      "front_delts"
+    ],
     "equipment": "bodyweight",
     "load": "bodyweight",
     "steps": [
@@ -923,7 +1046,10 @@
     "key": "Bench_Dips",
     "name": "Mergulho no banco",
     "primary": "triceps",
-    "secondary": ["chest", "front_delts"],
+    "secondary": [
+      "chest",
+      "front_delts"
+    ],
     "equipment": "bodyweight",
     "load": "bodyweight",
     "steps": [
@@ -976,7 +1102,9 @@
     "key": "Reverse_Barbell_Curl",
     "name": "Rosca inversa com barra",
     "primary": "forearms",
-    "secondary": ["biceps"],
+    "secondary": [
+      "biceps"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -989,7 +1117,11 @@
     "key": "Barbell_Squat",
     "name": "Agachamento livre com barra",
     "primary": "quads",
-    "secondary": ["glutes", "hamstrings", "lower_back"],
+    "secondary": [
+      "glutes",
+      "hamstrings",
+      "lower_back"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -1002,7 +1134,9 @@
     "key": "Front_Barbell_Squat",
     "name": "Agachamento frontal",
     "primary": "quads",
-    "secondary": ["glutes"],
+    "secondary": [
+      "glutes"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -1015,7 +1149,10 @@
     "key": "Smith_Machine_Squat",
     "name": "Agachamento no Smith",
     "primary": "quads",
-    "secondary": ["glutes", "hamstrings"],
+    "secondary": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "smith",
     "load": "kg",
     "steps": [
@@ -1028,7 +1165,9 @@
     "key": "Hack_Squat",
     "name": "Agachamento hack (máquina)",
     "primary": "quads",
-    "secondary": ["glutes"],
+    "secondary": [
+      "glutes"
+    ],
     "equipment": "machine",
     "load": "kg",
     "steps": [
@@ -1041,7 +1180,10 @@
     "key": "Leg_Press",
     "name": "Leg press 45°",
     "primary": "quads",
-    "secondary": ["glutes", "hamstrings"],
+    "secondary": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "machine",
     "load": "kg",
     "steps": [
@@ -1081,7 +1223,10 @@
     "key": "Dumbbell_Lunges",
     "name": "Avanço com halteres",
     "primary": "quads",
-    "secondary": ["glutes", "hamstrings"],
+    "secondary": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -1094,7 +1239,10 @@
     "key": "Split_Squat_with_Dumbbells",
     "name": "Agachamento búlgaro com halteres",
     "primary": "quads",
-    "secondary": ["glutes", "hamstrings"],
+    "secondary": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "unilateral": true,
@@ -1108,7 +1256,10 @@
     "key": "Smith_Single-Leg_Split_Squat",
     "name": "Agachamento búlgaro no Smith",
     "primary": "quads",
-    "secondary": ["glutes", "hamstrings"],
+    "secondary": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "smith",
     "load": "kg",
     "unilateral": true,
@@ -1122,7 +1273,10 @@
     "key": "Barbell_Walking_Lunge",
     "name": "Passada com barra",
     "primary": "quads",
-    "secondary": ["glutes", "hamstrings"],
+    "secondary": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -1135,7 +1289,9 @@
     "key": "Dumbbell_Step_Ups",
     "name": "Subida no banco com halteres",
     "primary": "quads",
-    "secondary": ["glutes"],
+    "secondary": [
+      "glutes"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -1145,10 +1301,28 @@
     ]
   },
   {
+    "key": "Plie_Dumbbell_Squat",
+    "name": "Agachamento sumô com halter",
+    "primary": "quads",
+    "secondary": [
+      "glutes",
+      "adductors"
+    ],
+    "equipment": "dumbbell",
+    "load": "kg",
+    "steps": [
+      "Afaste bem os pés, com as pontas viradas para fora, e segure um halter com as duas mãos entre as pernas.",
+      "Desça com o tronco ereto, levando os joelhos na direção das pontas dos pés.",
+      "Suba empurrando o chão e contraia o glúteo no alto."
+    ]
+  },
+  {
     "key": "Lying_Leg_Curls",
     "name": "Mesa flexora",
     "primary": "hamstrings",
-    "secondary": ["calves"],
+    "secondary": [
+      "calves"
+    ],
     "equipment": "machine",
     "load": "kg",
     "steps": [
@@ -1188,7 +1362,10 @@
     "key": "Stiff-Legged_Barbell_Deadlift",
     "name": "Stiff com barra",
     "primary": "hamstrings",
-    "secondary": ["glutes", "lower_back"],
+    "secondary": [
+      "glutes",
+      "lower_back"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -1201,7 +1378,10 @@
     "key": "Stiff-Legged_Dumbbell_Deadlift",
     "name": "Stiff com halteres",
     "primary": "hamstrings",
-    "secondary": ["glutes", "lower_back"],
+    "secondary": [
+      "glutes",
+      "lower_back"
+    ],
     "equipment": "dumbbell",
     "load": "kg",
     "steps": [
@@ -1214,7 +1394,10 @@
     "key": "Romanian_Deadlift",
     "name": "Levantamento terra romeno",
     "primary": "hamstrings",
-    "secondary": ["glutes", "lower_back"],
+    "secondary": [
+      "glutes",
+      "lower_back"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -1227,7 +1410,10 @@
     "key": "Good_Morning",
     "name": "Bom dia (good morning)",
     "primary": "hamstrings",
-    "secondary": ["glutes", "lower_back"],
+    "secondary": [
+      "glutes",
+      "lower_back"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -1240,7 +1426,9 @@
     "key": "Barbell_Hip_Thrust",
     "name": "Elevação pélvica com barra",
     "primary": "glutes",
-    "secondary": ["hamstrings"],
+    "secondary": [
+      "hamstrings"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -1253,7 +1441,9 @@
     "key": "Barbell_Glute_Bridge",
     "name": "Ponte de glúteo com barra",
     "primary": "glutes",
-    "secondary": ["hamstrings"],
+    "secondary": [
+      "hamstrings"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -1266,7 +1456,9 @@
     "key": "One-Legged_Cable_Kickback",
     "name": "Glúteo na polia (coice)",
     "primary": "glutes",
-    "secondary": ["hamstrings"],
+    "secondary": [
+      "hamstrings"
+    ],
     "equipment": "cable",
     "load": "kg",
     "unilateral": true,
@@ -1293,7 +1485,10 @@
     "key": "Pull_Through",
     "name": "Pull through na polia",
     "primary": "glutes",
-    "secondary": ["hamstrings", "lower_back"],
+    "secondary": [
+      "hamstrings",
+      "lower_back"
+    ],
     "equipment": "cable",
     "load": "kg",
     "steps": [
@@ -1306,7 +1501,9 @@
     "key": "Glute_Kickback",
     "name": "Glúteo quatro apoios",
     "primary": "glutes",
-    "secondary": ["hamstrings"],
+    "secondary": [
+      "hamstrings"
+    ],
     "equipment": "bodyweight",
     "load": "bodyweight",
     "unilateral": true,
@@ -1385,7 +1582,12 @@
     "key": "Barbell_Deadlift",
     "name": "Levantamento terra",
     "primary": "lower_back",
-    "secondary": ["glutes", "hamstrings", "traps", "quads"],
+    "secondary": [
+      "glutes",
+      "hamstrings",
+      "traps",
+      "quads"
+    ],
     "equipment": "barbell",
     "load": "kg",
     "steps": [
@@ -1398,7 +1600,10 @@
     "key": "Hyperextensions_Back_Extensions",
     "name": "Banco romano (extensão lombar)",
     "primary": "lower_back",
-    "secondary": ["glutes", "hamstrings"],
+    "secondary": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "bodyweight",
     "load": "bodyweight",
     "steps": [
@@ -1489,7 +1694,9 @@
     "key": "Plank",
     "name": "Prancha",
     "primary": "abs",
-    "secondary": ["lower_back"],
+    "secondary": [
+      "lower_back"
+    ],
     "equipment": "bodyweight",
     "load": "time",
     "steps": [
@@ -1594,7 +1801,10 @@
     "key": "Rowing_Stationary",
     "name": "Remo ergômetro",
     "primary": "cardio",
-    "secondary": ["back", "quads"],
+    "secondary": [
+      "back",
+      "quads"
+    ],
     "equipment": "machine",
     "load": "time",
     "steps": [
@@ -1607,7 +1817,10 @@
     "key": "Stairmaster",
     "name": "Escada (simulador)",
     "primary": "cardio",
-    "secondary": ["glutes", "quads"],
+    "secondary": [
+      "glutes",
+      "quads"
+    ],
     "equipment": "machine",
     "load": "time",
     "steps": [

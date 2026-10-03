@@ -76,6 +76,7 @@ export function suggestWorkingSets(input: {
 /**
  * Aquecimento sobre a carga da 1ª série válida:
  * - completo: 2 × 12 a ~40% e ~55% (aquecimento) + 4 reps a ~70% e 2 a ~85% (preparação);
+ * - leve: 1 série de 12 reps a ~50% (iniciantes);
  * - preparação: 1 série de 4 reps a ~80%;
  * - direto: nada.
  */
@@ -86,6 +87,7 @@ const WARMUP_SCHEMES: Record<WarmupType, { kind: SetKind; percent: number; reps:
     { kind: 'prep', percent: 0.7, reps: 4 },
     { kind: 'prep', percent: 0.85, reps: 2 },
   ],
+  light: [{ kind: 'warmup', percent: 0.5, reps: 12 }],
   prep: [{ kind: 'prep', percent: 0.8, reps: 4 }],
   none: [],
 };

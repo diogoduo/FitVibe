@@ -13,7 +13,7 @@ import {
 import { createTestDb, type TestDb } from '@/db/test-db';
 import { todayKey } from '@/lib/dates';
 
-import { createSamplePlan } from '../../plan/sample-plan';
+import { AVANCADO_4X, createPlanFromTemplate } from '../../plan/templates';
 import { startWorkout } from '../../workout/repository';
 import type { ProfileData } from '../profile-form';
 import {
@@ -127,7 +127,7 @@ describe('updateProfile e o histórico de metas', () => {
 describe('wipeAllData', () => {
   it('apaga tudo de verdade, inclusive o plano e os exercícios', () => {
     createProfile(data, 82);
-    createSamplePlan();
+    createPlanFromTemplate(AVANCADO_4X);
     startWorkout(mockDb.select().from(planSessions).get()!.id);
     wipeAllData();
     expect(mockDb.select().from(workouts).all()).toEqual([]);

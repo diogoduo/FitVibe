@@ -145,8 +145,11 @@ export const EQUIPMENT = [
 ] as const;
 /** kg; placas (só o número, sem converter); peso corporal (reps); tempo (cardio, prancha). */
 export const LOAD_TYPES = ['kg', 'plates', 'bodyweight', 'time'] as const;
-/** Completo: 2×12 de aquecimento + 2 de preparação; preparação: 1 série; direto: nenhuma. */
-export const WARMUP_TYPES = ['full', 'prep', 'none'] as const;
+/**
+ * Completo: 2×12 de aquecimento + 2 de preparação; leve: 1 série leve de 12; preparação: 1 série
+ * de poucas reps perto da carga; direto: nenhuma. (Texto no SQLite: novos tipos não pedem migração.)
+ */
+export const WARMUP_TYPES = ['full', 'light', 'prep', 'none'] as const;
 export const MEDIA_KINDS = ['link', 'image', 'video'] as const;
 export const SESSION_KINDS = ['workout', 'activity'] as const;
 
@@ -203,6 +206,8 @@ export const plans = sqliteTable('plans', {
   ...syncColumns,
   name: text('name').notNull(),
   isActive: integer('is_active', { mode: 'boolean' }).notNull(),
+  /** Orientações gerais do plano (vêm dos modelos prontos). */
+  notes: text('notes'),
 });
 
 /** Um treino ou uma atividade (futebol) num dia da semana. Dia sem sessão = descanso. */

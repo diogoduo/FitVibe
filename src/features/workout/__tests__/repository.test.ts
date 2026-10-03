@@ -3,7 +3,7 @@ import { and, asc, eq, isNull } from 'drizzle-orm';
 import { exercises, planSessions, workoutExercises, workouts, workoutSets } from '@/db/schema';
 import { createTestDb, type TestDb } from '@/db/test-db';
 
-import { createSamplePlan } from '../../plan/sample-plan';
+import { AVANCADO_4X, createPlanFromTemplate } from '../../plan/templates';
 import {
   addExerciseToWorkout,
   addSet,
@@ -29,7 +29,7 @@ jest.mock('@/db/client', () => ({
 
 beforeEach(async () => {
   mockDb = await createTestDb();
-  createSamplePlan();
+  createPlanFromTemplate(AVANCADO_4X);
 });
 
 const session = (weekday: number) =>

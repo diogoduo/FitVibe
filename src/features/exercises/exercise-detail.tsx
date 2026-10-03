@@ -76,7 +76,7 @@ export function ExerciseDetail({ exercise, usage = [], children }: ExerciseDetai
 
       {exercise.notes ? (
         <Card title="Observação">
-          <Text className="text-base leading-6 text-warning">{exercise.notes}</Text>
+          <Text className="text-base leading-6 text-fg">{exercise.notes}</Text>
         </Card>
       ) : null}
 

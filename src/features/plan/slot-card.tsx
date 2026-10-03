@@ -53,7 +53,11 @@ export function SlotCard({
               ou {alternatives.map((alternative) => alternative.name).join(' ou ')}
             </Text>
           ) : null}
-          {exercise?.notes ? <Text className="text-sm text-warning">{exercise.notes}</Text> : null}
+          {exercise?.notes ? (
+            <Text className="text-sm text-warning" numberOfLines={3}>
+              {exercise.notes}
+            </Text>
+          ) : null}
         </View>
       </Pressable>
       <View className="justify-center gap-2">

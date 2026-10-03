@@ -1,12 +1,12 @@
 import { router } from 'expo-router';
-import { Alert, Text } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Screen } from '@/components/ui/screen';
 import { useActivePlan } from '@/features/plan/queries';
 import { createEmptyPlan, deletePlan } from '@/features/plan/repository';
-import { createSamplePlan } from '@/features/plan/sample-plan';
+import { createPlanFromTemplate, PLAN_TEMPLATES } from '@/features/plan/templates';
 import { WeekCard } from '@/features/plan/week-card';
 import { ActiveWorkoutCard } from '@/features/workout/active-workout-card';
 
@@ -28,16 +28,33 @@ export default function WorkoutScreen() {
     <Screen title="Treino" subtitle={plan?.name}>
       <ActiveWorkoutCard />
       {plan ? (
-        <WeekCard plan={plan} />
+        <>
+          <WeekCard plan={plan} />
+          {plan.notes ? (
+            <Card title="Observações do plano">
+              {plan.notes.split('\n').map((line) => (
+                <Text key={line} className="text-base leading-6 text-fg">
+                  • {line}
+                </Text>
+              ))}
+            </Card>
+          ) : null}
+        </>
       ) : (
         <Card title="Monte seu plano">
-          <Text className="text-base leading-6 text-fg">
-            O plano de exemplo é uma divisão de 4 treinos (peito/ombro/tríceps, perna, costas/bíceps
-            e upper) com futebol na quinta e no domingo, já com as cargas de referência. Dá para
-            mudar tudo depois.
+          <Text className="text-base leading-6 text-fg-muted">
+            Comece com um plano pronto ou do zero. Dá para mudar tudo depois.
           </Text>
-          <Button label="Usar plano de exemplo" onPress={createSamplePlan} />
-          <Button label="Montar do zero" variant="secondary" onPress={() => createEmptyPlan()} />
+          {PLAN_TEMPLATES.map((template) => (
+            <View key={template.id} className="gap-2 border-t border-line pt-3">
+              <Text className="text-lg font-semibold text-fg">{template.name}</Text>
+              <Text className="text-sm leading-5 text-fg-muted">{template.description}</Text>
+              <Button label="Usar este plano" onPress={() => createPlanFromTemplate(template)} />
+            </View>
+          ))}
+          <View className="border-t border-line pt-3">
+            <Button label="Montar do zero" variant="secondary" onPress={() => createEmptyPlan()} />
+          </View>
         </Card>
       )}
 
