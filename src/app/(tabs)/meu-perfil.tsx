@@ -2,13 +2,17 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
-import { ComingInPhase } from '@/components/coming-in-phase';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ChoiceChips } from '@/components/ui/choice-chips';
 import { HeaderButton } from '@/components/ui/header-button';
 import { Screen } from '@/components/ui/screen';
 import { MeasurementsCard } from '@/features/measurements/measurements-card';
+import { DietCard } from '@/features/progress/diet-card';
+import { MeasurementChartCard } from '@/features/progress/measurement-chart-card';
+import { StrengthCard } from '@/features/progress/strength-card';
+import { VolumeCard } from '@/features/progress/volume-card';
+import { WeightChartCard } from '@/features/progress/weight-chart-card';
 import { DaySummary } from '@/features/social/day-summary';
 import { PostCard } from '@/features/social/post-card';
 import { ProfileHeader } from '@/features/social/profile-header';
@@ -160,19 +164,17 @@ function MyPosts({ me }: { me: SocialProfile }) {
   );
 }
 
+/** Progresso: peso, força, volume por músculo, dieta e medidas, com gráficos. */
 function Progress() {
   return (
     <>
+      <WeightChartCard />
       <WeightHistoryCard />
+      <StrengthCard />
+      <VolumeCard />
+      <DietCard />
+      <MeasurementChartCard />
       <MeasurementsCard />
-      <ComingInPhase
-        phase={9}
-        items={[
-          'Evolução de carga e e1RM por exercício',
-          'Gráficos de peso e medidas',
-          'Adesão à dieta e séries por grupo muscular na semana',
-        ]}
-      />
     </>
   );
 }
