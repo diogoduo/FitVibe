@@ -36,7 +36,7 @@ export function LocalDataCard() {
       <Text className="text-base leading-6 text-fg-muted">
         Tudo fica salvo neste celular e funciona sem internet.{' '}
         {session
-          ? 'Com a conta, uma cópia vai para o servidor sempre que houver conexão. Fotos e vídeos dos exercícios ficam só no celular onde foram adicionados.'
+          ? 'Com a conta, uma cópia vai para o servidor sempre que houver conexão. Ficam só neste celular: as fotos de progresso, os vídeos e fotos dos exercícios, os lembretes e o tema.'
           : 'Crie uma conta para ter uma cópia no servidor.'}
       </Text>
       <Button label="Apagar todos os dados" variant="danger" onPress={confirmWipe} />

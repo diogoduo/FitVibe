@@ -2,11 +2,13 @@
 
 Feito pela **Duo**.
 
-App de treino e dieta para quem faz musculação e quer controlar tudo sozinho: plano semanal,
-registro de cada série (carga, reps, RIR e e1RM), progressão de carga, diário alimentar por
-refeição com leitor de código de barras e evolução do peso. **Offline-first**: tudo é gravado
-primeiro no celular, então funciona no subsolo da academia sem sinal, e sincroniza com o
-servidor quando a conexão volta.
+App de treino, dieta e progresso com um lado social. Plano semanal, registro de cada série
+(carga, reps, RIR e e1RM) com progressão de carga, diário alimentar com leitor de código de barras,
+meta de calorias que se ajusta pelo gasto real, gráficos de peso, força e volume por músculo e
+fotos de progresso. Com a conta, um perfil com @usuário para seguir os amigos, postar refeições,
+treinos e o dia, curtir, comentar e receber notificações. **Offline-first**: tudo é gravado
+primeiro no celular, então funciona no subsolo da academia sem sinal, e sincroniza com o servidor
+quando a conexão volta. Tudo no plano gratuito (Supabase Free e Expo Go).
 
 **React Native · Expo SDK 57 · TypeScript · Expo Router · NativeWind · SQLite · Supabase**
 
@@ -40,10 +42,11 @@ duo-gym-diet/
 │   │   ├── notifications/    # sininho, lista, aviso com o app aberto e preferências
 │   │   ├── reminders/        # lembretes de água e refeições (notificações locais)
 │   │   ├── export/           # planilhas CSV e relatório em PDF
-│   │   └── progress/         # gráficos do Progresso (peso, força, volume, dieta, medidas)
+│   │   ├── progress/         # gráficos do Progresso (peso, força, volume, dieta, medidas)
+│   │   └── progress-photos/  # fotos de progresso (só neste celular)
 │   ├── lib/                  # datas, números (pt-BR) e Supabase
 │   ├── sync/                 # conta e sincronização (motor, Supabase, telas de status)
-│   ├── theme/palette.js      # cores do app (fonte única para Tailwind e código nativo)
+│   ├── theme/                # paleta (Tailwind e código), tema claro/escuro e useColors()
 │   └── global.css            # entrada do Tailwind (NativeWind)
 ├── assets/exercises/         # fotos do catálogo (WebP, geradas pelo script)
 ├── scripts/                  # catálogo, TACO, SQL da sincronização, Supabase local, testes
@@ -101,7 +104,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 7 | Notificações dentro do app: sininho com contador, lista e aviso com o app aberto | ⚠️ |
 | 8 | Lembretes de água e refeições, exportação CSV e PDF | ✅ |
 | 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | ⚠️ |
-| 10 | Meta calórica adaptativa, fotos de progresso, tema claro, acabamento | |
+| 10 | Meta calórica adaptativa, fotos de progresso, tema claro, acabamento | ⚠️ |
 
 Tudo no plano gratuito: Supabase Free e Expo Go, sem conta paga da Apple. Por isso as
 notificações da Fase 7 aparecem só dentro do app (push com o app fechado exige build próprio e a
@@ -433,3 +436,23 @@ gráficos; tocar ou arrastar mostra o valor do ponto):
 
 ⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, `expo-doctor` (21/21) e o bundle de iOS
 passaram no PC.
+
+## Fase 10 — Meta adaptativa, fotos de progresso e tema claro
+
+- **Meta adaptativa** (`src/features/goals/adaptive.ts`): o gasto real das últimas 3 semanas é a
+  média do que foi comido menos o que a tendência do peso mostra que sobrou (7.700 kcal por kg).
+  Com pelo menos 14 dias registrados e pesagens no começo e no fim, o **Hoje** sugere a meta nova
+  (gasto real ± o ritmo escolhido), andando no máximo 250 kcal por vez e nunca abaixo de 1.200;
+  "Agora não" esconde por 7 dias. Aceitar vira a meta de calorias definida à mão (dá para tirar
+  em Perfil e metas). O **Progresso** mostra o gasto real ou o que falta para estimá-lo.
+- **Fotos de progresso**: frente, lado e costas por dia, comparação antes × depois da mesma pose
+  com a diferença da tendência do peso, tela cheia com compartilhar e excluir. Por privacidade,
+  ficam **só neste celular** (tabela local, não sincroniza).
+- **Tema claro** (Ajustes → Aparência: escuro, claro ou o do iPhone), na hora: as classes leem
+  variáveis CSS trocadas com `vars()` do NativeWind; as cores no código vêm de `useColors()`;
+  teclado, seletor de data, alertas, cabeçalhos e barra de status acompanham.
+- **Acabamento**: "Seus dados" diz o que fica só no celular; este README descreve o app inteiro.
+- **Testes**: 204 no Jest (inclui a meta adaptativa e as fotos) e 14 de integração.
+
+⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
+(21/21) e o bundle de iOS passaram no PC.
