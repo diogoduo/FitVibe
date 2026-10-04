@@ -36,7 +36,9 @@ duo-gym-diet/
 │   │   ├── diary/            # refeições, diário, refeições salvas, água
 │   │   ├── account/          # conta nos Ajustes e a escolha de dados no primeiro login
 │   │   ├── social/           # perfil público, feed, posts, curtidas, comentários, fila de posts
-│   │   └── notifications/    # sininho, lista, aviso com o app aberto e preferências
+│   │   ├── notifications/    # sininho, lista, aviso com o app aberto e preferências
+│   │   ├── reminders/        # lembretes de água e refeições (notificações locais)
+│   │   └── export/           # planilhas CSV e relatório em PDF
 │   ├── lib/                  # datas, números (pt-BR) e Supabase
 │   ├── sync/                 # conta e sincronização (motor, Supabase, telas de status)
 │   ├── theme/palette.js      # cores do app (fonte única para Tailwind e código nativo)
@@ -95,7 +97,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 5 | Conta e sincronização: login, fila de envio, última alteração vence, RLS | ✅ |
 | 6 | Social: perfil com @usuário, seguir (com aprovação), feed, posts com foto e legenda, curtidas, comentários, bloquear | ✅ |
 | 7 | Notificações dentro do app: sininho com contador, lista e aviso com o app aberto | ⚠️ |
-| 8 | Lembretes de água e refeições, exportação CSV e PDF | |
+| 8 | Lembretes de água e refeições, exportação CSV e PDF | ⚠️ |
 | 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | |
 | 10 | Meta calórica adaptativa, fotos de progresso, tema claro, acabamento | |
 
@@ -380,6 +382,28 @@ funcionaram.
   Realtime) e confere que uma conta não recebe o aviso de outra.
 
 Para a nuvem: rode também `supabase/migrations/20261003200000_notificacoes.sql` no SQL Editor.
+
+⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
+(21/21) e o bundle de iOS passaram no PC.
+
+## Fase 8 — Lembretes e exportação
+
+- **Lembretes** (Ajustes → Lembretes): notificações locais agendadas no próprio celular, então
+  chegam **com o app fechado** e sem servidor. Água de 1 h, 1h30, 2 h ou 3 h, entre um horário e
+  outro, dizendo quanto falta para a meta; e um horário por refeição. O planejamento é data por
+  data para os próximos 3 dias (no máximo 50, abaixo do limite de 64 do iOS), refeito a cada
+  mudança: a água para quando bate a meta e a refeição já registrada não toca. Tocar abre o Hoje
+  ou a Dieta. "Testar agora" manda um em 5 segundos. Os ajustes ficam só neste celular
+  (`app_settings`, não sincroniza).
+- **Exportar** (Ajustes → Exportar): período de 7, 30 ou 90 dias ou tudo.
+  - **Planilhas CSV** do diário alimentar, água, treinos (uma linha por série), peso (com a
+    tendência), medidas e metas, no padrão do Excel brasileiro (separador ";", vírgula decimal,
+    UTF-8 com BOM) e com proteção contra fórmula em texto.
+  - **Relatório em PDF** (A4, `expo-print`): média de calorias e macros contra a meta, dias na
+    meta (±10%), água, treinos com recordes, a curva do peso (SVG) e a diferença das medidas.
+  - Sai pela tela de compartilhar do iPhone (Arquivos, WhatsApp, e-mail).
+- **Testes**: 195 no Jest, incluindo o planejamento dos lembretes, o formato do CSV, as planilhas
+  e os números do relatório.
 
 ⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
 (21/21) e o bundle de iOS passaram no PC.
