@@ -1,6 +1,8 @@
 import Constants from 'expo-constants';
+import { router } from 'expo-router';
 import { Platform, Text } from 'react-native';
 
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Screen } from '@/components/ui/screen';
 import { AccountCard } from '@/features/account/account-card';
@@ -9,7 +11,20 @@ import { DataSourcesCard, DietSettingsCard } from '@/features/diary/diet-setting
 import { LocalDataCard } from '@/features/profile/local-data-card';
 import { NotificationSettingsCard } from '@/features/notifications/settings-card';
 import { ProfileSummaryCard } from '@/features/profile/profile-summary-card';
+import { RemindersCard } from '@/features/reminders/reminders-card';
 import { SocialSettingsCard } from '@/features/social/social-settings-card';
+
+function ExportCard() {
+  return (
+    <Card title="Exportar">
+      <Text className="text-base leading-6 text-fg-muted">
+        Relatório em PDF do período e planilhas (CSV) do diário, água, treinos, peso, medidas e
+        metas.
+      </Text>
+      <Button label="Exportar dados" variant="secondary" onPress={() => router.push('/exportar')} />
+    </Card>
+  );
+}
 
 /** Ajustes (abre pelo ⚙️ do Perfil): conta, perfil público, metas, dieta, servidor e dados. */
 export default function SettingsScreen() {
@@ -23,6 +38,8 @@ export default function SettingsScreen() {
       <NotificationSettingsCard />
       <ProfileSummaryCard />
       <DietSettingsCard />
+      <RemindersCard />
+      <ExportCard />
       <SupabaseStatusCard />
       <LocalDataCard />
       <DataSourcesCard />
