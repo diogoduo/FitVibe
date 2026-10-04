@@ -40,7 +40,7 @@ export default function MyProfileScreen() {
   return (
     <Screen
       title="Perfil"
-      action={<HeaderButton icon="⚙️" label="Ajustes" onPress={() => router.push('/ajustes')} />}
+      action={<HeaderButton icon="gear" label="Ajustes" onPress={() => router.push('/ajustes')} />}
     >
       {/* Sem conta ou sem perfil social, o Progresso aparece direto embaixo do aviso. */}
       <SocialGate

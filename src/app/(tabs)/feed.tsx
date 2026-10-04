@@ -29,8 +29,8 @@ function Header() {
     <View className="flex-row items-center justify-between pt-4">
       <Text className="text-3xl font-bold text-fg">Feed</Text>
       <View className="flex-row gap-2">
-        <HeaderButton icon="🔍" label="Buscar pessoas" onPress={() => router.push('/buscar')} />
-        <HeaderButton icon="＋" label="Novo post" onPress={() => router.push('/novo-post')} />
+        <HeaderButton icon="search" label="Buscar pessoas" onPress={() => router.push('/buscar')} />
+        <HeaderButton icon="plus" label="Novo post" onPress={() => router.push('/novo-post')} />
         <BellButton />
       </View>
     </View>

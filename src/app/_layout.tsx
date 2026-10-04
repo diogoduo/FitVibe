@@ -6,6 +6,7 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useEffect, type ReactNode } from 'react';
 
 import { db } from '@/db/client';
@@ -66,26 +67,29 @@ export default function RootLayout() {
   }, [error]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {error ? (
-        <>
-          <StatusBar style="light" />
-          <DatabaseErrorScreen error={error} />
-        </>
-      ) : success ? (
-        // O tema lê a escolha salva no banco: só depois das migrações.
-        <AppThemeProvider>
-          <NavigationTheme>
-            <SyncProvider />
-            <SocialProvider />
-            <NotificationsProvider />
-            <RemindersProvider />
-            <AppStack />
-            <NotificationToast />
-          </NavigationTheme>
-        </AppThemeProvider>
-      ) : null}
-    </QueryClientProvider>
+    // Gestos (deslizar para apagar, duplo toque) precisam deste envoltório no topo.
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        {error ? (
+          <>
+            <StatusBar style="light" />
+            <DatabaseErrorScreen error={error} />
+          </>
+        ) : success ? (
+          // O tema lê a escolha salva no banco: só depois das migrações.
+          <AppThemeProvider>
+            <NavigationTheme>
+              <SyncProvider />
+              <SocialProvider />
+              <NotificationsProvider />
+              <RemindersProvider />
+              <AppStack />
+              <NotificationToast />
+            </NavigationTheme>
+          </AppThemeProvider>
+        ) : null}
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }
 
