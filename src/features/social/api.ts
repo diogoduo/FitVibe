@@ -9,6 +9,7 @@ import type {
   DaySummaryRow,
   FeedPost,
   FollowStatus,
+  NotifyPrefs,
   PersonRow,
   PostContent,
   PostComment,
@@ -34,13 +35,13 @@ const SOCIAL_ERRORS: [(error: PostgrestError) => boolean, string][] = [
   [(e) => e.code === '42501', 'Você não tem permissão para isso.'],
 ];
 
-function fail(error: PostgrestError | Error): never {
+export function fail(error: PostgrestError | Error): never {
   const known =
     'code' in error ? SOCIAL_ERRORS.find(([match]) => match(error as PostgrestError)) : undefined;
   throw new SocialError(known ? known[1] : friendlyError(error));
 }
 
-function client(): SupabaseClient {
+export function client(): SupabaseClient {
   if (!supabase) throw new SocialError('Servidor não configurado.');
   return supabase;
 }
@@ -76,7 +77,7 @@ export async function createMyProfile(input: SocialProfileInput): Promise<Social
 }
 
 export async function updateMyProfile(
-  patch: Partial<SocialProfileInput & { avatar_path: string | null }>,
+  patch: Partial<SocialProfileInput & NotifyPrefs & { avatar_path: string | null }>,
 ): Promise<SocialProfile> {
   const userId = await myUserId();
   const { data, error } = await client()

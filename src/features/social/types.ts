@@ -71,7 +71,17 @@ export type SocialProfile = {
   share_training: boolean;
   share_diet: boolean;
   share_body: boolean;
+  /** O que a pessoa quer receber de notificação (Fase 7). */
+  notify_follows: boolean;
+  notify_likes: boolean;
+  notify_comments: boolean;
+  notify_posts: boolean;
 };
+
+export type NotifyPrefs = Pick<
+  SocialProfile,
+  'notify_follows' | 'notify_likes' | 'notify_comments' | 'notify_posts'
+>;
 
 export type SocialProfileInput = Pick<
   SocialProfile,
@@ -93,7 +103,7 @@ export type PersonRow = {
 
 export type FollowStatus = 'pending' | 'accepted';
 
-export type ProfileView = SocialProfile & {
+export type ProfileView = Omit<SocialProfile, keyof NotifyPrefs> & {
   post_count: number;
   follower_count: number;
   following_count: number;
