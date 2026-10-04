@@ -1,8 +1,12 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 
+import { useUnreadCount } from '@/features/notifications/queries';
+
 import { palette } from '@/theme/palette';
 
 export default function TabsLayout() {
+  // Notificações não lidas no ícone do Feed, visível de qualquer aba.
+  const unread = useUnreadCount();
   return (
     <NativeTabs tintColor={palette.dark.primary}>
       <NativeTabs.Trigger name="index">
@@ -20,6 +24,9 @@ export default function TabsLayout() {
       <NativeTabs.Trigger name="feed">
         <NativeTabs.Trigger.Label>Feed</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="square.stack.fill" md="dynamic_feed" />
+        <NativeTabs.Trigger.Badge hidden={unread === 0}>
+          {unread > 9 ? '9+' : String(unread)}
+        </NativeTabs.Trigger.Badge>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="meu-perfil">
         <NativeTabs.Trigger.Label>Perfil</NativeTabs.Trigger.Label>

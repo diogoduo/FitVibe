@@ -11,6 +11,8 @@ import { useEffect } from 'react';
 import { db } from '@/db/client';
 import { DatabaseErrorScreen } from '@/db/database-error-screen';
 import migrations from '@/db/migrations/migrations';
+import { NotificationsProvider } from '@/features/notifications/notifications-provider';
+import { NotificationToast } from '@/features/notifications/toast';
 import { useProfile } from '@/features/profile/queries';
 import { SocialProvider } from '@/features/social/social-provider';
 import { queryClient } from '@/lib/query-client';
@@ -61,7 +63,9 @@ export default function RootLayout() {
           <>
             <SyncProvider />
             <SocialProvider />
+            <NotificationsProvider />
             <AppStack />
+            <NotificationToast />
           </>
         ) : null}
       </ThemeProvider>
@@ -130,6 +134,7 @@ function AppStack() {
         <Stack.Screen name="solicitacoes" options={pushed} />
         <Stack.Screen name="conexoes" options={pushed} />
         <Stack.Screen name="bloqueados" options={pushed} />
+        <Stack.Screen name="notificacoes" options={{ ...pushed, title: 'Notificações' }} />
       </Stack.Protected>
       <Stack.Protected guard={!hasProfile}>
         <Stack.Screen name="cadastro" options={{ gestureEnabled: false }} />

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { HeaderButton } from '@/components/ui/header-button';
 import { Screen } from '@/components/ui/screen';
+import { BellButton } from '@/features/notifications/bell-button';
 import { OutboxList } from '@/features/social/outbox-list';
 import { PostCard } from '@/features/social/post-card';
 import { useFeed } from '@/features/social/queries';
@@ -29,6 +30,7 @@ function Header() {
       <View className="flex-row gap-2">
         <HeaderButton icon="🔍" label="Buscar pessoas" onPress={() => router.push('/buscar')} />
         <HeaderButton icon="＋" label="Novo post" onPress={() => router.push('/novo-post')} />
+        <BellButton />
       </View>
     </View>
   );

@@ -7,6 +7,7 @@ import { AccountCard } from '@/features/account/account-card';
 import { SupabaseStatusCard } from '@/features/diagnostics/supabase-status-card';
 import { DataSourcesCard, DietSettingsCard } from '@/features/diary/diet-settings-card';
 import { LocalDataCard } from '@/features/profile/local-data-card';
+import { NotificationSettingsCard } from '@/features/notifications/settings-card';
 import { ProfileSummaryCard } from '@/features/profile/profile-summary-card';
 import { SocialSettingsCard } from '@/features/social/social-settings-card';
 
@@ -19,6 +20,7 @@ export default function SettingsScreen() {
     <Screen title="Ajustes">
       <AccountCard />
       <SocialSettingsCard />
+      <NotificationSettingsCard />
       <ProfileSummaryCard />
       <DietSettingsCard />
       <SupabaseStatusCard />
