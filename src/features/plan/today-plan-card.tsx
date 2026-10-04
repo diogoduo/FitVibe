@@ -34,7 +34,7 @@ export function TodayPlanCard() {
 
   if (!plan) {
     return (
-      <Card title="Treino de hoje">
+      <Card icon="dumbbell" title="Treino de hoje">
         <Text className="text-base text-fg-muted">Você ainda não tem um plano de treino.</Text>
         <Button
           label="Montar plano"
@@ -47,7 +47,7 @@ export function TodayPlanCard() {
 
   if (sessions.length === 0) {
     return (
-      <Card title={`Treino de hoje · ${weekdayName(weekday)}`}>
+      <Card icon="dumbbell" title={`Treino de hoje · ${weekdayName(weekday)}`}>
         <Text className="text-base text-fg">Dia de descanso.</Text>
       </Card>
     );
@@ -57,7 +57,7 @@ export function TodayPlanCard() {
   const done = new Set(logs.map((log) => log.sessionId));
 
   return (
-    <Card title={`Treino de hoje · ${weekdayName(weekday)}`}>
+    <Card icon="dumbbell" title={`Treino de hoje · ${weekdayName(weekday)}`}>
       {sessions.map((session) =>
         session.kind === 'workout' ? (
           <View key={session.id} className="gap-2">

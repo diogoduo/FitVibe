@@ -101,7 +101,7 @@ export function ExerciseDetail({ exercise, usage = [], children }: ExerciseDetai
       ) : null}
 
       {steps.length > 0 ? (
-        <Card title="Como fazer">
+        <Card icon="info" title="Como fazer">
           {steps.map((step, index) => (
             <View key={index} className="flex-row gap-3">
               <Text className="w-5 text-base font-bold text-primary">{index + 1}</Text>

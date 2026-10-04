@@ -9,7 +9,9 @@ export type ColorToken =
   | 'on-primary'
   | 'success'
   | 'warning'
-  | 'danger';
+  | 'danger'
+  | 'protein'
+  | 'water';
 
 export type ColorSchemeName = 'dark' | 'light';
 

@@ -44,7 +44,7 @@ export function SupabaseStatusCard() {
 
   if (!configResult.ok) {
     return (
-      <Card title="Servidor (Supabase)">
+      <Card icon="cloud" title="Servidor (Supabase)">
         <StatusLine color={colors.warning} label="Não configurado" />
         <Text className="text-base leading-6 text-fg-muted">
           {CONFIG_HINTS[configResult.problem]}
@@ -54,7 +54,7 @@ export function SupabaseStatusCard() {
   }
 
   return (
-    <Card title="Servidor (Supabase)">
+    <Card icon="cloud" title="Servidor (Supabase)">
       {status.kind === 'checking' ? (
         <View className="flex-row items-center gap-3">
           <Spinner />

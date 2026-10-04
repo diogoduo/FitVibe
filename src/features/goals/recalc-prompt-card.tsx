@@ -34,7 +34,7 @@ export function RecalcPromptCard() {
   const next = computeGoals(toEnergyInput(pickProfileData(profile), trend, todayKey()));
 
   return (
-    <Card title="Atualizar as metas?">
+    <Card icon="sparkles" title="Atualizar as metas?">
       <Text className="text-base leading-6 text-fg">
         Sua tendência foi de {formatKg(goal.weightKg)} para {formatKg(trend)} desde a última meta.
       </Text>

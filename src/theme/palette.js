@@ -22,6 +22,9 @@ const palette = {
     success: '#4ADE80',
     warning: '#FBBF24',
     danger: '#F87171',
+    // Anéis do Hoje: proteína e água.
+    protein: '#FB923C',
+    water: '#38BDF8',
   },
   light: {
     background: '#F6F6F8',
@@ -35,6 +38,8 @@ const palette = {
     success: '#15803D',
     warning: '#B45309',
     danger: '#DC2626',
+    protein: '#EA580C',
+    water: '#0284C7',
   },
 };
 

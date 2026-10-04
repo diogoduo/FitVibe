@@ -31,7 +31,7 @@ export default function WorkoutScreen() {
         <>
           <WeekCard plan={plan} />
           {plan.notes ? (
-            <Card title="Observações do plano">
+            <Card icon="info" title="Observações do plano">
               {plan.notes.split('\n').map((line) => (
                 <Text key={line} className="text-base leading-6 text-fg">
                   • {line}
@@ -41,7 +41,7 @@ export default function WorkoutScreen() {
           ) : null}
         </>
       ) : (
-        <Card title="Monte seu plano">
+        <Card icon="sparkles" title="Monte seu plano">
           <Text className="text-base leading-6 text-fg-muted">
             Comece com um plano pronto ou do zero. Dá para mudar tudo depois.
           </Text>

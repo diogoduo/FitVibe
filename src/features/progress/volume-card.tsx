@@ -38,7 +38,7 @@ export function VolumeCard() {
   const top = Math.max(WEEKLY_SETS_RANGE.max, ...muscles.map(([, sets]) => sets));
 
   return (
-    <Card title="Volume por músculo">
+    <Card icon="figure" title="Volume por músculo">
       <View className="flex-row items-center justify-between">
         <Arrow
           label="‹"

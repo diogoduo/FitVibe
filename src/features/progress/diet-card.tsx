@@ -44,7 +44,7 @@ export function DietCard() {
     : null;
 
   return (
-    <Card title="Dieta">
+    <Card icon="fork" title="Dieta">
       <ChoiceChips options={RANGES} value={range} onChange={setRange} />
       {summary.loggedDays === 0 ? (
         <Text className="text-base text-fg-muted">Nada registrado no diário no período.</Text>

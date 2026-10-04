@@ -23,7 +23,7 @@ export function ProfileSummaryCard() {
       : `${goalLabel(profile.goal)} ${formatDecimal(profile.weeklyRateKg)} kg por semana`;
 
   return (
-    <Card title="Perfil e metas">
+    <Card icon="person" title="Perfil e metas">
       <Text className="text-xl font-semibold text-fg">{profile.name}</Text>
       <Text className="text-base text-fg-muted">
         {sex} · {ageOn(profile.birthDate, todayKey())} anos · {formatDecimal(profile.heightCm)} cm

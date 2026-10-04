@@ -25,7 +25,7 @@ export function AdaptiveGoalPrompt() {
       : `${PACE[profile.goal]} ${formatDecimal(profile.weeklyRateKg)} kg por semana`;
 
   return (
-    <Card title="Ajustar a meta?">
+    <Card icon="sparkles" title="Ajustar a meta?">
       <Text className="text-base leading-6 text-fg">
         Nas últimas 3 semanas você comeu em média {formatInt(result.averageIntake)} kcal e a
         tendência do peso foi de {formatKg(roundTenth(result.startKg))} para{' '}
@@ -60,7 +60,7 @@ export function RealExpenditureCard() {
   if (!estimate) return null;
   const { result, goal } = estimate;
   return (
-    <Card title="Gasto real">
+    <Card icon="flame" title="Gasto real">
       {result.status === 'ready' ? (
         <>
           <Text className="text-2xl font-bold text-fg">

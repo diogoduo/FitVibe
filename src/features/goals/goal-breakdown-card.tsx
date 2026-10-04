@@ -17,7 +17,7 @@ type GoalBreakdownCardProps = {
 /** A conta da meta passo a passo: TMB → gasto total → ajuste do objetivo → meta → macros. */
 export function GoalBreakdownCard({ input, goals, weightSource }: GoalBreakdownCardProps) {
   return (
-    <Card title="Sua meta diária">
+    <Card icon="flame" title="Sua meta diária">
       <Step
         label="Taxa metabólica basal"
         detail={goals.bmrFormula === 'katch' ? 'Katch-McArdle (massa magra)' : 'Mifflin-St Jeor'}

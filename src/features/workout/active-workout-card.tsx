@@ -15,7 +15,7 @@ export function ActiveWorkoutCard() {
   if (!workout) return null;
 
   return (
-    <Card title="Treino em andamento">
+    <Card icon="timer" title="Treino em andamento">
       <Text className="text-xl font-semibold text-fg">{workout.name}</Text>
       <Text className="text-sm text-fg-muted">
         Começou há {formatWorkoutDuration(workout.startedAt, new Date(now))}

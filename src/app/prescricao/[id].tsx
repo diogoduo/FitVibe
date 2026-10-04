@@ -203,7 +203,7 @@ export default function PrescriptionScreen() {
           />
         ) : null}
 
-        <Card title="Alternativas">
+        <Card icon="list" title="Alternativas">
           {alternatives.length === 0 ? (
             <Text className="text-base leading-6 text-fg-muted">
               Exercícios que valem no lugar deste (máquina ocupada, supino ou crossover).

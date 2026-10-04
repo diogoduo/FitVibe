@@ -15,7 +15,7 @@ const OPTIONS: { value: ThemeChoice; label: string }[] = [
 export function AppearanceCard() {
   const choice = useThemeChoice();
   return (
-    <Card title="Aparência">
+    <Card icon="sun" title="Aparência">
       <ChoiceChips options={OPTIONS} value={choice} onChange={saveThemeChoice} />
       <Text className="text-sm leading-5 text-fg-muted">
         {

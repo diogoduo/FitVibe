@@ -41,7 +41,7 @@ export function AccountCard() {
 
   if (!session) {
     return (
-      <Card title="Conta">
+      <Card icon="cloud" title="Conta">
         <Text className="text-base leading-6 text-fg-muted">
           Sem conta, tudo fica só neste celular. Com uma conta, uma cópia vai para o servidor: dá
           para trocar de celular sem perder nada, e o perfil e o feed vão usar essa conta.
@@ -62,7 +62,7 @@ export function AccountCard() {
         return askConflict(result, () => setBusy('Baixando os dados da conta…'));
       });
     return (
-      <Card title="Conta">
+      <Card icon="cloud" title="Conta">
         <Text className="text-base text-fg">{email}</Text>
         <Text className="text-base leading-6 text-fg-muted">
           Falta escolher quais dados usar neste celular.
@@ -121,7 +121,7 @@ export function AccountCard() {
   const syncing = status.syncing || busy != null;
 
   return (
-    <Card title="Conta">
+    <Card icon="cloud" title="Conta">
       <Text className="text-lg font-semibold text-fg">{email}</Text>
 
       {status.syncing ? (

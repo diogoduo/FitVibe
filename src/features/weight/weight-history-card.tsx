@@ -20,7 +20,7 @@ export function WeightHistoryCard() {
   const visible = expanded ? entries : entries.slice(0, COLLAPSED_COUNT);
 
   return (
-    <Card title="Pesagens">
+    <Card icon="scale" title="Pesagens">
       {entries.length === 0 ? (
         <Text className="text-base text-fg-muted">Nenhuma pesagem registrada.</Text>
       ) : (

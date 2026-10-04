@@ -115,7 +115,7 @@ function MyDay({ me }: { me: SocialProfile }) {
   const snapshot = useTodaySnapshot(me.share_training, me.share_diet, me.share_body);
   const nothingShared = !me.share_training && !me.share_diet && !me.share_body;
   return (
-    <Card title="Seu dia hoje">
+    <Card icon="sun" title="Seu dia hoje">
       {nothingShared ? (
         <Text className="text-base leading-6 text-fg-muted">
           Você não compartilha nada do seu dia no perfil. Ligue em Editar perfil.

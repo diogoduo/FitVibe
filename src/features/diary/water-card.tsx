@@ -19,7 +19,7 @@ export function WaterCard({ day = todayKey() }: { day?: DayKey }) {
   const goal = waterGoalMl(profile?.waterGoalMl ?? null, weightKg);
 
   return (
-    <Card title="Água">
+    <Card icon="drop" title="Água">
       <View className="flex-row items-baseline justify-between">
         <Text className="text-2xl font-bold text-fg">
           {formatInt(total)}

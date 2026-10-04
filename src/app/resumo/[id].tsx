@@ -99,7 +99,7 @@ export default function WorkoutSummaryScreen() {
         </View>
 
         {records.length > 0 ? (
-          <Card title="Recordes">
+          <Card icon="trophy" title="Recordes">
             {records.map((record) => (
               <Text key={record.exerciseId} className="text-base leading-6 text-fg">
                 🏆 <Text className="font-semibold">{byId.get(record.exerciseId)?.name}</Text>:{' '}
@@ -110,7 +110,7 @@ export default function WorkoutSummaryScreen() {
         ) : null}
 
         {perMuscle.length > 0 ? (
-          <Card title="Séries por grupo muscular">
+          <Card icon="figure" title="Séries por grupo muscular">
             <Text className="text-base leading-6 text-fg">
               {perMuscle
                 .map(([muscle, count]) => `${MUSCLE_LABELS[muscle]} ${formatDecimal(count)}`)
@@ -122,7 +122,7 @@ export default function WorkoutSummaryScreen() {
           </Card>
         ) : null}
 
-        <Card title="Exercícios">
+        <Card icon="dumbbell" title="Exercícios">
           {items.map(({ entry, exercise, sets: done }) => (
             <View key={entry.id} className="gap-0.5 border-t border-line pt-2">
               <Text className="text-base font-semibold text-fg">

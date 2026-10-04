@@ -51,7 +51,7 @@ export default function EditProfileScreen() {
     <>
       <Stack.Screen options={{ title: 'Perfil e metas' }} />
       <FormScroll>
-        <Card title="Você">
+        <Card icon="person" title="Você">
           <PersonalFields values={values} errors={shownErrors} onChange={onChange} />
         </Card>
         <Card title="Rotina">
@@ -70,7 +70,7 @@ export default function EditProfileScreen() {
           </Text>
         )}
 
-        <Card title="Ajustes da meta">
+        <Card icon="flame" title="Ajustes da meta">
           <TargetFields
             values={values}
             errors={shownErrors}

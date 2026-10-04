@@ -26,7 +26,7 @@ export function MeasurementsCard() {
   const [latest, ...older] = measurements;
 
   return (
-    <Card title="Medidas">
+    <Card icon="ruler" title="Medidas">
       {latest ? (
         <>
           <Pressable

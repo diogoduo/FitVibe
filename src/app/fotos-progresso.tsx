@@ -167,7 +167,7 @@ function Compare({ photos }: { photos: readonly ProgressPhoto[] }) {
   const weightAfter = after ? trendOn(after.takenOn) : undefined;
 
   return (
-    <Card title="Comparar">
+    <Card icon="photos" title="Comparar">
       <ChoiceChips
         options={available.map((value) => ({ value, label: POSE_LABELS[value] }))}
         value={available.includes(pose) ? pose : available[0]}

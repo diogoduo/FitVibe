@@ -34,7 +34,7 @@ export function WeightChartCard() {
   const x = (day: string) => daysBetween(from, day);
 
   return (
-    <Card title="Peso">
+    <Card icon="scale" title="Peso">
       <ChoiceChips options={RANGE_OPTIONS} value={range} onChange={setRange} />
       {series.length < 2 ? (
         <Text className="text-base leading-6 text-fg-muted">

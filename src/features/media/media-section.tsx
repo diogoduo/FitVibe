@@ -33,7 +33,7 @@ export function MediaSection({ exerciseId }: { exerciseId: string }) {
     );
 
   return (
-    <Card title="Suas mídias">
+    <Card icon="photos" title="Suas mídias">
       {media.length === 0 ? (
         <Text className="text-base leading-6 text-fg-muted">
           Guarde aqui o vídeo do seu professor, um Reels de referência ou uma gravação da sua

@@ -17,7 +17,7 @@ export function ExerciseProgressCards({ exercise }: { exercise: Exercise }) {
   const history = exerciseHistory(exercise.id);
   if (history.length === 0) {
     return (
-      <Card title="Histórico">
+      <Card icon="calendar" title="Histórico">
         <Text className="text-base text-fg-muted">Ainda não registrado em nenhum treino.</Text>
       </Card>
     );
@@ -30,7 +30,7 @@ export function ExerciseProgressCards({ exercise }: { exercise: Exercise }) {
   return (
     <>
       {bests && (bests.e1rm || bests.heaviest || bests.mostReps) ? (
-        <Card title="Recordes">
+        <Card icon="trophy" title="Recordes">
           {bests.e1rm ? (
             <Best
               label="Força (e1RM)"
@@ -50,7 +50,7 @@ export function ExerciseProgressCards({ exercise }: { exercise: Exercise }) {
         </Card>
       ) : null}
 
-      <Card title="Últimas vezes">
+      <Card icon="list" title="Últimas vezes">
         {history.slice(0, RECENT).map(({ workout, sets }) => (
           <Pressable
             key={workout.id}

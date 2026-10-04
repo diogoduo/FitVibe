@@ -41,7 +41,7 @@ export function NotificationSettingsCard() {
   };
 
   return (
-    <Card title="Notificações">
+    <Card icon="bell" title="Notificações">
       <Text className="text-base leading-6 text-fg-muted">
         Aparecem no 🔔 do Feed e num aviso no topo quando o app está aberto. Com o app fechado não
         chega aviso (precisaria de um app próprio na App Store, que é pago).

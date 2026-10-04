@@ -30,7 +30,7 @@ export function MeasurementChartCard() {
   const last = series[series.length - 1];
 
   return (
-    <Card title="Evolução das medidas">
+    <Card icon="ruler" title="Evolução das medidas">
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

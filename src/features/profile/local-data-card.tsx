@@ -32,7 +32,7 @@ export function LocalDataCard() {
     );
 
   return (
-    <Card title="Seus dados">
+    <Card icon="lock" title="Seus dados">
       <Text className="text-base leading-6 text-fg-muted">
         Tudo fica salvo neste celular e funciona sem internet.{' '}
         {session

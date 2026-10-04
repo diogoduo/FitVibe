@@ -14,7 +14,7 @@ export function WeightSummaryCard() {
   const last = entries[0];
 
   return (
-    <Card title="Peso">
+    <Card icon="scale" title="Peso">
       {trendKg != null ? (
         <View className="flex-row items-end justify-between">
           <View>

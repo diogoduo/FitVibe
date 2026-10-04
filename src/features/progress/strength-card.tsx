@@ -36,7 +36,7 @@ export function StrengthCard() {
 
   if (!selected) {
     return (
-      <Card title="Força">
+      <Card icon="trophy" title="Força">
         <Text className="text-base leading-6 text-fg-muted">
           Termine um treino para acompanhar a evolução de cada exercício.
         </Text>
@@ -62,7 +62,7 @@ export function StrengthCard() {
   const change = first && last && first !== last ? last.value - first.value : null;
 
   return (
-    <Card title="Força">
+    <Card icon="trophy" title="Força">
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

@@ -34,7 +34,7 @@ export function WeekCard({ plan }: { plan: Plan }) {
   );
 
   return (
-    <Card title="Semana">
+    <Card icon="calendar" title="Semana">
       {WEEKDAY_NAMES.map((dayName, index) => {
         const weekday = index + 1;
         const isToday = weekday === isoWeekday(today);

@@ -17,7 +17,7 @@ import { AppearanceCard } from '@/theme/appearance-card';
 
 function ExportCard() {
   return (
-    <Card title="Exportar">
+    <Card icon="share" title="Exportar">
       <Text className="text-base leading-6 text-fg-muted">
         Relatório em PDF do período e planilhas (CSV) do diário, água, treinos, peso, medidas e
         metas.
@@ -45,7 +45,7 @@ export default function SettingsScreen() {
       <SupabaseStatusCard />
       <LocalDataCard />
       <DataSourcesCard />
-      <Card title="Sobre">
+      <Card icon="info" title="Sobre">
         <Text className="text-base text-fg">FitVibe {appVersion}</Text>
         <Text className="text-sm text-fg-muted">Feito pela Duo</Text>
         <Text className="text-sm text-fg-muted">

@@ -21,7 +21,7 @@ export function RemindersCard() {
   ];
 
   return (
-    <Card title="Lembretes">
+    <Card icon="bell_badge" title="Lembretes">
       <Text className="text-base leading-6 text-fg-muted">
         {parts.length
           ? parts.join(' · ')

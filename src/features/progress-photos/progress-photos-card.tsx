@@ -16,7 +16,7 @@ export function ProgressPhotosCard() {
   const latest = groups[0];
 
   return (
-    <Card title="Fotos de progresso">
+    <Card icon="camera" title="Fotos de progresso">
       {latest ? (
         <>
           <Text className="text-sm text-fg-muted">

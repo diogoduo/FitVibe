@@ -66,7 +66,7 @@ export default function ExportScreen() {
           : `De ${formatDayKey(period.from)} a ${formatDayKey(period.to)}.`}
       </Text>
 
-      <Card title="Relatório em PDF">
+      <Card icon="share" title="Relatório em PDF">
         <Text className="text-base leading-6 text-fg-muted">
           Médias da dieta e dias na meta, água, treinos com recordes, a curva do peso e as medidas.
           Bom para mandar para o nutricionista ou o treinador.
@@ -82,7 +82,7 @@ export default function ExportScreen() {
         )}
       </Card>
 
-      <Card title="Planilhas (CSV)">
+      <Card icon="list" title="Planilhas (CSV)">
         <Text className="text-base leading-6 text-fg-muted">
           Abrem no Excel, no Google Planilhas e no Numbers (separadas por ponto e vírgula e com
           vírgula decimal, o padrão do Brasil).

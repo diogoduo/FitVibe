@@ -97,7 +97,7 @@ export default function UserProfileScreen() {
       ) : (
         <>
           {day.data ? (
-            <Card title={`O dia · ${formatDayLabel(day.data.day)}`}>
+            <Card icon="sun" title={`O dia · ${formatDayLabel(day.data.day)}`}>
               <DaySummary snapshot={day.data.data} />
             </Card>
           ) : null}

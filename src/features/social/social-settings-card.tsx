@@ -18,7 +18,7 @@ export function SocialSettingsCard() {
   ].filter(Boolean);
 
   return (
-    <Card title="Perfil público">
+    <Card icon="people" title="Perfil público">
       <View className="gap-1">
         <Text className="text-base text-fg">
           @{me.username} · {me.is_private ? '🔒 Privado' : '🌎 Público'}

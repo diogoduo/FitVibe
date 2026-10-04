@@ -25,7 +25,7 @@ export function SocialGate({ children, wrap = (content) => content }: SocialGate
 
   if (!supabase) {
     return wrap(
-      <Card title="Social">
+      <Card icon="people" title="Social">
         <Text className="text-base leading-6 text-fg-muted">Servidor não configurado.</Text>
       </Card>,
     );
@@ -39,7 +39,7 @@ export function SocialGate({ children, wrap = (content) => content }: SocialGate
   }
   if (!session) {
     return wrap(
-      <Card title="Social">
+      <Card icon="people" title="Social">
         <Text className="text-base leading-6 text-fg-muted">
           Para ter um perfil, seguir pessoas e postar refeições, treinos e o seu dia, entre na sua
           conta (ou crie uma).
@@ -50,7 +50,7 @@ export function SocialGate({ children, wrap = (content) => content }: SocialGate
   }
   if (error) {
     return wrap(
-      <Card title="Social">
+      <Card icon="people" title="Social">
         <Text className="text-base leading-6 text-fg-muted">{error.message}</Text>
         <Button label="Tentar de novo" variant="secondary" onPress={() => void refetch()} />
       </Card>,
@@ -58,7 +58,7 @@ export function SocialGate({ children, wrap = (content) => content }: SocialGate
   }
   if (!me) {
     return wrap(
-      <Card title="Seu perfil">
+      <Card icon="person" title="Seu perfil">
         <Text className="text-base leading-6 text-fg-muted">
           Escolha um @usuário para aparecer no feed. O perfil começa privado: só quem você aprovar
           vê seus posts e o seu dia.
