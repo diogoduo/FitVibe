@@ -7,6 +7,7 @@ import { ensureDefaultMeals } from '@/features/diary/repository';
 import { MealCard } from '@/features/diary/meal-card';
 import { WaterCard } from '@/features/diary/water-card';
 import { DailyGoalCard } from '@/features/goals/daily-goal-card';
+import { TipCard } from '@/features/tutorial/tip-card';
 import { useMySocialProfile } from '@/features/social/queries';
 import { addDays, formatDayLabel, todayKey } from '@/lib/dates';
 
@@ -32,6 +33,7 @@ export default function DietScreen() {
 
   return (
     <Screen title="Dieta">
+      <TipCard id="dieta" />
       <View className="flex-row items-center justify-between">
         <DayArrow label="‹" hint="Dia anterior" onPress={() => setDay(addDays(day, -1))} />
         <Pressable onPress={() => setDay(today)} accessibilityRole="button" hitSlop={8}>

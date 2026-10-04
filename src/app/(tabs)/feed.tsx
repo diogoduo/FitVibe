@@ -13,6 +13,7 @@ import { OutboxList } from '@/features/social/outbox-list';
 import { PostCard } from '@/features/social/post-card';
 import { useFeed } from '@/features/social/queries';
 import { SocialGate } from '@/features/social/social-gate';
+import { TipCard } from '@/features/tutorial/tip-card';
 import type { SocialProfile } from '@/features/social/types';
 import { useColors } from '@/theme/theme';
 
@@ -57,6 +58,7 @@ function Feed({ me }: { me: SocialProfile }) {
       ListHeaderComponent={
         <View className="gap-4">
           <Header />
+          <TipCard id="feed" />
           <OutboxList userId={me.user_id} />
         </View>
       }

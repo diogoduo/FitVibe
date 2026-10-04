@@ -8,6 +8,7 @@ import { useActivePlan } from '@/features/plan/queries';
 import { createEmptyPlan, deletePlan } from '@/features/plan/repository';
 import { createPlanFromTemplate, PLAN_TEMPLATES } from '@/features/plan/templates';
 import { WeekCard } from '@/features/plan/week-card';
+import { TipCard } from '@/features/tutorial/tip-card';
 import { ActiveWorkoutCard } from '@/features/workout/active-workout-card';
 
 export default function WorkoutScreen() {
@@ -26,6 +27,7 @@ export default function WorkoutScreen() {
 
   return (
     <Screen title="Treino" subtitle={plan?.name}>
+      <TipCard id="treino" />
       <ActiveWorkoutCard />
       {plan ? (
         <>

@@ -21,6 +21,7 @@ import { PostCard } from '@/features/social/post-card';
 import { ProfileHeader } from '@/features/social/profile-header';
 import { useFollowRequests, useProfileView, useUserPosts } from '@/features/social/queries';
 import { SocialGate } from '@/features/social/social-gate';
+import { TipCard } from '@/features/tutorial/tip-card';
 import type { SocialProfile } from '@/features/social/types';
 import { useTodaySnapshot } from '@/features/social/use-today-snapshot';
 import { WeightHistoryCard } from '@/features/weight/weight-history-card';
@@ -42,6 +43,7 @@ export default function MyProfileScreen() {
       title="Perfil"
       action={<HeaderButton icon="gear" label="Ajustes" onPress={() => router.push('/ajustes')} />}
     >
+      <TipCard id="perfil" />
       {/* Sem conta ou sem perfil social, o Progresso aparece direto embaixo do aviso. */}
       <SocialGate
         wrap={(content) => (

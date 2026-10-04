@@ -456,3 +456,25 @@ passaram no PC.
 
 ⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
 (21/21) e o bundle de iOS passaram no PC.
+
+## Interface nova e tutorial
+
+- **Base visual** (`src/components/ui`): ícones `Icon` (SF Symbols no iPhone, com animação, e
+  Material Symbols no Android; nomes conferidos pelo TypeScript), `PressableScale` (o toque
+  "afunda" e volta com mola), vibração em `src/lib/haptics.ts`, barras e números animados,
+  esqueletos no lugar dos carregamentos e cartões com ícone. As telas entram deslizando.
+- **Hoje**: "Bom dia, Diogo", atalhos (+250 ml de água, refeição, peso, treino) e anéis estilo
+  Apple Watch de calorias, proteína e água (`ActivityRings`, react-native-svg + Reanimated).
+- **Treino**: ✓ da série com mola e vibração; recorde batido solta confete e um troféu no meio da
+  tela (`CelebrationOverlay`).
+- **Dieta e peso**: deslize para a esquerda para tirar um alimento ou excluir uma pesagem; refeições
+  com ícone; água com vibração de "deu certo" ao bater a meta.
+- **Feed**: duplo toque na foto ou no conteúdo para curtir (coração grande), coração que "pula",
+  selo do tipo do post e da notificação.
+- **Tutorial**: carrossel de 6 telas com uma demonstração animada em cada (aparece uma vez depois
+  do cadastro ou da atualização; Ajustes → Sobre → "Ver o tutorial de novo") e uma dica curta no
+  topo de cada aba, que some com "Entendi". O que já foi visto fica só neste celular.
+- **Testes**: 205 no Jest e 14 de integração.
+
+⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
+(21/21) e o bundle de iOS passaram no PC.

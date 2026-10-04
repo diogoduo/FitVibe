@@ -13,6 +13,7 @@ import { NotificationSettingsCard } from '@/features/notifications/settings-card
 import { ProfileSummaryCard } from '@/features/profile/profile-summary-card';
 import { RemindersCard } from '@/features/reminders/reminders-card';
 import { SocialSettingsCard } from '@/features/social/social-settings-card';
+import { resetTutorial } from '@/features/tutorial/seen';
 import { AppearanceCard } from '@/theme/appearance-card';
 
 function ExportCard() {
@@ -56,6 +57,15 @@ export default function SettingsScreen() {
         <Text className="text-sm text-fg-muted">
           Expo SDK {sdkVersion} · {Platform.OS} {Platform.Version}
         </Text>
+        <Button
+          label="Ver o tutorial de novo"
+          icon="lightbulb"
+          variant="secondary"
+          onPress={() => {
+            resetTutorial();
+            router.push('/tutorial');
+          }}
+        />
       </Card>
     </Screen>
   );

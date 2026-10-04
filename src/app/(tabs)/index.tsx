@@ -6,6 +6,7 @@ import { TodayPlanCard } from '@/features/plan/today-plan-card';
 import { useProfile } from '@/features/profile/queries';
 import { DayRingsCard } from '@/features/today/day-rings-card';
 import { QuickActions } from '@/features/today/quick-actions';
+import { TipCard } from '@/features/tutorial/tip-card';
 import { WeightSummaryCard } from '@/features/weight/weight-summary-card';
 import { ActiveWorkoutCard } from '@/features/workout/active-workout-card';
 
@@ -31,6 +32,7 @@ export default function TodayScreen() {
   const { profile } = useProfile();
   return (
     <Screen title={greeting(profile?.name)} subtitle={formatToday()}>
+      <TipCard id="hoje" />
       <QuickActions />
       <ActiveWorkoutCard />
       <AdaptiveGoalPrompt />
