@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
-import { ActivityIndicator, FlatList, Platform, RefreshControl, Text, View } from 'react-native';
+import { FlatList, Platform, RefreshControl, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { HeaderButton } from '@/components/ui/header-button';
@@ -12,7 +13,7 @@ import { PostCard } from '@/features/social/post-card';
 import { useFeed } from '@/features/social/queries';
 import { SocialGate } from '@/features/social/social-gate';
 import type { SocialProfile } from '@/features/social/types';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 /** Feed: os meus posts e os de quem eu sigo, do mais novo ao mais antigo. */
 export default function FeedScreen() {
@@ -37,6 +38,7 @@ function Header() {
 }
 
 function Feed({ me }: { me: SocialProfile }) {
+  const colors = useColors();
   const insets = useSafeAreaInsets();
   const feed = useFeed(true);
   const posts = feed.data?.pages.flat() ?? [];
@@ -59,7 +61,7 @@ function Feed({ me }: { me: SocialProfile }) {
       }
       ListEmptyComponent={
         feed.isLoading ? (
-          <ActivityIndicator color={palette.dark.primary} style={{ paddingVertical: 40 }} />
+          <Spinner style={{ paddingVertical: 40 }} />
         ) : feed.error ? (
           <Card>
             <Text className="text-base leading-6 text-fg-muted">{feed.error.message}</Text>
@@ -84,9 +86,7 @@ function Feed({ me }: { me: SocialProfile }) {
         )
       }
       ListFooterComponent={
-        feed.isFetchingNextPage ? (
-          <ActivityIndicator color={palette.dark.primary} style={{ paddingVertical: 16 }} />
-        ) : null
+        feed.isFetchingNextPage ? <Spinner style={{ paddingVertical: 16 }} /> : null
       }
       onEndReached={() => {
         if (feed.hasNextPage && !feed.isFetchingNextPage) void feed.fetchNextPage();
@@ -96,7 +96,7 @@ function Feed({ me }: { me: SocialProfile }) {
         <RefreshControl
           refreshing={feed.isRefetching && !feed.isFetchingNextPage}
           onRefresh={() => void feed.refetch()}
-          tintColor={palette.dark.primary}
+          tintColor={colors.primary}
         />
       }
     />

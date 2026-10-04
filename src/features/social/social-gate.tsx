@@ -1,11 +1,11 @@
 import { router } from 'expo-router';
 import type { ReactNode } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { supabase } from '@/sync/supabase';
-import { palette } from '@/theme/palette';
 
 import { useMySocialProfile } from './queries';
 import type { SocialProfile } from './types';
@@ -33,7 +33,7 @@ export function SocialGate({ children, wrap = (content) => content }: SocialGate
   if (!sessionLoaded || (session && isLoading)) {
     return wrap(
       <View className="items-center py-10">
-        <ActivityIndicator color={palette.dark.primary} />
+        <Spinner />
       </View>,
     );
   }

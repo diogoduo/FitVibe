@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
 import { useEffect } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, Text, View } from 'react-native';
+import { FlatList, RefreshControl, Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { queryClient } from '@/lib/query-client';
@@ -9,13 +10,14 @@ import { useNow } from '@/lib/use-now';
 import { markAllRead } from '@/features/notifications/api';
 import { NotificationRow } from '@/features/notifications/notification-row';
 import { notificationKeys, useNotifications } from '@/features/notifications/queries';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 /**
  * Notificações, da mais nova para a mais antiga. Abrir marca tudo como lido (as novas continuam
  * destacadas até sair ou puxar a lista).
  */
 export default function NotificationsScreen() {
+  const colors = useColors();
   const now = useNow(60_000);
   const list = useNotifications();
   const items = list.data?.pages.flat() ?? [];
@@ -43,7 +45,7 @@ export default function NotificationsScreen() {
       renderItem={({ item }) => <NotificationRow notification={item} now={now} />}
       ListEmptyComponent={
         list.isLoading ? (
-          <ActivityIndicator color={palette.dark.primary} style={{ paddingVertical: 40 }} />
+          <Spinner style={{ paddingVertical: 40 }} />
         ) : list.error ? (
           <Card>
             <Text className="text-base leading-6 text-fg-muted">{list.error.message}</Text>
@@ -80,7 +82,7 @@ export default function NotificationsScreen() {
         <RefreshControl
           refreshing={list.isRefetching && !list.isFetchingNextPage}
           onRefresh={() => void list.refetch()}
-          tintColor={palette.dark.primary}
+          tintColor={colors.primary}
         />
       }
     />

@@ -1,14 +1,16 @@
 import { Stack } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, RefreshControl, ScrollView, Text, View } from 'react-native';
+import { Alert, RefreshControl, ScrollView, Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import * as api from '@/features/social/api';
 import { PersonRow, RowAction } from '@/features/social/person-row';
 import { refreshSocial, useFollowRequests } from '@/features/social/queries';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 /** Pedidos para seguir o meu perfil privado: aceitar ou recusar. */
 export default function FollowRequestsScreen() {
+  const colors = useColors();
   const requests = useFollowRequests();
   const [busy, setBusy] = useState<string | null>(null);
 
@@ -33,12 +35,12 @@ export default function FollowRequestsScreen() {
         <RefreshControl
           refreshing={requests.isRefetching}
           onRefresh={() => void requests.refetch()}
-          tintColor={palette.dark.primary}
+          tintColor={colors.primary}
         />
       }
     >
       <Stack.Screen options={{ title: 'Pedidos para seguir' }} />
-      {requests.isLoading ? <ActivityIndicator color={palette.dark.primary} /> : null}
+      {requests.isLoading ? <Spinner /> : null}
       {requests.data?.length === 0 ? (
         <Text className="text-base text-fg-muted">Nenhum pedido agora.</Text>
       ) : null}

@@ -13,6 +13,7 @@ import { NotificationSettingsCard } from '@/features/notifications/settings-card
 import { ProfileSummaryCard } from '@/features/profile/profile-summary-card';
 import { RemindersCard } from '@/features/reminders/reminders-card';
 import { SocialSettingsCard } from '@/features/social/social-settings-card';
+import { AppearanceCard } from '@/theme/appearance-card';
 
 function ExportCard() {
   return (
@@ -39,6 +40,7 @@ export default function SettingsScreen() {
       <ProfileSummaryCard />
       <DietSettingsCard />
       <RemindersCard />
+      <AppearanceCard />
       <ExportCard />
       <SupabaseStatusCard />
       <LocalDataCard />

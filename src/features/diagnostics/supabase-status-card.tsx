@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { getSupabaseConfig } from '@/lib/supabase/config';
 import { checkSupabaseHealth, type HealthResult } from '@/lib/supabase/health';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 type Status = { kind: 'checking' } | { kind: 'done'; result: HealthResult };
 
@@ -17,6 +18,7 @@ const CONFIG_HINTS = {
 
 /** Mostra se o celular alcança o Supabase. É o critério de pronto da Fase 0. */
 export function SupabaseStatusCard() {
+  const colors = useColors();
   const configResult = getSupabaseConfig();
   const config = configResult.ok ? configResult.config : null;
   const url = config?.url;
@@ -43,7 +45,7 @@ export function SupabaseStatusCard() {
   if (!configResult.ok) {
     return (
       <Card title="Servidor (Supabase)">
-        <StatusLine color={palette.dark.warning} label="Não configurado" />
+        <StatusLine color={colors.warning} label="Não configurado" />
         <Text className="text-base leading-6 text-fg-muted">
           {CONFIG_HINTS[configResult.problem]}
         </Text>
@@ -55,17 +57,14 @@ export function SupabaseStatusCard() {
     <Card title="Servidor (Supabase)">
       {status.kind === 'checking' ? (
         <View className="flex-row items-center gap-3">
-          <ActivityIndicator color={palette.dark.primary} />
+          <Spinner />
           <Text className="text-base text-fg">Testando conexão…</Text>
         </View>
       ) : status.result.ok ? (
-        <StatusLine
-          color={palette.dark.success}
-          label={`Conectado em ${status.result.latencyMs} ms`}
-        />
+        <StatusLine color={colors.success} label={`Conectado em ${status.result.latencyMs} ms`} />
       ) : (
         <>
-          <StatusLine color={palette.dark.danger} label="Sem conexão" />
+          <StatusLine color={colors.danger} label="Sem conexão" />
           <Text className="text-base leading-6 text-fg-muted">
             {status.result.reason}.{' '}
             {url?.startsWith('https:')

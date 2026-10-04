@@ -1,7 +1,6 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import {
-  ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
   Platform,
@@ -13,6 +12,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Spinner } from '@/components/ui/spinner';
 import { formatTimeAgo } from '@/lib/dates';
 import { useNow } from '@/lib/use-now';
 import * as api from '@/features/social/api';
@@ -22,10 +22,12 @@ import { refreshSocial, useComments, usePost } from '@/features/social/queries';
 import type { PostComment } from '@/features/social/types';
 import { parseTimestamp } from '@/sync/convert';
 import { useSession } from '@/sync/hooks';
-import { palette } from '@/theme/palette';
+import { useColors, useScheme } from '@/theme/theme';
 
 /** Um post com os comentários. Apaga o comentário quem escreveu ou o dono do post. */
 export default function PostScreen() {
+  const colors = useColors();
+  const scheme = useScheme();
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
   const now = useNow(60_000);
@@ -36,7 +38,7 @@ export default function PostScreen() {
   const [sending, setSending] = useState(false);
 
   if (post.isLoading) {
-    return <ActivityIndicator color={palette.dark.primary} style={{ paddingTop: 40 }} />;
+    return <Spinner style={{ paddingTop: 40 }} />;
   }
   if (!post.data) {
     return (
@@ -96,7 +98,7 @@ export default function PostScreen() {
         <Text className="text-sm font-semibold uppercase tracking-wider text-fg-muted">
           Comentários
         </Text>
-        {comments.isLoading ? <ActivityIndicator color={palette.dark.primary} /> : null}
+        {comments.isLoading ? <Spinner /> : null}
         {comments.data?.length === 0 ? (
           <Text className="text-base text-fg-muted">Seja o primeiro a comentar.</Text>
         ) : null}
@@ -135,9 +137,9 @@ export default function PostScreen() {
           value={text}
           onChangeText={setText}
           placeholder="Escreva um comentário…"
-          placeholderTextColor={palette.dark['fg-muted']}
-          selectionColor={palette.dark.primary}
-          keyboardAppearance="dark"
+          placeholderTextColor={colors['fg-muted']}
+          selectionColor={colors.primary}
+          keyboardAppearance={scheme}
           multiline
           maxLength={500}
           className="max-h-28 flex-1 rounded-xl bg-surface-2 px-3 py-2.5 text-base text-fg"

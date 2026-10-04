@@ -13,7 +13,7 @@ import {
   renameMeal,
   setMealHidden,
 } from '@/features/diary/repository';
-import { palette } from '@/theme/palette';
+import { useColors, useScheme } from '@/theme/theme';
 
 /** As refeições do dia: renomear, reordenar, esconder e criar. */
 export default function MealsSettingsScreen() {
@@ -57,6 +57,8 @@ export default function MealsSettingsScreen() {
 }
 
 function MealRow({ meal, isFirst, isLast }: { meal: Meal; isFirst: boolean; isLast: boolean }) {
+  const colors = useColors();
+  const scheme = useScheme();
   const [name, setName] = useState(meal.name);
   const commit = () => {
     const trimmed = name.trim();
@@ -71,8 +73,8 @@ function MealRow({ meal, isFirst, isLast }: { meal: Meal; isFirst: boolean; isLa
         onChangeText={setName}
         onEndEditing={commit}
         maxLength={30}
-        keyboardAppearance="dark"
-        selectionColor={palette.dark.primary}
+        keyboardAppearance={scheme}
+        selectionColor={colors.primary}
         accessibilityLabel={`Nome da refeição ${meal.name}`}
         className={`flex-1 py-2 text-base ${meal.hidden ? 'text-fg-muted' : 'text-fg'}`}
       />
@@ -80,9 +82,9 @@ function MealRow({ meal, isFirst, isLast }: { meal: Meal; isFirst: boolean; isLa
         value={!meal.hidden}
         onValueChange={(visible) => setMealHidden(meal.id, !visible)}
         accessibilityLabel={`Mostrar ${meal.name}`}
-        trackColor={{ true: palette.dark.primary, false: palette.dark.line }}
-        thumbColor={palette.dark.fg}
-        ios_backgroundColor={palette.dark.line}
+        trackColor={{ true: colors.primary, false: colors.line }}
+        thumbColor={colors.fg}
+        ios_backgroundColor={colors.line}
       />
       <OrderButton
         label="↑"

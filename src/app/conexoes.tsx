@@ -1,10 +1,10 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, Alert, ScrollView, Text } from 'react-native';
+import { Alert, ScrollView, Text } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import * as api from '@/features/social/api';
 import { PersonRow, RowAction } from '@/features/social/person-row';
 import { refreshSocial, useFollowList, useMySocialProfile } from '@/features/social/queries';
-import { palette } from '@/theme/palette';
 
 type Params = { usuario: string; tipo: 'followers' | 'following'; nome: string };
 
@@ -39,7 +39,7 @@ export default function ConnectionsScreen() {
       <Stack.Screen
         options={{ title: `${kind === 'followers' ? 'Seguidores' : 'Seguindo'} · @${nome}` }}
       />
-      {list.isLoading ? <ActivityIndicator color={palette.dark.primary} /> : null}
+      {list.isLoading ? <Spinner /> : null}
       {list.error ? <Text className="text-base text-fg-muted">{list.error.message}</Text> : null}
       {list.data?.length === 0 ? (
         <Text className="text-base text-fg-muted">Ninguém por aqui.</Text>

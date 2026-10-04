@@ -1,14 +1,14 @@
 import { Stack } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, Text, View } from 'react-native';
+import { Alert, ScrollView, Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ChoiceChips } from '@/components/ui/choice-chips';
 import { EXPORT_LABELS, EXPORTS, type ExportKind, type Period } from '@/features/export/datasets';
 import { shareCsv, shareReport } from '@/features/export/share';
 import { addDays, formatDayKey, todayKey } from '@/lib/dates';
-import { palette } from '@/theme/palette';
 
 type Range = 7 | 30 | 90 | 0;
 
@@ -110,7 +110,7 @@ export default function ExportScreen() {
 function BusyLine({ label }: { label: string }) {
   return (
     <View className="flex-row items-center justify-center gap-3 py-3.5">
-      <ActivityIndicator color={palette.dark.primary} />
+      <Spinner />
       <Text className="text-base text-fg">{label}</Text>
     </View>
   );

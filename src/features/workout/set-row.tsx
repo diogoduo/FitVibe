@@ -3,7 +3,7 @@ import { Alert, Pressable, Text, TextInput, View } from 'react-native';
 
 import type { LoadType, WorkoutSet } from '@/db/schema';
 import { formatDecimal, parseDecimal, toInputText } from '@/lib/numbers';
-import { palette } from '@/theme/palette';
+import { useColors, useScheme } from '@/theme/theme';
 
 import { loadUnit } from './format';
 import type { RecordKind } from './records';
@@ -27,6 +27,8 @@ type SetRowProps = {
  * o que for digitado é gravado ao sair do campo e ao concluir.
  */
 export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowProps) {
+  const colors = useColors();
+  const scheme = useScheme();
   const byTime = loadType === 'time';
   const [loadText, setLoadText] = useState(toInputText(set.load));
   const [repsText, setRepsText] = useState(set.reps?.toString() ?? '');
@@ -112,8 +114,8 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
             onBlur={persist}
             keyboardType="decimal-pad"
             selectTextOnFocus
-            keyboardAppearance="dark"
-            selectionColor={palette.dark.primary}
+            keyboardAppearance={scheme}
+            selectionColor={colors.primary}
             accessibilityLabel="Minutos"
             className={`w-20 ${inputClass}`}
           />
@@ -126,11 +128,11 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
             onChangeText={setLoadText}
             onBlur={persist}
             placeholder={loadType === 'bodyweight' ? '+kg' : loadUnit(loadType)}
-            placeholderTextColor={palette.dark['fg-muted']}
+            placeholderTextColor={colors['fg-muted']}
             keyboardType="decimal-pad"
             selectTextOnFocus
-            keyboardAppearance="dark"
-            selectionColor={palette.dark.primary}
+            keyboardAppearance={scheme}
+            selectionColor={colors.primary}
             accessibilityLabel={loadType === 'plates' ? 'Placas' : 'Carga'}
             className={`w-[70px] ${inputClass}`}
           />
@@ -142,8 +144,8 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
             onBlur={persist}
             keyboardType="number-pad"
             selectTextOnFocus
-            keyboardAppearance="dark"
-            selectionColor={palette.dark.primary}
+            keyboardAppearance={scheme}
+            selectionColor={colors.primary}
             accessibilityLabel="Repetições"
             className={`w-14 ${inputClass}`}
           />

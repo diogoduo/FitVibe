@@ -1,12 +1,12 @@
 import { Stack } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Text } from 'react-native';
+import { Text } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { FormScroll } from '@/components/ui/form-scroll';
 import { TextField } from '@/components/ui/text-field';
 import { PersonRow } from '@/features/social/person-row';
 import { useSearchProfiles } from '@/features/social/queries';
-import { palette } from '@/theme/palette';
 
 /** Buscar pessoas pelo @usuário ou pelo nome. */
 export default function SearchPeopleScreen() {
@@ -29,7 +29,7 @@ export default function SearchPeopleScreen() {
       {!typed ? (
         <Text className="text-base text-fg-muted">Digite pelo menos 2 letras.</Text>
       ) : results.isLoading ? (
-        <ActivityIndicator color={palette.dark.primary} />
+        <Spinner />
       ) : results.error ? (
         <Text className="text-base text-fg-muted">{results.error.message}</Text>
       ) : results.data?.length === 0 ? (

@@ -2,11 +2,11 @@ import '@/global.css';
 
 import { QueryClientProvider } from '@tanstack/react-query';
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
-import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, type ReactNode } from 'react';
 
 import { db } from '@/db/client';
 import { DatabaseErrorScreen } from '@/db/database-error-screen';
@@ -18,7 +18,7 @@ import { RemindersProvider } from '@/features/reminders/reminders-provider';
 import { SocialProvider } from '@/features/social/social-provider';
 import { queryClient } from '@/lib/query-client';
 import { SyncProvider } from '@/sync/sync-provider';
-import { palette } from '@/theme/palette';
+import { AppThemeProvider, useColors, useScheme } from '@/theme/theme';
 
 // A tela de abertura fica até o banco local estar migrado e o perfil carregado.
 SplashScreen.preventAutoHideAsync();
@@ -33,19 +33,30 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const colors = palette.dark;
-
-const navigationTheme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    primary: colors.primary,
-    background: colors.background,
-    card: colors.surface,
-    text: colors.fg,
-    border: colors.line,
-  },
-};
+/** Cabeçalhos, fundos e barra de status no tema atual (escuro ou claro). */
+function NavigationTheme({ children }: { children: ReactNode }) {
+  const scheme = useScheme();
+  const colors = useColors();
+  const base = scheme === 'light' ? DefaultTheme : DarkTheme;
+  return (
+    <ThemeProvider
+      value={{
+        ...base,
+        colors: {
+          ...base.colors,
+          primary: colors.primary,
+          background: colors.background,
+          card: colors.surface,
+          text: colors.fg,
+          border: colors.line,
+        },
+      }}
+    >
+      <StatusBar style={scheme === 'light' ? 'dark' : 'light'} />
+      {children}
+    </ThemeProvider>
+  );
+}
 
 export default function RootLayout() {
   const { success, error } = useMigrations(db, migrations);
@@ -56,21 +67,24 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={navigationTheme}>
-        <StatusBar style="light" />
-        {error ? (
+      {error ? (
+        <>
+          <StatusBar style="light" />
           <DatabaseErrorScreen error={error} />
-        ) : success ? (
-          <>
+        </>
+      ) : success ? (
+        // O tema lê a escolha salva no banco: só depois das migrações.
+        <AppThemeProvider>
+          <NavigationTheme>
             <SyncProvider />
             <SocialProvider />
             <NotificationsProvider />
             <RemindersProvider />
             <AppStack />
             <NotificationToast />
-          </>
-        ) : null}
-      </ThemeProvider>
+          </NavigationTheme>
+        </AppThemeProvider>
+      ) : null}
     </QueryClientProvider>
   );
 }
@@ -87,6 +101,7 @@ const pushed = { headerShown: true, headerBackButtonDisplayMode: 'minimal' } as 
  */
 function AppStack() {
   const { profile, loaded } = useProfile();
+  const colors = useColors();
 
   useEffect(() => {
     if (loaded) SplashScreen.hide();

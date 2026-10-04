@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Pressable, Text } from 'react-native';
 
 import { formatDayKey, formatTime, toDayKey } from '@/lib/dates';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 import { Field } from './field';
 
@@ -31,6 +31,7 @@ export function DateTimeField({
   mode = 'date',
   maximumDate,
 }: DateTimeFieldProps) {
+  const colors = useColors();
   const [step, setStep] = useState<'date' | 'time' | null>(null);
   const [pickedDay, setPickedDay] = useState(value);
 
@@ -75,7 +76,7 @@ export function DateTimeField({
           value={step === 'date' ? utcNoonOfLocalDay(value) : pickedDay}
           maximumDate={step === 'date' && maximumDate ? utcNoonOfLocalDay(maximumDate) : undefined}
           is24Hour
-          accentColor={palette.dark.primary}
+          accentColor={colors.primary}
           positiveButton={{ label: 'OK' }}
           negativeButton={{ label: 'Cancelar' }}
           onValueChange={(_, picked) =>

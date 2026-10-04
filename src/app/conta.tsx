@@ -1,7 +1,8 @@
 import { router, Stack } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { ChoiceChips } from '@/components/ui/choice-chips';
 import { FormScroll } from '@/components/ui/form-scroll';
@@ -10,7 +11,6 @@ import { askConflict } from '@/features/account/conflict';
 import { getProfile } from '@/features/profile/queries';
 import { signIn, signUp, type AccountResult } from '@/sync/account';
 import { supabase } from '@/sync/supabase';
-import { palette } from '@/theme/palette';
 
 type Mode = 'signIn' | 'signUp';
 
@@ -134,7 +134,7 @@ export default function AccountScreen() {
 
       {busy ? (
         <View className="flex-row items-center justify-center gap-3 py-3.5">
-          <ActivityIndicator color={palette.dark.primary} />
+          <Spinner />
           <Text className="text-base text-fg">{busy}</Text>
         </View>
       ) : (

@@ -1,7 +1,8 @@
 import { router, Stack } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, Text, View } from 'react-native';
+import { Alert, Pressable, Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { FormScroll } from '@/components/ui/form-scroll';
 import { TextField } from '@/components/ui/text-field';
@@ -23,7 +24,6 @@ import { AVATARS, avatarPath } from '@/features/social/storage';
 import type { SocialProfile, SocialProfileInput } from '@/features/social/types';
 import { cleanUsername, suggestUsername, validateUsername } from '@/features/social/username';
 import { queryClient } from '@/lib/query-client';
-import { palette } from '@/theme/palette';
 
 type AvatarChange = { kind: 'keep' } | { kind: 'new'; photo: LocalPhoto } | { kind: 'remove' };
 
@@ -40,7 +40,7 @@ export default function EditSocialProfileScreen() {
   if (!sessionLoaded || isPending || me === undefined) {
     return (
       <View className="flex-1 items-center justify-center bg-background">
-        <ActivityIndicator color={palette.dark.primary} />
+        <Spinner />
       </View>
     );
   }
@@ -215,7 +215,7 @@ function ProfileForm({ me }: { me: SocialProfile | null }) {
 
       {busy ? (
         <View className="flex-row items-center justify-center gap-3 py-3.5">
-          <ActivityIndicator color={palette.dark.primary} />
+          <Spinner />
           <Text className="text-base text-fg">Salvando…</Text>
         </View>
       ) : (

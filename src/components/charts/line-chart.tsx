@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Text, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
 import Svg, { Circle, G, Line, Path } from 'react-native-svg';
 
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 export type LinePoint = { x: number; y: number };
 
@@ -25,7 +25,6 @@ type LineChartProps = {
 };
 
 const PAD = { top: 12, right: 8, bottom: 8, left: 8 };
-const colors = palette.dark;
 
 /**
  * Gráfico de linha simples (react-native-svg), com o eixo x proporcional (datas com buracos
@@ -39,6 +38,7 @@ export function LineChart({
   reference,
   height = 160,
 }: LineChartProps) {
+  const colors = useColors();
   const [width, setWidth] = useState(0);
   const [selected, setSelected] = useState<LinePoint | null>(null);
 

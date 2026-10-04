@@ -1,15 +1,15 @@
 import { CameraView, useCameraPermissions, type BarcodeScanningResult } from 'expo-camera';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useRef, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { lookupBarcode } from '@/features/foods/open-food-facts';
 import { findFoodByBarcode, saveOffProduct } from '@/features/foods/repository';
 import { rowKey } from '@/features/foods/food';
 import { toInputText } from '@/lib/numbers';
-import { palette } from '@/theme/palette';
 
 type Params = { refeicao: string; dia: string };
 
@@ -105,7 +105,7 @@ export default function ScannerScreen() {
       >
         {status ? (
           <View className="flex-row items-center gap-3">
-            <ActivityIndicator color={palette.dark.primary} />
+            <Spinner />
             <Text className="text-base text-white">{status}</Text>
           </View>
         ) : (

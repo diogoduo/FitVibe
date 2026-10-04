@@ -6,7 +6,7 @@ import { LineChart } from '@/components/charts/line-chart';
 import { Card } from '@/components/ui/card';
 import { addDays, daysBetween, formatDayLabel, toDayKey, todayKey } from '@/lib/dates';
 import { formatDecimal } from '@/lib/numbers';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 import { useAllExercises } from '../exercises/queries';
 import { loadUnit } from '../workout/format';
@@ -21,6 +21,7 @@ const METRIC_TEXT: Record<StrengthMetric, string> = {
 
 /** Força por exercício: a melhor série de cada treino ao longo do tempo. */
 export function StrengthCard() {
+  const colors = useColors();
   const trained = useTrainedExercises();
   const all = useAllExercises();
   const byId = new Map(all.map((exercise) => [exercise.id, exercise]));
@@ -111,7 +112,7 @@ export function StrengthCard() {
                   x: daysBetween(start, point.day),
                   y: point.value,
                 })),
-                color: palette.dark.primary,
+                color: colors.primary,
                 dots: true,
               },
             ]}

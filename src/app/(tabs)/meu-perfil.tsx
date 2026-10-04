@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ChoiceChips } from '@/components/ui/choice-chips';
@@ -21,7 +22,6 @@ import { SocialGate } from '@/features/social/social-gate';
 import type { SocialProfile } from '@/features/social/types';
 import { useTodaySnapshot } from '@/features/social/use-today-snapshot';
 import { WeightHistoryCard } from '@/features/weight/weight-history-card';
-import { palette } from '@/theme/palette';
 
 type Section = 'hoje' | 'posts' | 'progresso';
 
@@ -91,7 +91,7 @@ function MyHeader({ me }: { me: SocialProfile }) {
           }
         />
       ) : (
-        <ActivityIndicator color={palette.dark.primary} />
+        <Spinner />
       )}
       {pending > 0 ? (
         <Pressable
@@ -138,7 +138,7 @@ function MyDay({ me }: { me: SocialProfile }) {
 function MyPosts({ me }: { me: SocialProfile }) {
   const posts = useUserPosts(me.user_id);
   const list = posts.data?.pages.flat() ?? [];
-  if (posts.isLoading) return <ActivityIndicator color={palette.dark.primary} />;
+  if (posts.isLoading) return <Spinner />;
   if (list.length === 0) {
     return (
       <Card>

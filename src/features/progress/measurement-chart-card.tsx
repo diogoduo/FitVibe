@@ -5,13 +5,14 @@ import { LineChart } from '@/components/charts/line-chart';
 import { Card } from '@/components/ui/card';
 import { daysBetween, formatDayLabel } from '@/lib/dates';
 import { formatCm, formatDecimal, formatSignedCm } from '@/lib/numbers';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 import { MEASUREMENT_FIELDS, type MeasurementKey } from '../measurements/measurement-form';
 import { useMeasurements } from '../measurements/queries';
 
 /** Evolução de uma medida (cintura, quadril...), entre as medidas com pelo menos 2 registros. */
 export function MeasurementChartCard() {
+  const colors = useColors();
   const { measurements } = useMeasurements();
   const [picked, setPicked] = useState<MeasurementKey>('waistCm');
 
@@ -67,7 +68,7 @@ export function MeasurementChartCard() {
               x: daysBetween(first.day, point.day),
               y: point.value,
             })),
-            color: palette.dark.primary,
+            color: colors.primary,
             dots: true,
           },
         ]}

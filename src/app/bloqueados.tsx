@@ -1,10 +1,10 @@
 import { Stack } from 'expo-router';
-import { ActivityIndicator, Alert, ScrollView, Text } from 'react-native';
+import { Alert, ScrollView, Text } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import * as api from '@/features/social/api';
 import { PersonRow, RowAction } from '@/features/social/person-row';
 import { refreshSocial, useBlocks } from '@/features/social/queries';
-import { palette } from '@/theme/palette';
 
 /** Pessoas que eu bloqueei: elas não acham o meu perfil nem veem meus posts. */
 export default function BlockedScreen() {
@@ -27,7 +27,7 @@ export default function BlockedScreen() {
         Quem está aqui não acha o seu perfil, não vê seus posts e não pode te seguir. Desbloquear
         não volta a seguir ninguém.
       </Text>
-      {blocks.isLoading ? <ActivityIndicator color={palette.dark.primary} /> : null}
+      {blocks.isLoading ? <Spinner /> : null}
       {blocks.data?.length === 0 ? (
         <Text className="text-base text-fg-muted">Você não bloqueou ninguém.</Text>
       ) : null}

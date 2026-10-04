@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { ChoiceChips } from '@/components/ui/choice-chips';
 import { addDays, daysBetween, formatDayLabel, todayKey } from '@/lib/dates';
 import { formatDecimal, formatKg, formatSignedKg } from '@/lib/numbers';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 import { useWeightEntries } from '../weight/queries';
 import { weeklyRate, weightSeries } from './data';
@@ -22,6 +22,7 @@ export const RANGE_OPTIONS: { value: Range; label: string }[] = [
 
 /** Peso: pesagens (pontos) e tendência (linha) no período, com o ritmo por semana. */
 export function WeightChartCard() {
+  const colors = useColors();
   const [range, setRange] = useState<Range>(90);
   const { entries } = useWeightEntries();
   const today = todayKey();
@@ -52,13 +53,13 @@ export function WeightChartCard() {
             series={[
               {
                 points: series.map((point) => ({ x: x(point.day), y: point.weightKg })),
-                color: palette.dark['fg-muted'],
+                color: colors['fg-muted'],
                 line: false,
                 dots: true,
               },
               {
                 points: series.map((point) => ({ x: x(point.day), y: point.trendKg })),
-                color: palette.dark.primary,
+                color: colors.primary,
               },
             ]}
             describe={(offset) => {

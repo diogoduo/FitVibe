@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Text, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
 import Svg, { Line, Rect } from 'react-native-svg';
 
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 export type Bar = {
   /** Texto embaixo da barra (curto: "S", "12"). */
@@ -22,10 +22,10 @@ type BarChartProps = {
 };
 
 const PAD = { top: 8, bottom: 4 };
-const colors = palette.dark;
 
 /** Barras verticais (react-native-svg) com uma linha de meta. Tocar mostra o detalhe. */
 export function BarChart({ bars, reference, height = 140, labelEvery = 1 }: BarChartProps) {
+  const colors = useColors();
   const [width, setWidth] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   if (bars.length === 0) return null;

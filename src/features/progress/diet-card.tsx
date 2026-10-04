@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { ChoiceChips } from '@/components/ui/choice-chips';
 import { addDays, formatDayKey, formatDayLabel, todayKey } from '@/lib/dates';
 import { formatInt } from '@/lib/numbers';
-import { palette } from '@/theme/palette';
+import { useColors, type Colors } from '@/theme/theme';
 
 import { useGoalVersions } from '../goals/queries';
 import { dietDays, dietSummary, inTarget, type DietDay } from './data';
@@ -18,10 +18,9 @@ const RANGES: { value: Range; label: string }[] = [
   { value: 14, label: '14 d' },
   { value: 30, label: '30 d' },
 ];
-const colors = palette.dark;
 
 /** Verde: na meta (±10%); amarelo: acima; cinza claro: abaixo; cinza escuro: sem registro. */
-function barColor(day: DietDay) {
+function barColor(day: DietDay, colors: Colors) {
   if (!day.logged) return colors.line;
   if (inTarget(day)) return colors.success;
   return day.goalKcal != null && day.kcal > day.goalKcal ? colors.warning : colors['fg-muted'];
@@ -29,6 +28,7 @@ function barColor(day: DietDay) {
 
 /** Adesão à dieta: calorias de cada dia contra a meta daquele dia, proteína e água. */
 export function DietCard() {
+  const colors = useColors();
   const [range, setRange] = useState<Range>(14);
   const to = todayKey();
   const from = addDays(to, -(range - 1));
@@ -66,7 +66,7 @@ export function DietCard() {
             bars={days.map((day) => ({
               label: formatDayKey(day.day).slice(0, 2),
               value: day.kcal,
-              color: barColor(day),
+              color: barColor(day, colors),
               detail: day.logged
                 ? `${formatDayLabel(day.day)}: ${formatInt(day.kcal)} kcal${day.goalKcal != null ? ` de ${formatInt(day.goalKcal)}` : ''}`
                 : `${formatDayLabel(day.day)}: sem registro`,

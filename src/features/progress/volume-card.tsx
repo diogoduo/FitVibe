@@ -5,16 +5,15 @@ import { BarChart } from '@/components/charts/bar-chart';
 import { Card } from '@/components/ui/card';
 import { addDays, formatDayKey, toDayKey, todayKey } from '@/lib/dates';
 import { formatDecimal } from '@/lib/numbers';
-import { palette } from '@/theme/palette';
+import { useColors, type Colors } from '@/theme/theme';
 
 import { MUSCLE_LABELS } from '../exercises/labels';
 import { muscleSetsForWeek, weekStart, weeklySetTotals, WEEKLY_SETS_RANGE } from './data';
 import { useMuscleSets } from './queries';
 
 const WEEKS = 8;
-const colors = palette.dark;
 
-const zoneColor = (sets: number) =>
+const zoneColor = (sets: number, colors: Colors) =>
   sets < WEEKLY_SETS_RANGE.min
     ? colors['fg-muted']
     : sets <= WEEKLY_SETS_RANGE.max
@@ -25,6 +24,7 @@ const shortDate = (day: string) => formatDayKey(day).slice(0, 5);
 
 /** Séries válidas por grupo muscular na semana, contra a faixa de 10 a 20, e as últimas 8 semanas. */
 export function VolumeCard() {
+  const colors = useColors();
   const thisWeek = weekStart(todayKey());
   const [week, setWeek] = useState(thisWeek);
   const firstWeek = addDays(thisWeek, -7 * (WEEKS - 1));
@@ -70,7 +70,10 @@ export function VolumeCard() {
               <View className="h-2 overflow-hidden rounded-full bg-surface-2">
                 <View
                   className="h-2 rounded-full"
-                  style={{ width: `${(sets / top) * 100}%`, backgroundColor: zoneColor(sets) }}
+                  style={{
+                    width: `${(sets / top) * 100}%`,
+                    backgroundColor: zoneColor(sets, colors),
+                  }}
                 />
               </View>
             </View>

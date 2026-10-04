@@ -1,8 +1,9 @@
 import { Image } from 'expo-image';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { FormScroll } from '@/components/ui/form-scroll';
@@ -26,7 +27,6 @@ import type { PostContent, SocialProfile } from '@/features/social/types';
 import { formatWorkoutDuration } from '@/features/workout/format';
 import { formatDayLabel, toDayKey, todayKey, type DayKey } from '@/lib/dates';
 import { formatInt } from '@/lib/numbers';
-import { palette } from '@/theme/palette';
 
 const KIND_OPTIONS: { value: PostKind; title: string; description: string }[] = [
   { value: 'meal', title: 'Refeição', description: 'Os alimentos e as calorias de uma refeição.' },
@@ -187,7 +187,7 @@ function Composer({ me, params }: { me: SocialProfile; params: Params }) {
 
           {busy ? (
             <View className="flex-row items-center justify-center gap-3 py-3.5">
-              <ActivityIndicator color={palette.dark.primary} />
+              <Spinner />
               <Text className="text-base text-fg">Preparando…</Text>
             </View>
           ) : (

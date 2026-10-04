@@ -1,6 +1,6 @@
 import { Text, TextInput, View, type TextInputProps } from 'react-native';
 
-import { palette } from '@/theme/palette';
+import { useColors, useScheme } from '@/theme/theme';
 
 import { Field } from './field';
 
@@ -37,6 +37,8 @@ export function TextField({
   multiline,
   ...inputProps
 }: TextFieldProps) {
+  const colors = useColors();
+  const scheme = useScheme();
   return (
     <Field label={label} error={error} hint={hint}>
       <View
@@ -46,9 +48,9 @@ export function TextField({
           {...inputProps}
           multiline={multiline}
           accessibilityLabel={label}
-          placeholderTextColor={palette.dark['fg-muted']}
-          selectionColor={palette.dark.primary}
-          keyboardAppearance="dark"
+          placeholderTextColor={colors['fg-muted']}
+          selectionColor={colors.primary}
+          keyboardAppearance={scheme}
           className={`flex-1 py-3 text-base text-fg ${multiline ? 'min-h-20' : ''}`}
           textAlignVertical={multiline ? 'top' : 'center'}
         />

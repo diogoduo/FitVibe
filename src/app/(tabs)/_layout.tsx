@@ -2,13 +2,14 @@ import { NativeTabs } from 'expo-router/unstable-native-tabs';
 
 import { useUnreadCount } from '@/features/notifications/queries';
 
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 export default function TabsLayout() {
+  const colors = useColors();
   // Notificações não lidas no ícone do Feed, visível de qualquer aba.
   const unread = useUnreadCount();
   return (
-    <NativeTabs tintColor={palette.dark.primary}>
+    <NativeTabs tintColor={colors.primary}>
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>Hoje</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="sun.max.fill" md="today" />

@@ -1,13 +1,7 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import {
-  ActivityIndicator,
-  Alert,
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  Text,
-} from 'react-native';
+import { Alert, Pressable, RefreshControl, ScrollView, Text } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { formatDayLabel } from '@/lib/dates';
@@ -24,10 +18,11 @@ import {
   useUserPosts,
 } from '@/features/social/queries';
 import type { ProfileView } from '@/features/social/types';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 /** Perfil de alguém: cabeçalho, seguir, o dia de hoje e os posts (se puder ver). */
 export default function UserProfileScreen() {
+  const colors = useColors();
   const { username } = useLocalSearchParams<{ username: string }>();
   const { data: me } = useMySocialProfile();
   const profile = useProfileView(username);
@@ -37,7 +32,7 @@ export default function UserProfileScreen() {
   const day = useLatestDaySummary(view?.user_id, view?.can_view ?? false);
 
   if (profile.isLoading) {
-    return <ActivityIndicator color={palette.dark.primary} style={{ paddingTop: 40 }} />;
+    return <Spinner style={{ paddingTop: 40 }} />;
   }
   if (!view) {
     return (
@@ -59,7 +54,7 @@ export default function UserProfileScreen() {
         <RefreshControl
           refreshing={profile.isRefetching}
           onRefresh={refresh}
-          tintColor={palette.dark.primary}
+          tintColor={colors.primary}
         />
       }
     >
@@ -109,7 +104,7 @@ export default function UserProfileScreen() {
           {list.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
-          {posts.isLoading ? <ActivityIndicator color={palette.dark.primary} /> : null}
+          {posts.isLoading ? <Spinner /> : null}
           {!posts.isLoading && list.length === 0 ? (
             <Text className="text-base text-fg-muted">Nenhum post ainda.</Text>
           ) : null}

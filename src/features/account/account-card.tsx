@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 
+import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { formatTimeAgo } from '@/lib/dates';
@@ -9,7 +10,7 @@ import { useNow } from '@/lib/use-now';
 import { deleteAccount, resumeAccount, signOut, syncNow, type AccountResult } from '@/sync/account';
 import { useSession, useSyncStatus } from '@/sync/hooks';
 import { supabase } from '@/sync/supabase';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 import { askConflict } from './conflict';
 
@@ -17,6 +18,7 @@ const changes = (n: number) => (n === 1 ? '1 alteração' : `${n} alterações`)
 
 /** Ajustes: entrar na conta, ver se está sincronizado, sair e excluir a conta. */
 export function AccountCard() {
+  const colors = useColors();
   const { session, loaded } = useSession();
   const status = useSyncStatus();
   const now = useNow(30_000);
@@ -126,12 +128,12 @@ export function AccountCard() {
         <BusyLine label="Sincronizando…" />
       ) : status.lastError ? (
         <View className="gap-1">
-          <StatusLine color={palette.dark.danger} label="Não sincronizou" />
+          <StatusLine color={colors.danger} label="Não sincronizou" />
           <Text className="text-base leading-6 text-fg-muted">{status.lastError}</Text>
         </View>
       ) : (
         <StatusLine
-          color={status.pending > 0 ? palette.dark.warning : palette.dark.success}
+          color={status.pending > 0 ? colors.warning : colors.success}
           label={
             status.lastSyncAt
               ? `Sincronizado ${formatTimeAgo(status.lastSyncAt, new Date(now))}`
@@ -179,7 +181,7 @@ function StatusLine({ color, label }: { color: string; label: string }) {
 function BusyLine({ label }: { label: string }) {
   return (
     <View className="flex-row items-center gap-3">
-      <ActivityIndicator color={palette.dark.primary} />
+      <Spinner />
       <Text className="text-base text-fg">{label}</Text>
     </View>
   );

@@ -8,7 +8,7 @@ import { queryClient } from '@/lib/query-client';
 import { useNow } from '@/lib/use-now';
 import { parseTimestamp } from '@/sync/convert';
 import { useSession } from '@/sync/hooks';
-import { palette } from '@/theme/palette';
+import { useColors } from '@/theme/theme';
 
 import * as api from './api';
 import { Avatar } from './avatar';
@@ -142,6 +142,7 @@ export function PostCard({ post, linkToPost = true, onDeleted }: PostCardProps) 
 
 /** Curtir responde na hora; se o servidor recusar, volta como estava. */
 function LikeButton({ postId, liked, count }: { postId: string; liked: boolean; count: number }) {
+  const colors = useColors();
   const [state, setState] = useState({ liked, count });
 
   const toggle = async () => {
@@ -169,7 +170,7 @@ function LikeButton({ postId, liked, count }: { postId: string; liked: boolean; 
     >
       <Text
         className="text-2xl"
-        style={{ color: state.liked ? palette.dark.danger : palette.dark['fg-muted'] }}
+        style={{ color: state.liked ? colors.danger : colors['fg-muted'] }}
       >
         {state.liked ? '♥' : '♡'}
       </Text>
