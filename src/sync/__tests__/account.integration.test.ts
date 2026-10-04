@@ -31,6 +31,7 @@ jest.mock('../supabase', () => ({ supabase: mockClient }));
 jest.mock('../../features/media/files', () => ({ deleteAllMediaFiles: jest.fn() }));
 jest.mock('../../features/workout/rest', () => ({ cancelRestNotification: jest.fn() }));
 jest.mock('../../features/social/outbox-files', () => ({ deleteAllOutboxPhotos: jest.fn() }));
+jest.mock('../../features/progress-photos/files', () => ({ deleteAllProgressPhotos: jest.fn() }));
 
 type Account = typeof import('../account');
 type Phone = { db: TestDb; account: Account };

@@ -9,6 +9,7 @@ import { ChoiceChips } from '@/components/ui/choice-chips';
 import { HeaderButton } from '@/components/ui/header-button';
 import { Screen } from '@/components/ui/screen';
 import { RealExpenditureCard } from '@/features/goals/adaptive-cards';
+import { ProgressPhotosCard } from '@/features/progress-photos/progress-photos-card';
 import { MeasurementsCard } from '@/features/measurements/measurements-card';
 import { DietCard } from '@/features/progress/diet-card';
 import { MeasurementChartCard } from '@/features/progress/measurement-chart-card';
@@ -175,6 +176,7 @@ function Progress() {
       <StrengthCard />
       <VolumeCard />
       <DietCard />
+      <ProgressPhotosCard />
       <MeasurementChartCard />
       <MeasurementsCard />
     </>

@@ -11,6 +11,7 @@ import m0006 from './0006_controle_sincronizacao.sql';
 import m0007 from './0007_gatilhos_sincronizacao.sql';
 import m0008 from './0008_fila_de_posts.sql';
 import m0009 from './0009_ajustes_do_celular.sql';
+import m0010 from './0010_fotos_de_progresso.sql';
 
   export default {
     journal,
@@ -24,7 +25,8 @@ m0005,
 m0006,
 m0007,
 m0008,
-m0009
+m0009,
+m0010
     }
   }
   

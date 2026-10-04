@@ -154,6 +154,8 @@ function AppStack() {
         <Stack.Screen name="notificacoes" options={{ ...pushed, title: 'Notificações' }} />
         <Stack.Screen name="lembretes" options={formSheet} />
         <Stack.Screen name="exportar" options={pushed} />
+        <Stack.Screen name="fotos-progresso" options={pushed} />
+        <Stack.Screen name="foto-progresso/[id]" options={formSheet} />
       </Stack.Protected>
       <Stack.Protected guard={!hasProfile}>
         <Stack.Screen name="cadastro" options={{ gestureEnabled: false }} />

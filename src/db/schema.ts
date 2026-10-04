@@ -493,6 +493,27 @@ export const appSettings = sqliteTable('app_settings', {
   value: text('value', { mode: 'json' }).$type<unknown>().notNull(),
 });
 
+export const PHOTO_POSES = ['front', 'side', 'back'] as const;
+export type PhotoPose = (typeof PHOTO_POSES)[number];
+
+/**
+ * Fotos de progresso (frente, lado, costas). Só deste celular, por privacidade: sem
+ * updated_at/deleted_at, não sincroniza; o arquivo fica em <documentos>/progresso.
+ */
+export const progressPhotos = sqliteTable(
+  'progress_photos',
+  {
+    id: text('id').primaryKey(),
+    takenOn: text('taken_on').notNull(),
+    pose: text('pose', { enum: PHOTO_POSES }).notNull(),
+    fileName: text('file_name').notNull(),
+    width: integer('width').notNull(),
+    height: integer('height').notNull(),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
+  },
+  (t) => [index('progress_photos_taken_on_idx').on(t.takenOn)],
+);
+
 export const POST_KINDS = ['meal', 'workout', 'goals', 'day', 'photo'] as const;
 export type PostKind = (typeof POST_KINDS)[number];
 
@@ -537,3 +558,4 @@ export type DiaryEntry = typeof diaryEntries.$inferSelect;
 export type SavedMeal = typeof savedMeals.$inferSelect;
 export type WaterLog = typeof waterLogs.$inferSelect;
 export type OutboxPost = typeof postOutbox.$inferSelect;
+export type ProgressPhoto = typeof progressPhotos.$inferSelect;

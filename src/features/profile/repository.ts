@@ -18,6 +18,7 @@ import {
   plans,
   postOutbox,
   profiles,
+  progressPhotos,
   savedMeals,
   waterLogs,
   weightEntries,
@@ -112,6 +113,7 @@ export function wipeAllData() {
       goalVersions,
       profiles,
       postOutbox,
+      progressPhotos,
     ]) {
       tx.delete(table).where(isNotNull(table.id)).run();
     }

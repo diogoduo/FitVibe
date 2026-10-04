@@ -1,6 +1,7 @@
 import { db } from '@/db/client';
 
 import { deleteAllMediaFiles } from '../features/media/files';
+import { deleteAllProgressPhotos } from '../features/progress-photos/files';
 import { deleteAllOutboxPhotos } from '../features/social/outbox-files';
 import { removeMyFiles } from '../features/social/storage';
 import { getProfile } from '../features/profile/queries';
@@ -165,6 +166,7 @@ export function wipeDevice() {
   wipeAllData();
   deleteAllMediaFiles();
   deleteAllOutboxPhotos();
+  deleteAllProgressPhotos();
   cancelRestNotification();
   resetSync(syncDb);
 }
