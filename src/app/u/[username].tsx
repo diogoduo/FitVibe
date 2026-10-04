@@ -1,6 +1,7 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { Alert, Pressable, RefreshControl, ScrollView, Text } from 'react-native';
+import { Alert, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
 
+import { SkeletonCard } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -32,7 +33,12 @@ export default function UserProfileScreen() {
   const day = useLatestDaySummary(view?.user_id, view?.can_view ?? false);
 
   if (profile.isLoading) {
-    return <Spinner style={{ paddingTop: 40 }} />;
+    return (
+      <View className="flex-1 gap-4 bg-background p-4">
+        <SkeletonCard />
+        <SkeletonCard withImage />
+      </View>
+    );
   }
   if (!view) {
     return (

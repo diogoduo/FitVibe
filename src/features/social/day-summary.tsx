@@ -1,7 +1,9 @@
 import { Text, View } from 'react-native';
 
+import { Icon } from '@/components/ui/icon';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { formatDecimal, formatInt } from '@/lib/numbers';
+import { useColors } from '@/theme/theme';
 
 import type { DaySnapshot } from './types';
 
@@ -10,6 +12,7 @@ import type { DaySnapshot } from './types';
  * só as partes que vieram (a pessoa escolhe o que compartilha).
  */
 export function DaySummary({ snapshot }: { snapshot: DaySnapshot }) {
+  const colors = useColors();
   const { diet, training, body } = snapshot;
   if (!diet && !training && !body) {
     return <Text className="text-base text-fg-muted">Nada compartilhado neste dia.</Text>;
@@ -25,14 +28,17 @@ export function DaySummary({ snapshot }: { snapshot: DaySnapshot }) {
             <Text className="text-base text-fg-muted">Nenhum treino registrado.</Text>
           ) : (
             training.workouts.map((workout, index) => (
-              <Text key={index} className="text-base text-fg">
-                🏋️ <Text className="font-semibold">{workout.name}</Text>
-                <Text className="text-fg-muted">
-                  {' '}
-                  · {workout.durationMin} min · {workout.sets} séries
-                  {workout.volumeKg > 0 ? ` · ${formatInt(workout.volumeKg)} kg` : ''}
+              <View key={index} className="flex-row items-center gap-2">
+                <Icon name="dumbbell" size={15} color={colors.primary} />
+                <Text className="flex-1 text-base text-fg">
+                  <Text className="font-semibold">{workout.name}</Text>
+                  <Text className="text-fg-muted">
+                    {' '}
+                    · {workout.durationMin} min · {workout.sets} séries
+                    {workout.volumeKg > 0 ? ` · ${formatInt(workout.volumeKg)} kg` : ''}
+                  </Text>
                 </Text>
-              </Text>
+              </View>
             ))
           )}
         </View>
@@ -63,20 +69,26 @@ export function DaySummary({ snapshot }: { snapshot: DaySnapshot }) {
               <Text className="text-base text-fg-muted">{formatInt(meal.kcal)} kcal</Text>
             </View>
           ))}
-          <Text className="text-base text-fg">
-            💧 {formatInt(diet.waterMl)}
-            <Text className="text-fg-muted">
-              {diet.waterGoalMl != null ? ` / ${formatInt(diet.waterGoalMl)} ml` : ' ml'}
+          <View className="flex-row items-center gap-2">
+            <Icon name="drop" size={15} color={colors.water} />
+            <Text className="text-base text-fg">
+              {formatInt(diet.waterMl)}
+              <Text className="text-fg-muted">
+                {diet.waterGoalMl != null ? ` / ${formatInt(diet.waterGoalMl)} ml` : ' ml'}
+              </Text>
             </Text>
-          </Text>
+          </View>
         </View>
       ) : null}
 
       {body?.weightKg != null ? (
-        <Text className="text-base text-fg">
-          ⚖️ {formatDecimal(body.weightKg)} kg
-          <Text className="text-fg-muted"> (tendência)</Text>
-        </Text>
+        <View className="flex-row items-center gap-2">
+          <Icon name="scale" size={15} color={colors.protein} />
+          <Text className="text-base text-fg">
+            {formatDecimal(body.weightKg)} kg
+            <Text className="text-fg-muted"> (tendência)</Text>
+          </Text>
+        </View>
       ) : null}
     </View>
   );

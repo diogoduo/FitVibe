@@ -1,6 +1,8 @@
 import { Text, View } from 'react-native';
 
+import { Icon, type IconName } from '@/components/ui/icon';
 import { formatDecimal, formatInt } from '@/lib/numbers';
+import { useColors } from '@/theme/theme';
 
 import { DaySummary } from './day-summary';
 import type { GoalsPostData, MealPostData, PostContent, WorkoutPostData } from './types';
@@ -9,11 +11,19 @@ import type { GoalsPostData, MealPostData, PostContent, WorkoutPostData } from '
 const MAX_ITEMS = 6;
 
 export const POST_KIND_LABELS: Record<PostContent['kind'], string> = {
-  meal: '🍽️ Refeição',
-  workout: '🏋️ Treino',
-  goals: '🎯 Metas',
-  day: '📅 Meu dia',
-  photo: '📷 Foto',
+  meal: 'Refeição',
+  workout: 'Treino',
+  goals: 'Metas',
+  day: 'Meu dia',
+  photo: 'Foto',
+};
+
+export const POST_KIND_ICONS: Record<PostContent['kind'], IconName> = {
+  meal: 'fork',
+  workout: 'dumbbell',
+  goals: 'flame',
+  day: 'sun',
+  photo: 'camera',
 };
 
 /** O que foi postado (refeição, treino, metas, dia), como ficou no momento do post. */
@@ -63,6 +73,7 @@ function MealBody({ data }: { data: MealPostData }) {
 }
 
 function WorkoutBody({ data }: { data: WorkoutPostData }) {
+  const colors = useColors();
   return (
     <View className="gap-1.5">
       <Text className="text-lg font-semibold text-fg">{data.name}</Text>
@@ -71,10 +82,13 @@ function WorkoutBody({ data }: { data: WorkoutPostData }) {
         {data.volumeKg > 0 ? ` · ${formatInt(data.volumeKg)} kg de volume` : ''}
       </Text>
       {data.records.map((record) => (
-        <Text key={record.exercise} className="text-base text-fg">
-          🏆 <Text className="font-semibold">{record.exercise}</Text>:{' '}
-          {record.kinds.map((kind) => kind.toLowerCase()).join(', ')}
-        </Text>
+        <View key={record.exercise} className="flex-row items-center gap-2">
+          <Icon name="trophy" size={15} color={colors.warning} />
+          <Text className="flex-1 text-base text-fg">
+            <Text className="font-semibold">{record.exercise}</Text>:{' '}
+            {record.kinds.map((kind) => kind.toLowerCase()).join(', ')}
+          </Text>
+        </View>
       ))}
       {data.exercises.slice(0, MAX_ITEMS).map((exercise, index) => (
         <View key={index}>
@@ -90,6 +104,7 @@ function WorkoutBody({ data }: { data: WorkoutPostData }) {
 const GOAL_TEXT = { lose: 'Perder', maintain: 'Manter o peso', gain: 'Ganhar' } as const;
 
 function GoalsBody({ data }: { data: GoalsPostData }) {
+  const colors = useColors();
   const pace =
     data.goal === 'maintain'
       ? GOAL_TEXT.maintain
@@ -105,7 +120,10 @@ function GoalsBody({ data }: { data: GoalsPostData }) {
         {formatInt(data.fat)} g
       </Text>
       {data.waterMl != null ? (
-        <Text className="text-sm text-fg-muted">💧 Água: {formatInt(data.waterMl)} ml</Text>
+        <View className="flex-row items-center gap-2">
+          <Icon name="drop" size={15} color={colors.water} />
+          <Text className="text-sm text-fg-muted">Água: {formatInt(data.waterMl)} ml</Text>
+        </View>
       ) : null}
     </View>
   );

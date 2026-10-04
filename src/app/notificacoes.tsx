@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { FlatList, RefreshControl, Text, View } from 'react-native';
 
-import { Spinner } from '@/components/ui/spinner';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { queryClient } from '@/lib/query-client';
@@ -45,7 +45,17 @@ export default function NotificationsScreen() {
       renderItem={({ item }) => <NotificationRow notification={item} now={now} />}
       ListEmptyComponent={
         list.isLoading ? (
-          <Spinner style={{ paddingVertical: 40 }} />
+          <View className="gap-3">
+            {[0, 1, 2, 3].map((index) => (
+              <View key={index} className="flex-row items-center gap-3">
+                <Skeleton width={44} height={44} radius={22} />
+                <View className="flex-1 gap-2">
+                  <Skeleton width="80%" height={14} />
+                  <Skeleton width="30%" height={12} />
+                </View>
+              </View>
+            ))}
+          </View>
         ) : list.error ? (
           <Card>
             <Text className="text-base leading-6 text-fg-muted">{list.error.message}</Text>

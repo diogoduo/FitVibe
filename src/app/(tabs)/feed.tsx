@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { FlatList, Platform, RefreshControl, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { SkeletonCard } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -61,7 +62,10 @@ function Feed({ me }: { me: SocialProfile }) {
       }
       ListEmptyComponent={
         feed.isLoading ? (
-          <Spinner style={{ paddingVertical: 40 }} />
+          <View className="gap-4">
+            <SkeletonCard withImage />
+            <SkeletonCard />
+          </View>
         ) : feed.error ? (
           <Card>
             <Text className="text-base leading-6 text-fg-muted">{feed.error.message}</Text>
