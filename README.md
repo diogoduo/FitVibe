@@ -22,6 +22,7 @@ duo-gym-diet/
 │   │   ├── registro/ (treino em andamento), resumo/, historico-treinos
 │   │   └── alimentos, alimento, alimento-editar, scanner, agua, refeicoes...
 │   ├── components/ui/        # Screen, Card, Button, TextField, ChoiceChips, DateTimeField...
+│   ├── components/charts/    # gráfico de linha e de barras (react-native-svg)
 │   ├── db/                   # SQLite: schema.ts, client.ts, migrations/ (geradas)
 │   ├── features/             # por funcionalidade: contas, consultas, gravações e cards
 │   │   ├── goals/            # TMB, gasto total, macros, histórico de metas
@@ -38,7 +39,8 @@ duo-gym-diet/
 │   │   ├── social/           # perfil público, feed, posts, curtidas, comentários, fila de posts
 │   │   ├── notifications/    # sininho, lista, aviso com o app aberto e preferências
 │   │   ├── reminders/        # lembretes de água e refeições (notificações locais)
-│   │   └── export/           # planilhas CSV e relatório em PDF
+│   │   ├── export/           # planilhas CSV e relatório em PDF
+│   │   └── progress/         # gráficos do Progresso (peso, força, volume, dieta, medidas)
 │   ├── lib/                  # datas, números (pt-BR) e Supabase
 │   ├── sync/                 # conta e sincronização (motor, Supabase, telas de status)
 │   ├── theme/palette.js      # cores do app (fonte única para Tailwind e código nativo)
@@ -98,7 +100,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 6 | Social: perfil com @usuário, seguir (com aprovação), feed, posts com foto e legenda, curtidas, comentários, bloquear | ✅ |
 | 7 | Notificações dentro do app: sininho com contador, lista e aviso com o app aberto | ⚠️ |
 | 8 | Lembretes de água e refeições, exportação CSV e PDF | ✅ |
-| 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | |
+| 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | ⚠️ |
 | 10 | Meta calórica adaptativa, fotos de progresso, tema claro, acabamento | |
 
 Tudo no plano gratuito: Supabase Free e Expo Go, sem conta paga da Apple. Por isso as
@@ -408,3 +410,26 @@ Para a nuvem: rode também `supabase/migrations/20261003200000_notificacoes.sql`
 ✅ **Validado no PC e no iPhone:** TypeScript, lint, testes, os testes de integração, `expo-doctor`
 (21/21) e o bundle de iOS passaram no PC; no iPhone, os lembretes (inclusive com o app fechado), o
 relatório em PDF e as planilhas funcionaram.
+
+## Fase 9 — Dashboards
+
+Perfil → **Progresso**, com gráficos em `react-native-svg` (feitos à mão, sem biblioteca de
+gráficos; tocar ou arrastar mostra o valor do ponto):
+
+- **Peso**: pesagens (pontos) e tendência (linha) em 30 dias, 90 dias, 6 meses ou 1 ano, com o
+  ritmo em kg por semana.
+- **Força**: escolha o exercício (os mais feitos primeiro) e veja a melhor série de cada treino:
+  e1RM para carga em kg e placas, mais repetições no peso corporal, maior tempo nos de tempo; o
+  melhor de todos e quanto mudou desde a primeira vez.
+- **Volume por músculo**: séries válidas por grupo muscular na semana (principal 1, secundário
+  meia), em verde dentro da faixa de 10 a 20 por semana; navega pelas últimas 8 semanas e mostra
+  o total de séries de cada uma.
+- **Dieta**: calorias de cada dia contra a meta daquele dia (verde na meta ±10%, amarelo acima),
+  dias na meta, média de calorias e proteína e água, em 7, 14 ou 30 dias.
+- **Medidas**: evolução de cada medida com pelo menos dois registros.
+- As contas ficam em `src/features/progress/data.ts` (testadas sem banco); as telas usam
+  consultas que se atualizam sozinhas.
+- **Testes**: 199 no Jest.
+
+⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, `expo-doctor` (21/21) e o bundle de iOS
+passaram no PC.
