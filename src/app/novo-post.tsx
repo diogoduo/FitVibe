@@ -162,13 +162,15 @@ function Composer({ me, params }: { me: SocialProfile; params: Params }) {
           ) : (
             <View className="flex-row gap-3">
               <Button
-                label="📷 Câmera"
+                label="Câmera"
+                icon="camera"
                 variant="secondary"
                 onPress={() => void choosePhoto('camera')}
                 grow
               />
               <Button
-                label="🖼️ Galeria"
+                label="Galeria"
+                icon="photos"
                 variant="secondary"
                 onPress={() => void choosePhoto('library')}
                 grow
@@ -193,6 +195,7 @@ function Composer({ me, params }: { me: SocialProfile; params: Params }) {
           ) : (
             <Button
               label="Postar"
+              icon="share"
               onPress={() => void publish()}
               disabled={!content || missingPhoto}
             />

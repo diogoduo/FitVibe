@@ -22,7 +22,12 @@ function ExportCard() {
         Relatório em PDF do período e planilhas (CSV) do diário, água, treinos, peso, medidas e
         metas.
       </Text>
-      <Button label="Exportar dados" variant="secondary" onPress={() => router.push('/exportar')} />
+      <Button
+        label="Exportar dados"
+        icon="share"
+        variant="secondary"
+        onPress={() => router.push('/exportar')}
+      />
     </Card>
   );
 }

@@ -49,7 +49,11 @@ export default function WorkoutScreen() {
             <View key={template.id} className="gap-2 border-t border-line pt-3">
               <Text className="text-lg font-semibold text-fg">{template.name}</Text>
               <Text className="text-sm leading-5 text-fg-muted">{template.description}</Text>
-              <Button label="Usar este plano" onPress={() => createPlanFromTemplate(template)} />
+              <Button
+                label="Usar este plano"
+                icon="check"
+                onPress={() => createPlanFromTemplate(template)}
+              />
             </View>
           ))}
           <View className="border-t border-line pt-3">
@@ -60,12 +64,14 @@ export default function WorkoutScreen() {
 
       <Button
         label="Biblioteca de exercícios"
+        icon="list"
         variant="secondary"
         onPress={() => router.push('/biblioteca')}
       />
 
       <Button
         label="Histórico de treinos"
+        icon="calendar"
         variant="secondary"
         onPress={() => router.push('/historico-treinos')}
       />

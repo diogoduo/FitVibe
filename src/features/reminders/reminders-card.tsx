@@ -29,6 +29,7 @@ export function RemindersCard() {
       </Text>
       <Button
         label="Configurar lembretes"
+        icon="bell_badge"
         variant="secondary"
         onPress={() => router.push('/lembretes')}
       />

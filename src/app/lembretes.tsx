@@ -188,7 +188,7 @@ export default function RemindersScreen() {
       </View>
 
       <Button label="Salvar" onPress={() => void save()} />
-      <Button label="Testar agora" variant="secondary" onPress={() => void test()} />
+      <Button label="Testar agora" icon="bell" variant="secondary" onPress={() => void test()} />
     </FormScroll>
   );
 }

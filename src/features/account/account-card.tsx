@@ -46,7 +46,7 @@ export function AccountCard() {
           Sem conta, tudo fica só neste celular. Com uma conta, uma cópia vai para o servidor: dá
           para trocar de celular sem perder nada, e o perfil e o feed vão usar essa conta.
         </Text>
-        <Button label="Entrar ou criar conta" onPress={() => router.push('/conta')} />
+        <Button label="Entrar ou criar conta" icon="person" onPress={() => router.push('/conta')} />
       </Card>
     );
   }
@@ -151,6 +151,7 @@ export function AccountCard() {
 
       <Button
         label="Sincronizar agora"
+        icon="cloud"
         variant="secondary"
         onPress={() => void syncNow()}
         disabled={syncing}

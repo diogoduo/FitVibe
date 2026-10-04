@@ -79,12 +79,14 @@ function MyHeader({ me }: { me: SocialProfile }) {
             <>
               <Button
                 label="Editar perfil"
+                icon="person"
                 variant="secondary"
                 onPress={() => router.push('/editar-perfil')}
                 grow
               />
               <Button
                 label="Buscar pessoas"
+                icon="search"
                 variant="secondary"
                 onPress={() => router.push('/buscar')}
                 grow
@@ -130,6 +132,7 @@ function MyDay({ me }: { me: SocialProfile }) {
       </Text>
       <Button
         label="Postar meu dia"
+        icon="share"
         variant="secondary"
         onPress={() => router.push({ pathname: '/novo-post', params: { tipo: 'day' } })}
       />
@@ -145,7 +148,7 @@ function MyPosts({ me }: { me: SocialProfile }) {
     return (
       <Card>
         <Text className="text-base leading-6 text-fg-muted">Você ainda não postou nada.</Text>
-        <Button label="Novo post" onPress={() => router.push('/novo-post')} />
+        <Button label="Novo post" icon="plus" onPress={() => router.push('/novo-post')} />
       </Card>
     );
   }

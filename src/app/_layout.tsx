@@ -13,6 +13,7 @@ import { db } from '@/db/client';
 import { DatabaseErrorScreen } from '@/db/database-error-screen';
 import migrations from '@/db/migrations/migrations';
 import { NotificationsProvider } from '@/features/notifications/notifications-provider';
+import { CelebrationOverlay } from '@/components/ui/celebration';
 import { NotificationToast } from '@/features/notifications/toast';
 import { useProfile } from '@/features/profile/queries';
 import { RemindersProvider } from '@/features/reminders/reminders-provider';
@@ -85,6 +86,7 @@ export default function RootLayout() {
               <RemindersProvider />
               <AppStack />
               <NotificationToast />
+              <CelebrationOverlay />
             </NavigationTheme>
           </AppThemeProvider>
         ) : null}

@@ -73,7 +73,7 @@ export function MeasurementsCard() {
 
       {older.length > 0 ? <OlderMeasurements measurements={older} /> : null}
 
-      <Button label="Nova medição" onPress={() => openMeasurement()} />
+      <Button label="Nova medição" icon="ruler" onPress={() => openMeasurement()} />
     </Card>
   );
 }

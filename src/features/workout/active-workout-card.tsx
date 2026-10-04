@@ -20,7 +20,7 @@ export function ActiveWorkoutCard() {
       <Text className="text-sm text-fg-muted">
         Começou há {formatWorkoutDuration(workout.startedAt, new Date(now))}
       </Text>
-      <Button label="Continuar treino" onPress={() => continueWorkout(workout.id)} />
+      <Button label="Continuar treino" icon="play" onPress={() => continueWorkout(workout.id)} />
     </Card>
   );
 }

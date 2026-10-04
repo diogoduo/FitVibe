@@ -44,7 +44,7 @@ export function WeightSummaryCard() {
         </Text>
       ) : null}
 
-      <Button label="Registrar peso" onPress={() => router.push('/peso')} />
+      <Button label="Registrar peso" icon="scale" onPress={() => router.push('/peso')} />
     </Card>
   );
 }

@@ -140,6 +140,7 @@ export default function WorkoutSummaryScreen() {
         {canPost ? (
           <Button
             label="Postar treino"
+            icon="share"
             onPress={() =>
               router.push({ pathname: '/novo-post', params: { tipo: 'workout', treino: id } })
             }

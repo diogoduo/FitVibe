@@ -1,9 +1,12 @@
-import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, Text, View } from 'react-native';
+import Animated, { ZoomIn } from 'react-native-reanimated';
 
+import { celebrate } from '@/components/ui/celebration';
+import { Icon } from '@/components/ui/icon';
 import { formatDayLabel, toDayKey } from '@/lib/dates';
+import { useColors } from '@/theme/theme';
 import type { Exercise, WorkoutExercise, WorkoutSet } from '@/db/schema';
 
 import { ExerciseThumb } from '../exercises/exercise-thumb';
@@ -38,6 +41,7 @@ export function WorkoutExerciseCard({
   active,
   onRest,
 }: WorkoutExerciseCardProps) {
+  const colors = useColors();
   const name = exercise?.name ?? 'Exercício excluído';
   const loadType = exercise?.loadType ?? 'kg';
   // "Última vez" fica fixo enquanto o card existe (troca de exercício remonta o card).
@@ -56,7 +60,10 @@ export function WorkoutExerciseCard({
   const onCompleted = (set: WorkoutSet, kinds: RecordKind[]) => {
     if (kinds.length > 0) {
       setRecords(kinds);
-      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      celebrate(
+        'Novo recorde!',
+        `${name}: ${kinds.map((kind) => RECORD_LABELS[kind].toLowerCase()).join(', ')}`,
+      );
     }
     if (!active) return;
     // Depois do aquecimento, descanso curto; depois das válidas, o da prescrição.
@@ -174,11 +181,24 @@ export function WorkoutExerciseCard({
           })}
 
           {records.length > 0 ? (
-            <View className="rounded-xl bg-primary/15 px-3 py-2">
-              <Text className="text-base font-semibold text-primary">
-                🏆 {records.map((kind) => RECORD_LABELS[kind]).join(' · ')}
+            <Animated.View
+              key={records.join()}
+              entering={ZoomIn.springify().damping(14)}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+                borderRadius: 12,
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                backgroundColor: `${colors.warning}26`,
+              }}
+            >
+              <Icon name="trophy" size={16} color={colors.warning} />
+              <Text className="flex-1 text-base font-semibold text-warning">
+                {records.map((kind) => RECORD_LABELS[kind]).join(' · ')}
               </Text>
-            </View>
+            </Animated.View>
           ) : null}
 
           <View className="flex-row justify-end gap-5 pt-1">

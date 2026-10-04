@@ -3,6 +3,9 @@ import { Alert, Pressable, Text, TextInput, View } from 'react-native';
 
 import type { LoadType, WorkoutSet } from '@/db/schema';
 import { formatDecimal, parseDecimal, toInputText } from '@/lib/numbers';
+import { Icon } from '@/components/ui/icon';
+import { PressableScale } from '@/components/ui/pressable-scale';
+import { haptics } from '@/lib/haptics';
 import { useColors, useScheme } from '@/theme/theme';
 
 import { loadUnit } from './format';
@@ -63,14 +66,17 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
   const toggle = () => {
     if (done) {
       uncompleteSet(set.id);
+      haptics.select();
       return;
     }
     const values = read();
     if (!values) {
       setInvalid(true);
+      haptics.warning();
       return;
     }
     setInvalid(false);
+    haptics.firm();
     onCompleted(set, completeSet(set.id, values));
   };
 
@@ -165,16 +171,25 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
         </Pressable>
       ) : null}
 
-      <Pressable
+      <PressableScale
         onPress={toggle}
+        scaleTo={0.85}
         accessibilityRole="checkbox"
         accessibilityState={{ checked: done }}
         accessibilityLabel={done ? 'Série feita' : 'Marcar série como feita'}
         hitSlop={6}
-        className={`h-10 w-10 items-center justify-center rounded-full active:opacity-70 ${done ? 'bg-success' : 'border-2 border-line bg-surface-2'}`}
+        className={`h-10 w-10 items-center justify-center rounded-full ${done ? 'bg-success' : 'border-2 border-line bg-surface-2'}`}
       >
-        <Text className={`text-lg font-bold ${done ? 'text-on-primary' : 'text-fg-muted'}`}>✓</Text>
-      </Pressable>
+        <Icon
+          // key: ao concluir, o ✓ remonta e "pula".
+          key={done ? 'feita' : 'aberta'}
+          name="check"
+          size={18}
+          weight="bold"
+          color={done ? colors.background : colors['fg-muted']}
+          animation={done ? { effect: { type: 'bounce' } } : undefined}
+        />
+      </PressableScale>
     </View>
   );
 }

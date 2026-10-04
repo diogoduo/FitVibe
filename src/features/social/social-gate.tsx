@@ -44,7 +44,7 @@ export function SocialGate({ children, wrap = (content) => content }: SocialGate
           Para ter um perfil, seguir pessoas e postar refeições, treinos e o seu dia, entre na sua
           conta (ou crie uma).
         </Text>
-        <Button label="Entrar ou criar conta" onPress={() => router.push('/conta')} />
+        <Button label="Entrar ou criar conta" icon="person" onPress={() => router.push('/conta')} />
       </Card>,
     );
   }
@@ -63,7 +63,11 @@ export function SocialGate({ children, wrap = (content) => content }: SocialGate
           Escolha um @usuário para aparecer no feed. O perfil começa privado: só quem você aprovar
           vê seus posts e o seu dia.
         </Text>
-        <Button label="Criar meu perfil" onPress={() => router.push('/editar-perfil')} />
+        <Button
+          label="Criar meu perfil"
+          icon="person"
+          onPress={() => router.push('/editar-perfil')}
+        />
       </Card>,
     );
   }

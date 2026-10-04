@@ -65,6 +65,7 @@ export default function SessionScreen() {
 
         <Button
           label="Adicionar exercício"
+          icon="plus"
           onPress={() =>
             router.push({ pathname: '/biblioteca', params: { escolher: 'sessao', alvo: id } })
           }

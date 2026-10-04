@@ -76,9 +76,10 @@ function Feed({ me }: { me: SocialProfile }) {
             <Text className="text-base leading-6 text-fg-muted">
               Nada por aqui ainda. Siga alguém ou faça o seu primeiro post.
             </Text>
-            <Button label="Buscar pessoas" onPress={() => router.push('/buscar')} />
+            <Button label="Buscar pessoas" icon="search" onPress={() => router.push('/buscar')} />
             <Button
               label="Novo post"
+              icon="plus"
               variant="secondary"
               onPress={() => router.push('/novo-post')}
             />

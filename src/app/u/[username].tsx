@@ -71,6 +71,7 @@ export default function UserProfileScreen() {
           isMe ? (
             <Button
               label="Editar perfil"
+              icon="person"
               variant="secondary"
               onPress={() => router.push('/editar-perfil')}
               grow

@@ -110,6 +110,7 @@ export default function WorkoutLogScreen() {
 
         <Button
           label="Adicionar exercício"
+          icon="plus"
           variant="secondary"
           onPress={() =>
             router.push({ pathname: '/biblioteca', params: { escolher: 'extra', alvo: id } })

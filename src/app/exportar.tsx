@@ -76,6 +76,7 @@ export default function ExportScreen() {
         ) : (
           <Button
             label="Gerar relatório"
+            icon="share"
             onPress={() => run('pdf', () => shareReport(period))}
             disabled={busy != null}
           />

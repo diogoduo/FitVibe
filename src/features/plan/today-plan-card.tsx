@@ -108,7 +108,9 @@ function WorkoutActions({
   doneTodayId: string | null;
 }) {
   if (activeId) {
-    return <Button label="Continuar treino" onPress={() => continueWorkout(activeId)} />;
+    return (
+      <Button label="Continuar treino" icon="play" onPress={() => continueWorkout(activeId)} />
+    );
   }
   if (doneTodayId) {
     return (
@@ -116,6 +118,7 @@ function WorkoutActions({
         <Text className="text-base font-semibold text-success">Feito hoje ✓</Text>
         <Button
           label="Ver resumo"
+          icon="list"
           variant="secondary"
           onPress={() => router.push({ pathname: '/resumo/[id]', params: { id: doneTodayId } })}
         />
@@ -126,6 +129,7 @@ function WorkoutActions({
     <View className="flex-row gap-3">
       <Button
         label="Ver treino"
+        icon="dumbbell"
         variant="secondary"
         onPress={() => router.push({ pathname: '/sessao/[id]', params: { id: sessionId } })}
         grow

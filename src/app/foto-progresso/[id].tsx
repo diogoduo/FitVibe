@@ -51,7 +51,13 @@ export default function ProgressPhotoScreen() {
       />
       <Image source={{ uri }} style={{ flex: 1 }} contentFit="contain" />
       <View className="flex-row gap-3 px-4 pt-4">
-        <Button label="Compartilhar" variant="secondary" onPress={() => void share()} grow />
+        <Button
+          label="Compartilhar"
+          icon="share"
+          variant="secondary"
+          onPress={() => void share()}
+          grow
+        />
         <Button label="Excluir" variant="danger" onPress={remove} grow />
       </View>
     </View>

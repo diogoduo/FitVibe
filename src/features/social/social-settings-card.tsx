@@ -32,6 +32,7 @@ export function SocialSettingsCard() {
       <View className="flex-row gap-3">
         <Button
           label="Editar perfil"
+          icon="person"
           variant="secondary"
           onPress={() => router.push('/editar-perfil')}
           grow
