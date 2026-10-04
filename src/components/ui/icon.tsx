@@ -51,6 +51,11 @@ const ICONS = {
   ruler: { ios: 'ruler.fill', android: 'straighten' },
   figure: { ios: 'figure.strengthtraining.traditional', android: 'exercise' },
   lightbulb: { ios: 'lightbulb.fill', android: 'lightbulb' },
+  moon: { ios: 'moon.fill', android: 'dark_mode' },
+  cup: { ios: 'cup.and.saucer.fill', android: 'local_cafe' },
+  carrot: { ios: 'carrot.fill', android: 'nutrition' },
+  copy: { ios: 'doc.on.doc', android: 'content_copy' },
+  bookmark: { ios: 'bookmark.fill', android: 'bookmark' },
 } satisfies Record<string, IconSpec>;
 
 export type IconName = keyof typeof ICONS;

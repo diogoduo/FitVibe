@@ -4,14 +4,16 @@ import { Pressable, Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { SwipeRow } from '@/components/ui/swipe-row';
 import { formatDayLabel, formatTime, toDayKey } from '@/lib/dates';
 import { formatKg } from '@/lib/numbers';
 
 import { useWeightTrend } from './queries';
+import { deleteWeightEntry } from './repository';
 
 const COLLAPSED_COUNT = 10;
 
-/** Aba Progresso: lista das pesagens com a tendência do dia; toque para editar ou excluir. */
+/** Progresso: lista das pesagens com a tendência do dia; toque para editar, deslize para excluir. */
 export function WeightHistoryCard() {
   const { entries, trend } = useWeightTrend();
   const [expanded, setExpanded] = useState(false);
@@ -38,27 +40,32 @@ export function WeightHistoryCard() {
             const day = toDayKey(entry.measuredAt);
             const trendKg = trendByDay.get(day);
             return (
-              <Pressable
+              <SwipeRow
                 key={entry.id}
-                onPress={() => router.push({ pathname: '/peso', params: { id: entry.id } })}
-                accessibilityRole="button"
-                accessibilityHint="Editar ou excluir a pesagem"
-                className="flex-row items-center border-t border-line py-3 active:opacity-70"
+                actionLabel="Excluir"
+                onAction={() => deleteWeightEntry(entry.id)}
               >
-                <View className="flex-1">
-                  <Text className="text-base text-fg">{formatDayLabel(day)}</Text>
-                  <Text numberOfLines={1} className="text-sm text-fg-muted">
-                    {formatTime(entry.measuredAt)}
-                    {entry.note ? ` · ${entry.note}` : ''}
+                <Pressable
+                  onPress={() => router.push({ pathname: '/peso', params: { id: entry.id } })}
+                  accessibilityRole="button"
+                  accessibilityHint="Toque para editar; deslize para a esquerda para excluir"
+                  className="flex-row items-center border-t border-line bg-surface py-3 active:opacity-70"
+                >
+                  <View className="flex-1">
+                    <Text className="text-base text-fg">{formatDayLabel(day)}</Text>
+                    <Text numberOfLines={1} className="text-sm text-fg-muted">
+                      {formatTime(entry.measuredAt)}
+                      {entry.note ? ` · ${entry.note}` : ''}
+                    </Text>
+                  </View>
+                  <Text className="w-24 text-right text-base font-semibold text-fg">
+                    {formatKg(entry.weightKg)}
                   </Text>
-                </View>
-                <Text className="w-24 text-right text-base font-semibold text-fg">
-                  {formatKg(entry.weightKg)}
-                </Text>
-                <Text className="w-24 text-right text-base text-fg-muted">
-                  {trendKg != null ? formatKg(trendKg) : '—'}
-                </Text>
-              </Pressable>
+                  <Text className="w-24 text-right text-base text-fg-muted">
+                    {trendKg != null ? formatKg(trendKg) : '—'}
+                  </Text>
+                </Pressable>
+              </SwipeRow>
             );
           })}
         </View>

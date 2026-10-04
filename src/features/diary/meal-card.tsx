@@ -1,9 +1,15 @@
 import { router } from 'expo-router';
 import { Alert, Pressable, Text, View } from 'react-native';
+import Animated, { FadeInDown, FadeOutLeft, LinearTransition } from 'react-native-reanimated';
 
+import { Icon, type IconName } from '@/components/ui/icon';
+import { PressableScale } from '@/components/ui/pressable-scale';
+import { SwipeRow } from '@/components/ui/swipe-row';
 import type { DiaryEntry, Meal } from '@/db/schema';
 import { addDays, type DayKey } from '@/lib/dates';
+import { haptics } from '@/lib/haptics';
 import { formatDecimal, formatInt } from '@/lib/numbers';
+import { useColors } from '@/theme/theme';
 
 import { nutrientsFor, sumNutrients } from '../foods/nutrition';
 import { copyMeal, deleteEntry } from './repository';
@@ -18,9 +24,21 @@ type MealCardProps = {
   canPost?: boolean;
 };
 
+/** Ícone pela refeição padrão; as criadas pela pessoa ficam com o garfo e a faca. */
+const MEAL_ICONS: Record<string, IconName> = {
+  'café da manhã': 'cup',
+  almoço: 'fork',
+  'lanche da tarde': 'carrot',
+  'pré-treino': 'bolt',
+  jantar: 'moon',
+  ceia: 'moon',
+};
+
 /** Uma refeição do dia: alimentos com gramas e kcal, totais e as ações. */
 export function MealCard({ meal, day, entries, canCopyYesterday, canPost }: MealCardProps) {
+  const colors = useColors();
   const total = sumNutrients(entries);
+  const icon = MEAL_ICONS[meal.name.trim().toLowerCase()] ?? 'fork';
 
   const confirmDelete = (entry: DiaryEntry) =>
     Alert.alert('Tirar do diário?', `${entry.name}, ${formatDecimal(entry.grams)} ${entry.unit}.`, [
@@ -29,51 +47,70 @@ export function MealCard({ meal, day, entries, canCopyYesterday, canPost }: Meal
     ]);
 
   return (
-    <View className="gap-2 rounded-2xl border border-line bg-surface p-4">
-      <View className="flex-row items-baseline justify-between">
-        <Text className="text-lg font-semibold text-fg">{meal.name}</Text>
+    <View className="gap-2 rounded-3xl border border-line bg-surface p-4">
+      <View className="flex-row items-center gap-3">
+        <View className="h-9 w-9 items-center justify-center rounded-full bg-primary/15">
+          <Icon name={icon} size={17} color={colors.primary} />
+        </View>
+        <View className="flex-1">
+          <Text className="text-lg font-semibold text-fg">{meal.name}</Text>
+          {entries.length > 0 ? (
+            <Text className="text-xs text-fg-muted">
+              P {formatInt(total.protein)} g · C {formatInt(total.carbs)} g · G{' '}
+              {formatInt(total.fat)} g
+            </Text>
+          ) : null}
+        </View>
         {entries.length > 0 ? (
-          <Text className="text-base font-semibold text-fg">{formatInt(total.kcal)} kcal</Text>
+          <Text className="text-base font-bold text-fg">{formatInt(total.kcal)} kcal</Text>
         ) : null}
       </View>
-      {entries.length > 0 ? (
-        <Text className="text-sm text-fg-muted">
-          P {formatInt(total.protein)} g · C {formatInt(total.carbs)} g · G {formatInt(total.fat)} g
-        </Text>
-      ) : null}
 
       {entries.map((entry) => (
-        <Pressable
+        <Animated.View
           key={entry.id}
-          onPress={() => router.push({ pathname: '/alimento', params: { registro: entry.id } })}
-          onLongPress={() => confirmDelete(entry)}
-          accessibilityRole="button"
-          accessibilityHint="Toque para mudar a quantidade; toque e segure para tirar"
-          className="flex-row items-center gap-3 border-t border-line pt-2 active:opacity-70"
+          entering={FadeInDown.duration(250)}
+          exiting={FadeOutLeft.duration(200)}
+          layout={LinearTransition.duration(200)}
         >
-          <View className="flex-1">
-            <Text className="text-base text-fg" numberOfLines={2}>
-              {entry.name}
-            </Text>
-            <Text className="text-sm text-fg-muted">
-              {formatDecimal(entry.grams)} {entry.unit}
-            </Text>
-          </View>
-          <Text className="text-base text-fg-muted">
-            {formatInt(nutrientsFor(entry, entry.grams).kcal)} kcal
-          </Text>
-        </Pressable>
+          <SwipeRow actionLabel="Tirar" onAction={() => deleteEntry(entry.id)}>
+            <Pressable
+              onPress={() => router.push({ pathname: '/alimento', params: { registro: entry.id } })}
+              onLongPress={() => confirmDelete(entry)}
+              accessibilityRole="button"
+              accessibilityHint="Toque para mudar a quantidade; deslize para a esquerda para tirar"
+              className="flex-row items-center gap-3 rounded-xl border-t border-line bg-surface pt-2 active:opacity-70"
+            >
+              <View className="flex-1">
+                <Text className="text-base text-fg" numberOfLines={2}>
+                  {entry.name}
+                </Text>
+                <Text className="text-sm text-fg-muted">
+                  {formatDecimal(entry.grams)} {entry.unit}
+                </Text>
+              </View>
+              <Text className="text-base text-fg-muted">
+                {formatInt(nutrientsFor(entry, entry.grams).kcal)} kcal
+              </Text>
+            </Pressable>
+          </SwipeRow>
+        </Animated.View>
       ))}
 
-      <View className="flex-row flex-wrap justify-end gap-x-5 gap-y-2 pt-1">
+      <View className="flex-row flex-wrap justify-end gap-2 pt-1">
         {canCopyYesterday && entries.length === 0 ? (
           <MealAction
+            icon="copy"
             label="Copiar de ontem"
-            onPress={() => copyMeal(meal.id, addDays(day, -1), day)}
+            onPress={() => {
+              copyMeal(meal.id, addDays(day, -1), day);
+              haptics.success();
+            }}
           />
         ) : null}
         {canPost && entries.length > 0 ? (
           <MealAction
+            icon="share"
             label="Postar"
             onPress={() =>
               router.push({
@@ -85,14 +122,17 @@ export function MealCard({ meal, day, entries, canCopyYesterday, canPost }: Meal
         ) : null}
         {entries.length > 0 ? (
           <MealAction
-            label="Salvar refeição"
+            icon="bookmark"
+            label="Salvar"
             onPress={() =>
               router.push({ pathname: '/refeicao-salvar', params: { refeicao: meal.id, dia: day } })
             }
           />
         ) : null}
         <MealAction
-          label="+ Adicionar"
+          icon="plus"
+          label="Adicionar"
+          primary
           onPress={() =>
             router.push({ pathname: '/alimentos', params: { refeicao: meal.id, dia: day } })
           }
@@ -102,15 +142,35 @@ export function MealCard({ meal, day, entries, canCopyYesterday, canPost }: Meal
   );
 }
 
-function MealAction({ label, onPress }: { label: string; onPress: () => void }) {
+function MealAction({
+  icon,
+  label,
+  onPress,
+  primary,
+}: {
+  icon: IconName;
+  label: string;
+  onPress: () => void;
+  primary?: boolean;
+}) {
+  const colors = useColors();
   return (
-    <Pressable
+    <PressableScale
       onPress={onPress}
+      haptic="select"
       accessibilityRole="button"
-      hitSlop={8}
-      className="active:opacity-70"
+      hitSlop={4}
+      className={`flex-row items-center gap-1.5 rounded-full px-3 py-2 ${primary ? 'bg-primary' : 'bg-surface-2'}`}
     >
-      <Text className="text-base font-semibold text-primary">{label}</Text>
-    </Pressable>
+      <Icon
+        name={icon}
+        size={14}
+        weight="semibold"
+        color={primary ? colors['on-primary'] : colors.primary}
+      />
+      <Text className={`text-sm font-semibold ${primary ? 'text-on-primary' : 'text-primary'}`}>
+        {label}
+      </Text>
+    </PressableScale>
   );
 }
