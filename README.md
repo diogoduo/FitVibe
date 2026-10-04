@@ -35,7 +35,8 @@ duo-gym-diet/
 │   │   ├── foods/            # TACO (taco/), busca, Open Food Facts, alimentos próprios
 │   │   ├── diary/            # refeições, diário, refeições salvas, água
 │   │   ├── account/          # conta nos Ajustes e a escolha de dados no primeiro login
-│   │   └── social/           # perfil público, feed, posts, curtidas, comentários, fila de posts
+│   │   ├── social/           # perfil público, feed, posts, curtidas, comentários, fila de posts
+│   │   └── notifications/    # sininho, lista, aviso com o app aberto e preferências
 │   ├── lib/                  # datas, números (pt-BR) e Supabase
 │   ├── sync/                 # conta e sincronização (motor, Supabase, telas de status)
 │   ├── theme/palette.js      # cores do app (fonte única para Tailwind e código nativo)
@@ -93,7 +94,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 4 | Dieta: TACO offline, scanner (Open Food Facts), diário por refeição, porções, água | ✅ |
 | 5 | Conta e sincronização: login, fila de envio, última alteração vence, RLS | ✅ |
 | 6 | Social: perfil com @usuário, seguir (com aprovação), feed, posts com foto e legenda, curtidas, comentários, bloquear | ✅ |
-| 7 | Notificações dentro do app: sininho com contador, lista e aviso com o app aberto | |
+| 7 | Notificações dentro do app: sininho com contador, lista e aviso com o app aberto | ⚠️ |
 | 8 | Lembretes de água e refeições, exportação CSV e PDF | |
 | 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | |
 | 10 | Meta calórica adaptativa, fotos de progresso, tema claro, acabamento | |
@@ -355,3 +356,30 @@ Para a nuvem: rode também `supabase/migrations/20261003180000_social.sql` no SQ
 Supabase local e na nuvem), `expo-doctor` (21/21) e o bundle de iOS passaram no PC; nos dois
 iPhones, perfil, seguir com aprovação, posts com foto, curtidas, comentários e o dia no perfil
 funcionaram.
+
+## Fase 7 — Notificações dentro do app
+
+- **No banco** (`supabase/migrations/…_notificacoes.sql`): gatilhos criam a notificação de quem
+  recebe quando alguém **te segue**, **pede para seguir**, **aceita seu pedido**, **curte**,
+  **comenta** ou **posta** (para quem segue). Respeitam o bloqueio e o que a pessoa escolheu
+  receber; ninguém consegue criar aviso falso (só os gatilhos inserem) e de cada notificação só
+  dá para mudar o "lida". Descurtir, apagar o comentário ou cancelar o pedido apaga o aviso.
+- **Textos** como no Instagram: "anasouza postou o café da manhã", "comentou na sua foto:
+  'Boa!'", "curtiu seu post do treino Pernas", "pediu para seguir você".
+- **🔔 no topo do Feed** e o número de não lidas no **ícone da aba Feed** (visível de qualquer
+  aba). A lista leva ao post ou ao perfil, e os pedidos têm Aceitar/Recusar ali mesmo; "Seguir de
+  volta" em quem começou a te seguir. Abrir a lista marca tudo como lido.
+- **Aviso no topo** quando chega algo com o app aberto, pelo Supabase Realtime (só as suas, pelo
+  RLS), com uma vibração leve. Se o Realtime cair, o contador confere de novo a cada minuto.
+- **Preferências** nos Ajustes: seguidores, curtidas, comentários e posts de quem você segue.
+- **Sem push com o app fechado**: exigiria build próprio e a conta paga da Apple; tudo aqui é do
+  plano gratuito.
+- **Testes**: 186 no Jest (inclui os textos) e 14 de integração, 4 das notificações (pedido,
+  aceite e cancelamento; post, curtida e comentário; preferências e bloqueio; segurança).
+  `npm run test:realtime` testa o aviso em tempo real na nuvem (o Supabase local roda sem
+  Realtime) e confere que uma conta não recebe o aviso de outra.
+
+Para a nuvem: rode também `supabase/migrations/20261003200000_notificacoes.sql` no SQL Editor.
+
+⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
+(21/21) e o bundle de iOS passaram no PC.
