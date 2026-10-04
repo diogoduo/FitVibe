@@ -37,9 +37,20 @@ async function newUser(label) {
   return user;
 }
 
-/** Espera o canal conectar e devolve as linhas que chegarem. */
+/**
+ * Espera o canal escutar o banco e devolve as linhas que chegarem. O "SUBSCRIBED" chega um
+ * pouco antes de o servidor ligar a escuta; o sinal certo é a mensagem "Subscribed to
+ * PostgreSQL" do sistema (senão uma inserção logo depois se perde).
+ */
 function listen(user, recipientId) {
   const received = [];
+  let resolveReady;
+  let rejectReady;
+  const ready = new Promise((resolve, reject) => {
+    resolveReady = resolve;
+    rejectReady = reject;
+  });
+  const timer = setTimeout(() => rejectReady(new Error('O canal não conectou em 15 s')), 15_000);
   const channel = user.client
     .channel(`teste-${crypto.randomUUID()}`)
     .on(
@@ -51,15 +62,18 @@ function listen(user, recipientId) {
         filter: `user_id=eq.${recipientId}`,
       },
       (payload) => received.push(payload.new),
-    );
-  const ready = new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('O canal não conectou em 15 s')), 15_000);
-    channel.subscribe((status) => {
-      if (status === 'SUBSCRIBED') {
-        clearTimeout(timer);
-        resolve();
-      }
+    )
+    .on('system', {}, (message) => {
+      if (message.extension !== 'postgres_changes') return;
+      clearTimeout(timer);
+      if (message.status === 'ok') resolveReady();
+      else rejectReady(new Error(`Realtime recusou: ${message.message}`));
     });
+  channel.subscribe((status, error) => {
+    if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+      clearTimeout(timer);
+      rejectReady(new Error(`Canal: ${status} ${error?.message ?? ''}`));
+    }
   });
   return { channel, received, ready };
 }
