@@ -67,6 +67,14 @@ export function recalculateGoals(profile: Profile, referenceWeightKg: number) {
   updateProfile(profile.id, pickProfileData(profile), referenceWeightKg);
 }
 
+/**
+ * Meta adaptativa aceita: as calorias passam a ser as sugeridas (como uma meta "definida à mão",
+ * que a pessoa pode tirar em Perfil e metas); proteína e gordura seguem os g/kg.
+ */
+export function applyAdaptiveKcal(profile: Profile, kcal: number, referenceWeightKg: number) {
+  updateProfile(profile.id, { ...pickProfileData(profile), kcalOverride: kcal }, referenceWeightKg);
+}
+
 /** "Agora não" no aviso de recálculo: guarda em que tendência a pessoa dispensou. */
 export function dismissRecalc(profileId: string, trendKg: number) {
   db.update(profiles)

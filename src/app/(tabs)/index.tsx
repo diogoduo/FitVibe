@@ -1,4 +1,5 @@
 import { Screen } from '@/components/ui/screen';
+import { AdaptiveGoalPrompt } from '@/features/goals/adaptive-cards';
 import { DailyGoalCard } from '@/features/goals/daily-goal-card';
 import { TodayPlanCard } from '@/features/plan/today-plan-card';
 import { WaterCard } from '@/features/diary/water-card';
@@ -19,6 +20,7 @@ export default function TodayScreen() {
   return (
     <Screen title="Hoje" subtitle={formatToday()}>
       <ActiveWorkoutCard />
+      <AdaptiveGoalPrompt />
       <RecalcPromptCard />
       <DailyGoalCard />
       <TodayPlanCard />
