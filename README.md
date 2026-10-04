@@ -97,7 +97,7 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 5 | Conta e sincronização: login, fila de envio, última alteração vence, RLS | ✅ |
 | 6 | Social: perfil com @usuário, seguir (com aprovação), feed, posts com foto e legenda, curtidas, comentários, bloquear | ✅ |
 | 7 | Notificações dentro do app: sininho com contador, lista e aviso com o app aberto | ⚠️ |
-| 8 | Lembretes de água e refeições, exportação CSV e PDF | ⚠️ |
+| 8 | Lembretes de água e refeições, exportação CSV e PDF | ✅ |
 | 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | |
 | 10 | Meta calórica adaptativa, fotos de progresso, tema claro, acabamento | |
 
@@ -405,5 +405,6 @@ Para a nuvem: rode também `supabase/migrations/20261003200000_notificacoes.sql`
 - **Testes**: 195 no Jest, incluindo o planejamento dos lembretes, o formato do CSV, as planilhas
   e os números do relatório.
 
-⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
-(21/21) e o bundle de iOS passaram no PC.
+✅ **Validado no PC e no iPhone:** TypeScript, lint, testes, os testes de integração, `expo-doctor`
+(21/21) e o bundle de iOS passaram no PC; no iPhone, os lembretes (inclusive com o app fechado), o
+relatório em PDF e as planilhas funcionaram.
