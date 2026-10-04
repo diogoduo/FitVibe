@@ -484,6 +484,15 @@ export const syncCursors = sqliteTable('sync_cursors', {
   rowId: text('row_id').notNull(),
 });
 
+/**
+ * Ajustes só deste celular (ex.: lembretes). Sem updated_at/deleted_at: não sincroniza, cada
+ * aparelho avisa do seu jeito.
+ */
+export const appSettings = sqliteTable('app_settings', {
+  key: text('key').primaryKey(),
+  value: text('value', { mode: 'json' }).$type<unknown>().notNull(),
+});
+
 export const POST_KINDS = ['meal', 'workout', 'goals', 'day', 'photo'] as const;
 export type PostKind = (typeof POST_KINDS)[number];
 

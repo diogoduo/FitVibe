@@ -3,6 +3,7 @@ import { eq, isNotNull } from 'drizzle-orm';
 import { db, newId } from '@/db/client';
 import {
   activityLogs,
+  appSettings,
   bodyMeasurements,
   diaryEntries,
   exerciseMedia,
@@ -106,5 +107,6 @@ export function wipeAllData() {
     ]) {
       tx.delete(table).where(isNotNull(table.id)).run();
     }
+    tx.delete(appSettings).where(isNotNull(appSettings.key)).run();
   });
 }
