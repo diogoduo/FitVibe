@@ -5,6 +5,7 @@ import Animated, { FadeInDown, FadeOutLeft, LinearTransition } from 'react-nativ
 import { Icon, type IconName } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
 import { SwipeRow } from '@/components/ui/swipe-row';
+import { showUndo } from '@/components/ui/undo-bar';
 import type { DiaryEntry, Meal } from '@/db/schema';
 import { addDays, type DayKey } from '@/lib/dates';
 import { haptics } from '@/lib/haptics';
@@ -12,7 +13,7 @@ import { formatDecimal, formatInt } from '@/lib/numbers';
 import { useColors } from '@/theme/theme';
 
 import { nutrientsFor, sumNutrients } from '../foods/nutrition';
-import { copyMeal, deleteEntry } from './repository';
+import { copyMeal, deleteEntry, restoreEntry } from './repository';
 
 type MealCardProps = {
   meal: Meal;
@@ -73,7 +74,15 @@ export function MealCard({ meal, day, entries, canCopyYesterday, canPost }: Meal
           exiting={FadeOutLeft.duration(200)}
           layout={LinearTransition.duration(200)}
         >
-          <SwipeRow actionLabel="Tirar" onAction={() => deleteEntry(entry.id)}>
+          <SwipeRow
+            actionLabel="Tirar"
+            onAction={() => {
+              deleteEntry(entry.id);
+              showUndo(`${entry.name} saiu do ${meal.name.toLowerCase()}.`, () =>
+                restoreEntry(entry.id),
+              );
+            }}
+          >
             <Pressable
               onPress={() => router.push({ pathname: '/alimento', params: { registro: entry.id } })}
               onLongPress={() => confirmDelete(entry)}

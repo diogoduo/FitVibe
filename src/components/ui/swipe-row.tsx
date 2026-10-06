@@ -9,30 +9,36 @@ import { Icon } from './icon';
 
 type SwipeRowProps = {
   children: ReactNode;
-  /** Texto do botão que aparece ao deslizar (ex.: "Tirar", "Excluir"). */
+  /** Texto que aparece por trás ao deslizar (ex.: "Tirar", "Excluir"). */
   actionLabel: string;
   onAction: () => void;
 };
 
-/** Deslize para a esquerda para mostrar a ação de apagar (como no Mail e no Mensagens). */
+/**
+ * Deslize para a esquerda e solte: a ação acontece na hora (como apagar um e-mail no iPhone).
+ * Um arrasto curto volta sem fazer nada. Quem usa mostra o "Desfazer" (showUndo).
+ */
 export function SwipeRow({ children, actionLabel, onAction }: SwipeRowProps) {
   const colors = useColors();
+  const run = () => {
+    haptics.firm();
+    onAction();
+  };
   return (
     <ReanimatedSwipeable
-      friction={2}
-      rightThreshold={40}
-      overshootRight={false}
-      onSwipeableWillOpen={() => haptics.select()}
+      friction={1.5}
+      rightThreshold={60}
+      overshootRight
+      onSwipeableOpen={run}
       renderRightActions={(_progress, _translation, methods) => (
         <Pressable
           onPress={() => {
             methods.close();
-            haptics.firm();
-            onAction();
+            run();
           }}
           accessibilityRole="button"
           accessibilityLabel={actionLabel}
-          className="ml-2 items-center justify-center gap-1 rounded-xl px-4"
+          className="ml-2 min-w-24 items-center justify-center gap-1 rounded-xl px-4"
           style={{ backgroundColor: colors.danger }}
         >
           <Icon name="trash" size={18} color="#FFFFFF" />

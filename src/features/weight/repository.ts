@@ -19,3 +19,8 @@ export function updateWeightEntry(id: string, input: WeightEntryInput) {
 export function deleteWeightEntry(id: string) {
   db.update(weightEntries).set({ deletedAt: new Date() }).where(eq(weightEntries.id, id)).run();
 }
+
+/** "Desfazer" logo depois de excluir. */
+export function restoreWeightEntry(id: string) {
+  db.update(weightEntries).set({ deletedAt: null }).where(eq(weightEntries.id, id)).run();
+}

@@ -25,6 +25,7 @@ import {
   addWater,
   copyMeal,
   deleteEntry,
+  restoreEntry,
   ensureDefaultMeals,
   moveMeal,
   saveMeal,
@@ -122,6 +123,18 @@ describe('diário', () => {
     const last = entriesOn('2026-10-02').at(-1)!;
     deleteEntry(last.id);
     expect(recentFoodKeys()).toEqual(['taco:410', 'taco:3']);
+  });
+
+  it('desfazer devolve o alimento tirado (deslizar para tirar)', () => {
+    const lunch = mealList()[1].id;
+    addEntry({ day: '2026-10-04', mealId: lunch, food: rice, grams: 150 });
+    const [entry] = entriesOn('2026-10-04');
+    deleteEntry(entry.id);
+    expect(entriesOn('2026-10-04')).toEqual([]);
+    restoreEntry(entry.id);
+    expect(entriesOn('2026-10-04')).toEqual([
+      expect.objectContaining({ id: entry.id, grams: 150 }),
+    ]);
   });
 });
 

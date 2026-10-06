@@ -149,7 +149,7 @@ function SlideContent({ slide }: { slide: Slide }) {
   const { Demo } = slide;
   return (
     <>
-      <Animated.View entering={ZoomIn.springify().damping(13)} className="items-center">
+      <Animated.View entering={ZoomIn.springify().damping(13)} style={{ alignItems: 'center' }}>
         <View
           className="h-20 w-20 items-center justify-center rounded-full"
           style={{ backgroundColor: `${colors.primary}26` }}
@@ -157,7 +157,7 @@ function SlideContent({ slide }: { slide: Slide }) {
           <Icon name={slide.icon} size={38} color={colors.primary} />
         </View>
       </Animated.View>
-      <Animated.View entering={FadeInDown.delay(120).duration(400)} className="gap-2">
+      <Animated.View entering={FadeInDown.delay(120).duration(400)} style={{ gap: 8 }}>
         {slide.kicker ? (
           <Text className="text-center text-sm font-semibold uppercase tracking-wider text-primary">
             {slide.kicker}

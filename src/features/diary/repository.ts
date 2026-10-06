@@ -97,6 +97,11 @@ export function deleteEntry(id: string) {
   db.update(diaryEntries).set({ deletedAt: new Date() }).where(eq(diaryEntries.id, id)).run();
 }
 
+/** "Desfazer" logo depois de tirar (a exclusão é só a marcação de deleted_at). */
+export function restoreEntry(id: string) {
+  db.update(diaryEntries).set({ deletedAt: null }).where(eq(diaryEntries.id, id)).run();
+}
+
 function entriesOf(day: DayKey, mealId: string) {
   return db
     .select()

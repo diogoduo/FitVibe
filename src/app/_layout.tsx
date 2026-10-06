@@ -1,5 +1,4 @@
 import '@/global.css';
-import '@/lib/animated-interop';
 
 import { QueryClientProvider } from '@tanstack/react-query';
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
@@ -15,6 +14,7 @@ import { DatabaseErrorScreen } from '@/db/database-error-screen';
 import migrations from '@/db/migrations/migrations';
 import { NotificationsProvider } from '@/features/notifications/notifications-provider';
 import { CelebrationOverlay } from '@/components/ui/celebration';
+import { UndoBar } from '@/components/ui/undo-bar';
 import { NotificationToast } from '@/features/notifications/toast';
 import { useProfile } from '@/features/profile/queries';
 import { RemindersProvider } from '@/features/reminders/reminders-provider';
@@ -89,6 +89,7 @@ export default function RootLayout() {
               <AppStack />
               <NotificationToast />
               <CelebrationOverlay />
+              <UndoBar />
             </NavigationTheme>
           </AppThemeProvider>
         ) : null}

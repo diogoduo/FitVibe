@@ -120,7 +120,7 @@ export function SetDemo() {
         <Animated.View
           entering={ZoomIn.springify().damping(14)}
           exiting={FadeOut.duration(150)}
-          className="flex-row items-center gap-2"
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
         >
           <Icon name="trophy" size={15} color={colors.warning} />
           <Text className="text-sm font-semibold text-warning">Maior carga!</Text>
@@ -162,8 +162,16 @@ export function SwipeDemo() {
           </Text>
         </View>
         <Animated.View
-          style={[{ backgroundColor: colors.surface }, sliding]}
-          className="flex-row items-center gap-3 py-2"
+          style={[
+            {
+              backgroundColor: colors.surface,
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 12,
+              paddingVertical: 8,
+            },
+            sliding,
+          ]}
         >
           <View className="flex-1">
             <Text className="text-base text-fg">Arroz, tipo 1, cozido</Text>
@@ -228,9 +236,9 @@ export function LikeDemo() {
           <Animated.View
             entering={ZoomIn.springify().damping(10)}
             exiting={FadeOut.duration(200)}
-            className="absolute"
+            style={{ position: 'absolute' }}
           >
-            <Icon name="heartFill" size={64} color="#FFFFFF" />
+            <Icon name="heartFill" size={64} color={colors.danger} />
           </Animated.View>
         ) : null}
       </View>
@@ -281,12 +289,13 @@ export function SettingsDemo() {
           <Animated.View
             entering={FadeInUp.springify().damping(14)}
             exiting={FadeOut.duration(200)}
-            className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface-2 p-3"
           >
-            <Icon name="drop" size={18} color={colors.water} />
-            <Text className="flex-1 text-sm text-fg">
-              <Text className="font-semibold">Hora da água · </Text>faltam 1.200 ml
-            </Text>
+            <View className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface-2 p-3">
+              <Icon name="drop" size={18} color={colors.water} />
+              <Text className="flex-1 text-sm text-fg">
+                <Text className="font-semibold">Hora da água · </Text>faltam 1.200 ml
+              </Text>
+            </View>
           </Animated.View>
         ) : null}
       </View>

@@ -5,11 +5,12 @@ import { Pressable, Text, View } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { SwipeRow } from '@/components/ui/swipe-row';
+import { showUndo } from '@/components/ui/undo-bar';
 import { formatDayLabel, formatTime, toDayKey } from '@/lib/dates';
 import { formatKg } from '@/lib/numbers';
 
 import { useWeightTrend } from './queries';
-import { deleteWeightEntry } from './repository';
+import { deleteWeightEntry, restoreWeightEntry } from './repository';
 
 const COLLAPSED_COUNT = 10;
 
@@ -43,7 +44,12 @@ export function WeightHistoryCard() {
               <SwipeRow
                 key={entry.id}
                 actionLabel="Excluir"
-                onAction={() => deleteWeightEntry(entry.id)}
+                onAction={() => {
+                  deleteWeightEntry(entry.id);
+                  showUndo(`Pesagem de ${formatKg(entry.weightKg)} excluída.`, () =>
+                    restoreWeightEntry(entry.id),
+                  );
+                }}
               >
                 <Pressable
                   onPress={() => router.push({ pathname: '/peso', params: { id: entry.id } })}
