@@ -23,7 +23,7 @@ export function ToggleField({ label, hint, value, onChange }: ToggleFieldProps) 
         onValueChange={onChange}
         accessibilityLabel={label}
         trackColor={{ true: colors.primary, false: colors.line }}
-        thumbColor={colors.fg}
+        thumbColor="#FFFFFF"
         ios_backgroundColor={colors.line}
       />
     </View>

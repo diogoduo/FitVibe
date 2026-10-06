@@ -188,7 +188,11 @@ function PostInteractive({ post, linkToPost }: { post: FeedPost; linkToPost: boo
                 entering={ZoomIn.springify().damping(10)}
                 exiting={FadeOut.duration(200)}
               >
-                <Icon name="heartFill" size={96} color="#FFFFFF" />
+                <Icon
+                  name="heartFill"
+                  size={96}
+                  color={post.photo_url ? '#FFFFFF' : colors.danger}
+                />
               </Animated.View>
             </View>
           ) : null}

@@ -1,33 +1,24 @@
 import { eq } from 'drizzle-orm';
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
-import { vars } from 'nativewind';
-import { createContext, useContext, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useLayoutEffect, type ReactNode } from 'react';
 import { Appearance, useColorScheme, View } from 'react-native';
 
 import { db } from '@/db/client';
 import { appSettings } from '@/db/schema';
 
-import { palette, toRgbChannels } from './palette';
+import { palette } from './palette';
 
 /**
- * Tema do app: escuro (padrão), claro ou o do sistema. As classes do Tailwind leem variáveis
- * CSS (tailwind.config.js); aqui elas mudam para o subtree inteiro com `vars()`. Onde a cor
- * precisa estar no código (indicadores, gráficos, interruptores), use `useColors()`.
+ * Tema do app: escuro (padrão), claro ou o do sistema. Um mecanismo só: o app força o modo do
+ * iPhone para este app (Appearance.setColorScheme) e tudo segue esse modo — as classes do
+ * Tailwind (as duas paletas estão no tailwind.config.js), os componentes nativos (teclado,
+ * alertas, seletores) e `useColors()`, para as cores que precisam estar no código.
  */
 export type ThemeChoice = 'system' | 'dark' | 'light';
 export type Scheme = 'dark' | 'light';
 export type Colors = (typeof palette)['dark'];
 
 const KEY = 'theme';
-
-const toVars = (colors: Colors) =>
-  vars(
-    Object.fromEntries(
-      Object.entries(colors).map(([token, hex]) => [`--color-${token}`, toRgbChannels(hex)]),
-    ),
-  );
-
-const THEME_VARS = { dark: toVars(palette.dark), light: toVars(palette.light) };
 
 const SchemeContext = createContext<Scheme>('dark');
 
@@ -49,19 +40,18 @@ export function saveThemeChoice(choice: ThemeChoice) {
 
 export function AppThemeProvider({ children }: { children: ReactNode }) {
   const choice = useThemeChoice();
-  const system = useColorScheme();
-  const scheme: Scheme = choice === 'system' ? (system === 'light' ? 'light' : 'dark') : choice;
+  // Depois do setColorScheme, este já devolve o modo forçado (ou o do iPhone, em "sistema").
+  const appearance = useColorScheme();
+  const scheme: Scheme = choice === 'system' ? (appearance === 'light' ? 'light' : 'dark') : choice;
 
-  // Alertas, teclado e seletores nativos seguem o tema escolhido (ou o do sistema).
-  useEffect(() => {
+  // Antes de pintar a tela, para não piscar o tema errado.
+  useLayoutEffect(() => {
     Appearance.setColorScheme(choice === 'system' ? 'unspecified' : choice);
   }, [choice]);
 
   return (
     <SchemeContext.Provider value={scheme}>
-      <View style={[{ flex: 1, backgroundColor: palette[scheme].background }, THEME_VARS[scheme]]}>
-        {children}
-      </View>
+      <View style={{ flex: 1, backgroundColor: palette[scheme].background }}>{children}</View>
     </SchemeContext.Provider>
   );
 }

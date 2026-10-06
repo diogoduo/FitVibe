@@ -83,7 +83,7 @@ function MealRow({ meal, isFirst, isLast }: { meal: Meal; isFirst: boolean; isLa
         onValueChange={(visible) => setMealHidden(meal.id, !visible)}
         accessibilityLabel={`Mostrar ${meal.name}`}
         trackColor={{ true: colors.primary, false: colors.line }}
-        thumbColor={colors.fg}
+        thumbColor="#FFFFFF"
         ios_backgroundColor={colors.line}
       />
       <OrderButton
