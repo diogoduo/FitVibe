@@ -465,10 +465,18 @@ passaram no PC.
   esqueletos no lugar dos carregamentos e cartões com ícone. As telas entram deslizando.
 - **Hoje**: "Bom dia, Diogo", atalhos (+250 ml de água, refeição, peso, treino) e anéis estilo
   Apple Watch de calorias, proteína e água (`ActivityRings`, react-native-svg + Reanimated).
-- **Treino**: ✓ da série com mola e vibração; recorde batido solta confete e um troféu no meio da
-  tela (`CelebrationOverlay`).
-- **Dieta e peso**: deslize para a esquerda para tirar um alimento ou excluir uma pesagem; refeições
-  com ícone; água com vibração de "deu certo" ao bater a meta.
+- **Treino**: cartão "Treinar agora" no topo da aba, com o treino de hoje (▶ Começar treino) e os
+  outros da semana (dá para treinar num dia de descanso); ✓ da série com mola e vibração; recorde
+  batido solta confete e um troféu no meio da tela (`CelebrationOverlay`).
+- **Dieta e peso**: deslize para a esquerda e solte para tirar um alimento ou excluir uma pesagem
+  na hora, com "Desfazer" embaixo da tela por alguns segundos; refeições com ícone; água com
+  vibração de "deu certo" ao bater a meta.
+- **Tema claro/escuro**: um mecanismo só. As duas paletas são variáveis CSS no
+  `tailwind.config.js` (clara em `:root`, escura em `prefers-color-scheme: dark`) e o app força
+  o modo com `Appearance.setColorScheme`, que o NativeWind, os componentes nativos e
+  `useColors()` seguem. Componentes do Reanimated não recebem `className` (o NativeWind
+  congelaria o estilo animado): o `PressableScale` anima um envoltório e o `Pressable` de dentro
+  leva as classes.
 - **Feed**: duplo toque na foto ou no conteúdo para curtir (coração grande), coração que "pula",
   selo do tipo do post e da notificação.
 - **Tutorial**: carrossel de 6 telas com uma demonstração animada em cada (aparece uma vez depois
