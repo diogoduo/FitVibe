@@ -101,7 +101,13 @@ describe('fotos dos dados para os posts', () => {
     expect(snapshot.exercises).toEqual([
       { name: expect.any(String), sets: Array(sets).fill('25 × 8') },
     ]);
-    expect(snapshot.records).toEqual([]);
+    // A referência do supino é 25 × 6: 25 × 8 já é recorde no 1º treino.
+    expect(snapshot.records).toEqual([
+      {
+        exercise: snapshot.exercises[0].name,
+        kinds: ['Recorde de força (e1RM)', 'Mais repetições com essa carga'],
+      },
+    ]);
   });
 
   it('metas: as que valem hoje', () => {

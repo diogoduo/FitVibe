@@ -109,16 +109,20 @@ describe('começar o treino de segunda', () => {
 });
 
 describe('progressão e recordes entre treinos', () => {
-  it('a série que bateu o topo sobe a carga; recorde só a partir do 2º treino', () => {
+  it('a série que bateu o topo sobe a carga; recorde conta a referência e os treinos', () => {
     const first = startWorkout(session(1).id);
     const supino = entries(first)[0];
-    // 1º treino: sem histórico, nada é recorde (a referência não conta)
+    // 1º treino: compara com a referência (25 × 6 / 25 × 4). 25 × 8 passa dela; 25 × 6 não
+    // passa do 25 × 8 de minutos antes.
     expect(
       doWorkingSets(supino.id, [
         [25, 8],
         [25, 6],
       ]),
-    ).toEqual([[], []]);
+    ).toEqual([['e1rm', 'reps'], []]);
+    expect(workoutRecords(getActiveWorkout()!, entries(first))).toEqual([
+      { exerciseId: supino.exerciseId, kinds: ['e1rm', 'reps'] },
+    ]);
     finishWorkout(first);
     mockDb
       .update(workouts)

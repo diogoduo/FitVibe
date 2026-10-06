@@ -88,6 +88,30 @@ export function exerciseHistory(
 
 const toDone = (set: WorkoutSet): DoneSet => ({ load: set.load, reps: set.reps, rir: set.rir });
 
+/**
+ * Com o que uma série compete para ser recorde: os treinos feitos no app e as séries de
+ * referência do exercício (o que a pessoa fazia antes do app; sem RIR, conta como até a falha).
+ * Assim o 1º treino também comemora quando passa da planilha.
+ */
+function recordBaseline(
+  exerciseId: string,
+  options: { before?: Date; excludeWorkoutId?: string },
+  executor: DbExecutor,
+): DoneSet[] {
+  const exercise = executor
+    .select({ referenceSets: exercises.referenceSets })
+    .from(exercises)
+    .where(eq(exercises.id, exerciseId))
+    .get();
+  const reference = (exercise?.referenceSets ?? []).map(
+    (set): DoneSet => ({ load: set.load, reps: set.reps, rir: null }),
+  );
+  const history = exerciseHistory(exerciseId, options, executor)
+    .flatMap((item) => item.sets)
+    .map(toDone);
+  return [...reference, ...history];
+}
+
 function prescriptionOf(source: Prescription): Prescription {
   return {
     setsCount: source.setsCount,
@@ -307,9 +331,7 @@ export function completeSet(setId: string, values: SetValues): RecordKind[] {
       .get();
     if (!entry || set.kind !== 'working' || entry.durationMinSec != null) return [];
 
-    const history = exerciseHistory(entry.exerciseId, { excludeWorkoutId: entry.workoutId }, tx)
-      .flatMap((item) => item.sets)
-      .map(toDone);
+    const history = recordBaseline(entry.exerciseId, { excludeWorkoutId: entry.workoutId }, tx);
     if (history.length === 0) return [];
     const earlierToday = entrySets(entry.id, tx)
       .filter((item) => item.kind === 'working' && item.completedAt && item.id !== setId)
@@ -419,9 +441,7 @@ export function workoutRecords(workout: Workout, entries: readonly WorkoutExerci
   const result: { exerciseId: string; kinds: RecordKind[] }[] = [];
   for (const entry of entries) {
     if (entry.skipped || entry.durationMinSec != null) continue;
-    const history = exerciseHistory(entry.exerciseId, { before: workout.startedAt })
-      .flatMap((item) => item.sets)
-      .map(toDone);
+    const history = recordBaseline(entry.exerciseId, { before: workout.startedAt }, db);
     if (history.length === 0) continue;
     const kinds = new Set<RecordKind>();
     for (const set of entrySets(entry.id, db)) {
