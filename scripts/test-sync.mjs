@@ -4,6 +4,7 @@
  *   node scripts/test-sync.mjs           Supabase local: Docker ligado e `npm run db:migrate`
  *                                        aplicado; a chave publishable vem do próprio contêiner.
  *   node scripts/test-sync.mjs --cloud   o Supabase do .env.local (EXPO_PUBLIC_SUPABASE_URL/KEY).
+ *   ... --only assistant                 só os arquivos de integração com esse trecho no nome.
  *
  * Os testes criam contas temporárias e as excluem no fim.
  */
@@ -35,11 +36,16 @@ function localTarget() {
 }
 
 const { url, key } = process.argv.includes('--cloud') ? cloudTarget() : localTarget();
+const onlyIndex = process.argv.indexOf('--only');
+const pattern =
+  onlyIndex >= 0
+    ? String.raw`${process.argv[onlyIndex + 1]}[^/\\]*\.integration\.test\.ts$`
+    : String.raw`\.integration\.test\.ts$`;
 console.log(`Testes de integração contra ${url}\n`);
 
 const result = spawnSync(
   process.execPath,
-  [path.join(root, 'node_modules', 'jest', 'bin', 'jest.js'), String.raw`\.integration\.test\.ts$`],
+  [path.join(root, 'node_modules', 'jest', 'bin', 'jest.js'), pattern],
   {
     cwd: root,
     stdio: 'inherit',

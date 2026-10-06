@@ -6,9 +6,11 @@ import { weightEntries } from '@/db/schema';
 export type WeightEntryInput = { measuredAt: Date; weightKg: number; note: string | null };
 
 export function addWeightEntry(input: WeightEntryInput) {
+  const id = newId();
   db.insert(weightEntries)
-    .values({ id: newId(), ...input })
+    .values({ id, ...input })
     .run();
+  return id;
 }
 
 export function updateWeightEntry(id: string, input: WeightEntryInput) {

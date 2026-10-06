@@ -252,6 +252,19 @@ function entrySets(entryId: string, executor: DbExecutor) {
     .all();
 }
 
+/**
+ * A próxima série válida ainda não feita do exercício (para marcar pela voz). Se todas já
+ * foram feitas, cria mais uma, copiando a última.
+ */
+export function nextOpenWorkingSet(entryId: string): { set: WorkoutSet; added: boolean } {
+  const open = () =>
+    entrySets(entryId, db).find((set) => set.kind === 'working' && !set.completedAt);
+  const existing = open();
+  if (existing) return { set: existing, added: false };
+  addSet(entryId);
+  return { set: open()!, added: true };
+}
+
 function getExerciseOrThrow(id: string, executor: DbExecutor) {
   const exercise = executor.select().from(exercises).where(eq(exercises.id, id)).get();
   if (!exercise) throw new Error('Exercício não encontrado.');
@@ -312,8 +325,8 @@ export function updateSet(setId: string, values: SetValues) {
 }
 
 /**
- * Conclui a série e diz que recordes ela bateu. Compara com os treinos terminados e com as
- * séries já feitas hoje; na primeira vez no exercício não há recorde.
+ * Conclui a série e diz que recordes ela bateu. Compara com a referência do exercício, os
+ * treinos terminados e as séries já feitas hoje; sem nada disso não há recorde.
  */
 export function completeSet(setId: string, values: SetValues): RecordKind[] {
   return db.transaction((tx) => {

@@ -9,9 +9,11 @@ import type { MeasurementValues } from './measurement-form';
 export type MeasurementInput = MeasurementValues & { measuredOn: DayKey; note: string | null };
 
 export function addMeasurement(input: MeasurementInput) {
+  const id = newId();
   db.insert(bodyMeasurements)
-    .values({ id: newId(), ...input })
+    .values({ id, ...input })
     .run();
+  return id;
 }
 
 export function updateMeasurement(id: string, input: MeasurementInput) {

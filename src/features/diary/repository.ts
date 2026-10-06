@@ -70,11 +70,12 @@ export function moveMeal(id: string, direction: -1 | 1) {
   });
 }
 
-/** Registra um alimento comido, com uma cópia do nome e dos valores por 100 g. */
+/** Registra um alimento comido, com uma cópia do nome e dos valores por 100 g. Devolve o id. */
 export function addEntry(input: { day: DayKey; mealId: string; food: AnyFood; grams: number }) {
+  const id = newId();
   db.insert(diaryEntries)
     .values({
-      id: newId(),
+      id,
       day: input.day,
       mealId: input.mealId,
       foodKey: input.food.key,
@@ -87,6 +88,7 @@ export function addEntry(input: { day: DayKey; mealId: string; food: AnyFood; gr
       ...input.food.per100,
     })
     .run();
+  return id;
 }
 
 export function updateEntryGrams(id: string, grams: number) {
@@ -179,7 +181,13 @@ export function deleteSavedMeal(id: string) {
 }
 
 export function addWater(day: DayKey, ml: number) {
-  db.insert(waterLogs).values({ id: newId(), day, ml }).run();
+  const id = newId();
+  db.insert(waterLogs).values({ id, day, ml }).run();
+  return id;
+}
+
+export function deleteWaterLog(id: string) {
+  db.update(waterLogs).set({ deletedAt: new Date() }).where(eq(waterLogs.id, id)).run();
 }
 
 /** Desfaz o último registro de água do dia. */
