@@ -7,9 +7,10 @@ const SPRING = { damping: 18, stiffness: 320, mass: 0.6 };
 
 /**
  * Classes que posicionam o botão dentro do pai: vão só para o envoltório animado (que não passa
- * pelo NativeWind; assim o estilo animado do Reanimated não é "congelado"). Não podem ir também
- * para o Pressable de dentro: com `flex-1` (base 0%) numa coluna sem altura, ele às vezes
- * encolhia até sobrar só o padding quando a tela era refeita (ex.: ao trocar o tema).
+ * pelo NativeWind; assim o estilo animado do Reanimated não é "congelado"). O Pressable de dentro
+ * não recebe nada de tamanho: com `flex-1` (base 0%) numa coluna sem altura ele encolhia até o
+ * padding ao refazer a tela (trocar o tema), e com `flexGrow` crescia até o fim de listas
+ * roláveis (o "Entendi" da dica ocupou o Feed inteiro).
  */
 const LAYOUT: Record<string, ViewStyle> = {
   'flex-1': { flex: 1 },
@@ -17,9 +18,6 @@ const LAYOUT: Record<string, ViewStyle> = {
   'self-center': { alignSelf: 'center' },
   'self-end': { alignSelf: 'flex-end' },
 };
-
-/** O de dentro ocupa a altura do envoltório (botões lado a lado ficam da mesma altura). */
-const FILL: ViewStyle = { flexGrow: 1 };
 
 type PressableScaleProps = Omit<PressableProps, 'style'> & {
   className?: string;
@@ -50,7 +48,6 @@ export function PressableScale({
       <Pressable
         {...props}
         className={inner}
-        style={layout.length ? FILL : undefined}
         onPressIn={(event) => {
           scale.set(withSpring(scaleTo, SPRING));
           onPressIn?.(event);
