@@ -10,6 +10,7 @@ import { createPlanFromTemplate, PLAN_TEMPLATES } from '@/features/plan/template
 import { WeekCard } from '@/features/plan/week-card';
 import { TipCard } from '@/features/tutorial/tip-card';
 import { ActiveWorkoutCard } from '@/features/workout/active-workout-card';
+import { StartWorkoutCard } from '@/features/workout/start-workout-card';
 
 export default function WorkoutScreen() {
   const { plan, loaded } = useActivePlan();
@@ -29,6 +30,7 @@ export default function WorkoutScreen() {
     <Screen title="Treino" subtitle={plan?.name}>
       <TipCard id="treino" />
       <ActiveWorkoutCard />
+      {plan ? <StartWorkoutCard plan={plan} /> : null}
       {plan ? (
         <>
           <WeekCard plan={plan} />
