@@ -2,7 +2,14 @@
   "expo": {
     "name": "FitVibe",
     "slug": "duo-gym-diet",
+    "owner": "duodiogo",
     "version": "1.0.0",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/cbad6eb8-cb13-433c-ae39-844fd1f0abc2"
+    },
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "fitvibe",
@@ -64,6 +71,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "cbad6eb8-cb13-433c-ae39-844fd1f0abc2"
+      }
     }
   }
 }

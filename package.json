@@ -34,6 +34,7 @@
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.3",
     "expo-system-ui": "~57.0.4",
+    "expo-updates": "~57.0.24",
     "expo-video": "~57.0.5",
     "expo-web-browser": "~57.0.3",
     "nativewind": "^4.2.7",
@@ -84,7 +85,8 @@
     "test:sync": "node scripts/test-sync.mjs",
     "test:sync:cloud": "node scripts/test-sync.mjs --cloud",
     "test:realtime": "node scripts/test-realtime.mjs",
-    "test:assistente": "node scripts/test-sync.mjs --cloud --only assistant"
+    "test:assistente": "node scripts/test-sync.mjs --cloud --only assistant",
+    "publicar": "node scripts/publicar.mjs"
   },
   "private": true,
   "jest": {

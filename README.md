@@ -529,3 +529,28 @@ explica na linha, para as kcal ficarem certas.
 
 ⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os 4 cenários contra o Gemini
 (`npm run test:assistente`) e o bundle de iOS passaram no PC.
+
+## Usar no dia a dia (publicado, sem o PC)
+
+O app fica publicado no **EAS Update** (grátis) e abre pelo **Expo Go**, sem o `npm start` e
+sem estar no mesmo Wi-Fi. Projeto `@duodiogo/duo-gym-diet` no expo.dev, canal `production`,
+versão de execução `exposdk:57.0.0` (`runtimeVersion.policy = sdkVersion` no `app.json`: é o que
+o Expo Go aceita).
+
+- **Abrir no iPhone**: Expo Go logado na conta **duodiogo** (o Expo Go só abre projetos da
+  própria conta) → abrir o link
+  `exp://u.expo.dev/cbad6eb8-cb13-433c-ae39-844fd1f0abc2?channel-name=production&runtime-version=exposdk:57.0.0`
+  (no Safari ou pela câmera, num QR code). Depois ele fica em "Recently opened".
+- **Primeira vez**: a versão publicada guarda os dados num espaço próprio do Expo Go
+  (`@duodiogo/duo-gym-diet`), separado da versão do PC. No cadastro, tocar em **"Já usa o app?
+  Entrar na conta"**: o que está na nuvem desce. Não vão junto (ficam só no celular): fotos de
+  progresso, fotos e vídeos da galeria nos exercícios, tema, lembretes, tutorial visto e posts
+  ainda na fila. Antes, na versão do PC: Ajustes → **Sincronizar agora**.
+- **Publicar uma versão nova**: commit e `npm run publicar` (recusa se houver alteração sem
+  commit; usa a mensagem do último commit). Os celulares baixam ao abrir o app (às vezes na
+  segunda abertura).
+- **Variáveis**: `EXPO_PUBLIC_SUPABASE_URL` e `EXPO_PUBLIC_SUPABASE_KEY` (publishable) ficam no
+  ambiente `production` do EAS (`npx eas-cli@latest env:list production`); a chave do Gemini fica
+  só no Supabase.
+- **Limite do Expo Go**: ele roda um SDK por vez. Quando o Expo Go da App Store passar para o
+  SDK 58, o FitVibe (SDK 57) para de abrir até o projeto ser atualizado e publicado de novo.
