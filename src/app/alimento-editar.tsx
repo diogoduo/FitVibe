@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { ChoiceChips } from '@/components/ui/choice-chips';
 import { FormScroll } from '@/components/ui/form-scroll';
 import { TextField } from '@/components/ui/text-field';
+import { pickFood } from '@/features/assistant/store';
 import { rowKey } from '@/features/foods/food';
 import {
   EMPTY_FOOD_FORM,
@@ -39,6 +40,8 @@ type Params = {
   /** Para seguir direto para a quantidade depois de salvar. */
   refeicao?: string;
   dia?: string;
+  /** Item do assistente que espera este alimento (volta para a conferência). */
+  assistente?: string;
 };
 
 const NOTICES = {
@@ -92,7 +95,10 @@ export default function EditFoodScreen() {
     }
     const key = createFood(food);
     if (portionSize) addPortion(key, 'Porção do rótulo', portionSize);
-    if (params.refeicao && params.dia) {
+    if (params.assistente) {
+      pickFood(params.assistente, key);
+      router.back();
+    } else if (params.refeicao && params.dia) {
       router.replace({
         pathname: '/alimento',
         params: { chave: key, refeicao: params.refeicao, dia: params.dia },

@@ -6,23 +6,35 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
+import type { FoodKey } from '@/db/schema';
+import { pickFood } from '@/features/assistant/store';
 import { lookupBarcode } from '@/features/foods/open-food-facts';
 import { findFoodByBarcode, saveOffProduct } from '@/features/foods/repository';
 import { rowKey } from '@/features/foods/food';
 import { toInputText } from '@/lib/numbers';
 
-type Params = { refeicao: string; dia: string };
+/** refeicao + dia: registrar no diário; assistente: devolver o alimento para a conferência. */
+type Params = { refeicao?: string; dia?: string; assistente?: string };
 
 /**
  * Lê o código de barras e acha o produto: primeiro no celular (já lido ou cadastrado antes),
  * depois no Open Food Facts. Sem resultado ou sem internet, abre o cadastro com o código.
  */
 export default function ScannerScreen() {
-  const { refeicao, dia } = useLocalSearchParams<Params>();
+  const { refeicao, dia, assistente } = useLocalSearchParams<Params>();
   const insets = useSafeAreaInsets();
   const [permission, requestPermission] = useCameraPermissions();
   const [status, setStatus] = useState<string | null>(null);
   const handled = useRef(false);
+
+  const found = (chave: FoodKey) => {
+    if (assistente) {
+      pickFood(assistente, chave);
+      router.back();
+      return;
+    }
+    router.replace({ pathname: '/alimento', params: { chave, refeicao, dia } });
+  };
 
   const onScanned = async ({ data }: BarcodeScanningResult) => {
     if (handled.current) return;
@@ -31,15 +43,14 @@ export default function ScannerScreen() {
 
     const local = findFoodByBarcode(barcode);
     if (local) {
-      router.replace({ pathname: '/alimento', params: { chave: rowKey(local.id), refeicao, dia } });
+      found(rowKey(local.id));
       return;
     }
 
     setStatus(`Procurando ${barcode}…`);
     const result = await lookupBarcode(barcode);
     if (result.status === 'found') {
-      const chave = saveOffProduct(result.product);
-      router.replace({ pathname: '/alimento', params: { chave, refeicao, dia } });
+      found(saveOffProduct(result.product));
       return;
     }
     const prefill =
@@ -61,6 +72,7 @@ export default function ScannerScreen() {
         motivo: result.status === 'offline' ? 'offline' : result.status,
         refeicao,
         dia,
+        assistente,
         ...prefill,
       },
     });

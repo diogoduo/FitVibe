@@ -51,7 +51,15 @@
           "microphonePermission": false
         }
       ],
-      "expo-sharing"
+      "expo-sharing",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "O FitVibe usa o microfone para você registrar comida, água e treino falando. O áudio vai para o assistente (Gemini, do Google) entender o que foi dito e não fica guardado no celular.",
+          "recordAudioAndroid": true
+        }
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,

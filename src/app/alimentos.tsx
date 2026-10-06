@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { FilterChips } from '@/components/ui/filter-chips';
 import { TextField } from '@/components/ui/text-field';
 import type { SavedMeal } from '@/db/schema';
+import { pickFood } from '@/features/assistant/store';
 import {
   useDiaryDay,
   useFavoriteKeys,
@@ -27,13 +28,14 @@ const TABS: { value: Exclude<FoodTab, 'all'>; label: string }[] = [
   { value: 'mine', label: 'Meus e lidos' },
 ];
 
-type Params = { refeicao: string; dia: string };
+/** refeicao + dia: registrar no diário; assistente (+ busca): escolher para a conferência. */
+type Params = { refeicao?: string; dia?: string; assistente?: string; busca?: string };
 
-/** Escolher o alimento para uma refeição de um dia. */
+/** Escolher o alimento para uma refeição de um dia (ou para um item do assistente). */
 export default function FoodSearchScreen() {
-  const { refeicao, dia } = useLocalSearchParams<Params>();
+  const { refeicao = '', dia = '', assistente, busca } = useLocalSearchParams<Params>();
   const insets = useSafeAreaInsets();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(busca ?? '');
   const [tab, setTab] = useState<Exclude<FoodTab, 'all'> | null>(null);
   const rows = useFoodRows();
   const favorites = useFavoriteKeys();
@@ -46,10 +48,18 @@ export default function FoodSearchScreen() {
   const meal = meals.find((item) => item.id === refeicao);
   const inMeal = dayEntries.filter((entry) => entry.mealId === refeicao);
   const results = searchFoods({ query, tab: tab ?? 'all', rows, favorites, recent });
-  const showSaved = !query.trim() && tab == null && savedMeals.length > 0;
+  const showSaved = !assistente && !query.trim() && tab == null && savedMeals.length > 0;
 
-  const open = (food: AnyFood) =>
+  const open = (food: AnyFood) => {
+    if (assistente) {
+      pickFood(assistente, food.key);
+      router.back();
+      return;
+    }
     router.push({ pathname: '/alimento', params: { chave: food.key, refeicao, dia } });
+  };
+  // No modo do assistente, o leitor e o cadastro devolvem o alimento para a conferência.
+  const target = assistente ? { assistente } : { refeicao, dia };
 
   const confirmDeleteSaved = (saved: SavedMeal) =>
     Alert.alert(`Apagar "${saved.name}"?`, 'Só a refeição salva; o diário não muda.', [
@@ -59,7 +69,9 @@ export default function FoodSearchScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <Stack.Screen options={{ title: meal?.name ?? 'Adicionar alimento' }} />
+      <Stack.Screen
+        options={{ title: assistente ? 'Escolher alimento' : (meal?.name ?? 'Adicionar alimento') }}
+      />
       <FlatList
         className="flex-1"
         contentContainerClassName="px-4 pb-6"
@@ -83,14 +95,17 @@ export default function FoodSearchScreen() {
               <Button
                 label="Ler código"
                 variant="secondary"
-                onPress={() => router.push({ pathname: '/scanner', params: { refeicao, dia } })}
+                onPress={() => router.push({ pathname: '/scanner', params: target })}
                 grow
               />
               <Button
                 label="Criar alimento"
                 variant="secondary"
                 onPress={() =>
-                  router.push({ pathname: '/alimento-editar', params: { refeicao, dia } })
+                  router.push({
+                    pathname: '/alimento-editar',
+                    params: assistente ? { assistente, nome: query.trim() } : target,
+                  })
                 }
                 grow
               />

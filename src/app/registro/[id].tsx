@@ -1,8 +1,10 @@
 import { useKeepAwake } from 'expo-keep-awake';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { Alert, ScrollView, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
+import { Icon } from '@/components/ui/icon';
+import { openAssistant } from '@/features/assistant/assistant-card';
 import { useAllExercises } from '@/features/exercises/queries';
 import { formatWorkoutDuration } from '@/features/workout/format';
 import { useWorkout, useWorkoutEntries, useWorkoutSets } from '@/features/workout/queries';
@@ -12,6 +14,7 @@ import { RestTimerBar } from '@/features/workout/rest-timer-bar';
 import { WorkoutExerciseCard } from '@/features/workout/workout-exercise-card';
 import { formatDayLabel, formatTime, toDayKey } from '@/lib/dates';
 import { useNow } from '@/lib/use-now';
+import { useColors } from '@/theme/theme';
 
 /**
  * O treino em andamento (registro das séries com o timer de descanso) ou, depois de
@@ -23,6 +26,7 @@ export default function WorkoutLogScreen() {
   const entries = useWorkoutEntries(id);
   const sets = useWorkoutSets(entries.map((entry) => entry.id));
   const exercises = useAllExercises();
+  const colors = useColors();
 
   if (!workout || workout.deletedAt) {
     return loaded ? (
@@ -71,7 +75,25 @@ export default function WorkoutLogScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <Stack.Screen options={{ title: workout.name }} />
+      <Stack.Screen
+        options={{
+          title: workout.name,
+          // Marcar séries falando ("supino 30 quilos, 8").
+          headerRight: active
+            ? () => (
+                <Pressable
+                  onPress={() => openAssistant('voz')}
+                  accessibilityRole="button"
+                  accessibilityLabel="Marcar séries falando"
+                  hitSlop={10}
+                  className="px-1.5 active:opacity-60"
+                >
+                  <Icon name="mic" size={20} color={colors.primary} />
+                </Pressable>
+              )
+            : undefined,
+        }}
+      />
       {active ? <KeepScreenOn /> : null}
       <ScrollView
         className="flex-1"

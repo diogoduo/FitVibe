@@ -9,6 +9,8 @@
     "drizzle-orm": "^0.45.3",
     "eslint-config-expo": "~57.0.2",
     "expo": "~57.0.26",
+    "expo-asset": "~57.0.18",
+    "expo-audio": "~57.0.5",
     "expo-camera": "~57.0.6",
     "expo-constants": "~57.0.20",
     "expo-crypto": "~57.0.3",

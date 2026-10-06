@@ -145,6 +145,7 @@ function AppStack() {
           <Stack.Screen name="alimento-editar" options={formSheet} />
           <Stack.Screen name="scanner" options={{ ...formSheet, title: 'Ler código' }} />
           <Stack.Screen name="agua" options={formSheet} />
+          <Stack.Screen name="assistente" options={{ ...formSheet, title: 'Assistente' }} />
           <Stack.Screen name="refeicao-salvar" options={formSheet} />
           <Stack.Screen name="refeicoes" options={{ ...pushed, title: 'Refeições do dia' }} />
           <Stack.Screen

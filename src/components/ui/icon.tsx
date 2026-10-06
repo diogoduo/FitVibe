@@ -56,6 +56,13 @@ const ICONS = {
   carrot: { ios: 'carrot.fill', android: 'nutrition' },
   copy: { ios: 'doc.on.doc', android: 'content_copy' },
   bookmark: { ios: 'bookmark.fill', android: 'bookmark' },
+  mic: { ios: 'mic.fill', android: 'mic' },
+  stop: { ios: 'stop.fill', android: 'stop' },
+  waveform: { ios: 'waveform', android: 'graphic_eq' },
+  keyboard: { ios: 'keyboard', android: 'keyboard' },
+  send: { ios: 'arrow.up.circle.fill', android: 'send' },
+  pencil: { ios: 'pencil', android: 'edit' },
+  question: { ios: 'questionmark.circle.fill', android: 'help' },
 } satisfies Record<string, IconSpec>;
 
 export type IconName = keyof typeof ICONS;

@@ -109,6 +109,13 @@ export function buildDraft(
   const items: DraftItem[] = [];
   let counter = 0;
   const nextId = () => `i${++counter}`;
+  // Numa resposta, a IA manda a lista inteira de novo: o alimento que a pessoa já escolheu
+  // (código de barras, macros) continua valendo para o mesmo nome.
+  const picked = new Map(
+    (previous?.items ?? []).flatMap((item) =>
+      item.kind === 'food' && item.food ? [[normalizeForSearch(item.name), item.food]] : [],
+    ),
+  );
 
   for (const item of result.items) {
     const day = addDays(today, item.day);
@@ -116,7 +123,9 @@ export function buildDraft(
     switch (item.kind) {
       case 'food': {
         const mealId = findMeal(context.meals, item.meal) ?? fallbackMeal;
-        const food = item.food ? context.catalog.resolve(item.food) : null;
+        const food =
+          (item.food ? context.catalog.resolve(item.food) : null) ??
+          (item.name ? (picked.get(normalizeForSearch(item.name)) ?? null) : null);
         if (!mealId || (!food && !item.name)) {
           questions.push(notUnderstood(item));
           break;

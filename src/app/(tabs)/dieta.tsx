@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
+import { HeaderButton } from '@/components/ui/header-button';
 import { Screen } from '@/components/ui/screen';
+import { openAssistant } from '@/features/assistant/assistant-card';
 import { useDiaryDay, useMeals } from '@/features/diary/queries';
 import { ensureDefaultMeals } from '@/features/diary/repository';
 import { MealCard } from '@/features/diary/meal-card';
@@ -32,7 +34,12 @@ export default function DietScreen() {
   );
 
   return (
-    <Screen title="Dieta">
+    <Screen
+      title="Dieta"
+      action={
+        <HeaderButton icon="mic" label="Registrar falando" onPress={() => openAssistant('voz')} />
+      }
+    >
       <TipCard id="dieta" />
       <View className="flex-row items-center justify-between">
         <DayArrow label="‹" hint="Dia anterior" onPress={() => setDay(addDays(day, -1))} />
