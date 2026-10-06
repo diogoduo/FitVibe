@@ -24,15 +24,16 @@ Regras gerais:
 - Um item por alimento, bebida ou registro. Nunca invente nada que a pessoa não disse.
 - Campos que não se aplicam ao tipo do item: null (options = [], estimated = false).
 - day: 0 = hoje, -1 = ontem ("ontem jantei..."). Padrão 0.
-- question: só quando algo importante ficou incerto (qual alimento, quanto); pergunta curta, em português. Senão null.
+- question: só quando a dúvida muda bastante as calorias (ex.: "um prato" de quê, frito ou grelhado, quanto de um item caro em calorias); pergunta curta, em português. Variedade parecida (banana prata × nanica, feijão carioca × preto, arroz tipo 1 × tipo 2) NÃO é pergunta: escolha a mais comum e ponha as outras em options. Senão null.
 - questions: dúvidas gerais que não cabem num item (ex.: um trecho que você não entendeu). Senão [].
 
 Alimentos e bebidas (kind "food"):
 - meal: o nome EXATO de uma refeição da lista quando a pessoa disser ("almocei" = Almoço, "no café da manhã" = Café da manhã, "jantei" = Jantar, "antes do treino" = Pré-treino, "lanchei" = Lanche da tarde). Se ela não disser, null.
 - food: o código (ex.: t3, u2) do alimento do catálogo que é o MESMO alimento. Prefira os marcados com * (a pessoa já usa). Respeite o preparo dito (grelhado, frito, cozido, cru). Sem preparo dito, arroz, feijão, macarrão, carnes e ovos são os prontos para comer (cozido/grelhado), nunca crus. "Bife" sem corte dito: um bife bovino grelhado comum (ex.: contra-filé grelhado). Marca ou produto específico que não está no catálogo (ex.: Coca-Cola Zero não é "Refrigerante, tipo cola"): food = null.
+- Só cru no catálogo, mas a pessoa comeu pronto (ex.: macarrão, que só existe cru): use o item cru e converta a quantidade para o peso CRU equivalente (macarrão cozido = 2,5 × o cru: 250 g cozido = 100 g cru; prato de macarrão ≈ 220 g cozido ≈ 90 g cru). Vale também para o peso dito ("250 g de macarrão" é o peso pronto → 100 g cru), a menos que a pessoa diga que pesou cru, estimated = true, e explique em question: "Registrado como 90 g de macarrão cru (≈ 220 g cozido)."
 - options: até 3 códigos de alternativas próximas quando houver dúvida real entre elas (ex.: feijão carioca × preto). Senão [].
 - name: nome curto e claro do que a pessoa quis dizer ("Coca-Cola Zero", "Bife grelhado").
-- amount: quantidade TOTAL em g, ou em ml para itens marcados (ml) e bebidas. "200 de arroz" = 200 g; "meio quilo" = 500. Unidades (2 bifes, 1 lata, 1 copo, 1 colher, 1 fatia, 1 prato, 1 unidade): use a porção entre colchetes do item, se houver; senão uma porção típica brasileira (bife ≈ 100 g, lata = 350 ml, copo = 200 ml, colher de sopa ≈ 25 g, fatia de pão de forma ≈ 25 g, ovo ≈ 50 g, banana ≈ 90 g, prato de arroz ≈ 150 g, concha de feijão ≈ 100 g) e marque estimated = true. Sem quantidade dita: uma porção comum, estimated = true.
+- amount: quantidade TOTAL em g, ou em ml para itens marcados (ml) e bebidas. "200 de arroz" = 200 g; "meio quilo" = 500. Unidades (2 bifes, 1 lata, 1 copo, 1 colher, 1 fatia, 1 prato, 1 unidade): use a porção entre colchetes do item, se houver; senão uma porção típica brasileira (bife ≈ 100 g, lata = 350 ml, copo = 200 ml, colher de sopa ≈ 25 g, fatia de pão de forma ≈ 25 g, ovo ≈ 50 g, banana ≈ 90 g, prato de arroz ≈ 150 g, concha de feijão ≈ 100 g) e marque estimated = true (sempre que a quantidade vier de unidades). Sem quantidade dita: uma porção comum, estimated = true.
 
 Água (kind "water"): só água pura. amount em ml ("2 copos" = 400, "uma garrafinha" = 500; estimated = true quando estimar). Suco, café, refrigerante etc. são "food".
 
@@ -94,7 +95,8 @@ export function buildInput(input: {
       text:
         `Antes a pessoa disse: "${input.previous.transcript}"${asked}\n` +
         'Agora ela completa ou corrige (a seguir). Devolva a lista COMPLETA e atualizada, juntando ' +
-        'o que ela disse antes com o que diz agora; no transcript, só a fala nova.',
+        'o que ela disse antes com o que diz agora, com as mesmas regras (inclusive a conversão ' +
+        'para o peso cru); no transcript, só a fala nova.',
     });
   }
   if (input.audio) {

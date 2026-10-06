@@ -520,8 +520,12 @@ passaram no PC.
 2. Supabase → **Edge Functions → Secrets** → nome `GEMINI_API_KEY`, valor = a chave → Save.
 3. Supabase → **Edge Functions → Deploy a new function → Via Editor** → apagar o exemplo, colar
    o conteúdo de `supabase/functions/assistente/index.ts`, dar o nome `assistente` → **Deploy function**.
-4. `npm run test:assistente` manda frases reais (o exemplo do almoço; peso, medida e refeição
-   pela hora) e confere o que voltou.
+4. `npm run test:assistente` manda frases reais e confere o que voltou: o exemplo do almoço (com a
+   Coca Zero desconhecida), peso + medida + refeição pela hora, responder a uma pergunta
+   ("o macarrão foi 250 gramas") e o treino (começar pelo nome e marcar séries).
 
-⚠️ **Falta validar no iPhone.** TypeScript, lint, testes e o bundle de iOS passaram no PC; o
-teste contra o Gemini roda depois de instalar a função.
+A TACO não tem macarrão cozido: a IA registra o cru com o peso equivalente (cozido = 2,5 × cru) e
+explica na linha, para as kcal ficarem certas.
+
+⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os 4 cenários contra o Gemini
+(`npm run test:assistente`) e o bundle de iOS passaram no PC.
