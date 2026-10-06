@@ -8,10 +8,11 @@ import { useColors } from '@/theme/theme';
 import { dismissTip, useDismissedTips } from './seen';
 
 export const TIPS = {
-  hoje: 'Toque nos anéis para abrir a Dieta. O atalho "+250 ml" soma um copo d\'água na hora.',
+  hoje: 'Toque no microfone e fale o que comeu ("almocei 200 de arroz e 2 bifes"): o assistente registra tudo. Os anéis abrem a Dieta.',
   treino:
     'Toque em "Começar" no treino do dia. Cada série já vem com a carga sugerida: confira, marque ✓ e o descanso começa sozinho.',
-  dieta: 'Deslize um alimento para a esquerda para tirá-lo. As setas no topo mostram outros dias.',
+  dieta:
+    'Deslize um alimento para a esquerda para tirá-lo. As setas mostram outros dias e o microfone no topo registra falando.',
   feed: 'Toque duas vezes numa foto para curtir. O sino mostra quem curtiu, comentou ou te seguiu.',
   perfil: 'Em "Progresso" ficam os gráficos, o gasto real e as fotos. O ⚙️ abre os Ajustes.',
 } as const;

@@ -188,6 +188,80 @@ export function SwipeDemo() {
   );
 }
 
+const VOICE_ITEMS = [
+  { name: 'Arroz, tipo 1, cozido', amount: '200 g' },
+  { name: 'Feijão, carioca, cozido', amount: '100 g' },
+  { name: 'Contra-filé grelhado', amount: '≈ 200 g' },
+  { name: 'Água', amount: '500 ml' },
+];
+
+/** Fala → o que o assistente entendeu (alterna a cada 3,5 s). */
+export function VoiceDemo() {
+  const colors = useColors();
+  const understood = useBlink(3500);
+  const pulse = useSharedValue(0);
+  useEffect(() => {
+    pulse.set(withRepeat(withTiming(1, { duration: 700 }), -1, true));
+  }, [pulse]);
+  const halo = useAnimatedStyle(() => ({
+    transform: [{ scale: 1 + pulse.get() * 0.35 }],
+    opacity: 0.35 - pulse.get() * 0.2,
+  }));
+
+  return (
+    <Frame>
+      <View className="flex-row items-center gap-3">
+        <View className="h-12 w-12 items-center justify-center">
+          {understood ? null : (
+            <Animated.View
+              style={[
+                {
+                  position: 'absolute',
+                  width: 48,
+                  height: 48,
+                  borderRadius: 24,
+                  backgroundColor: colors.danger,
+                },
+                halo,
+              ]}
+            />
+          )}
+          <View
+            className="h-12 w-12 items-center justify-center rounded-full"
+            style={{ backgroundColor: understood ? colors.primary : colors.danger }}
+          >
+            <Icon
+              name={understood ? 'checkCircle' : 'mic'}
+              size={20}
+              color={understood ? colors['on-primary'] : '#FFFFFF'}
+            />
+          </View>
+        </View>
+        <Text className="flex-1 text-sm italic leading-5 text-fg">
+          “Almocei 200 de arroz, 100 de feijão, 2 bifes e bebi 500 de água”
+        </Text>
+      </View>
+      {understood ? (
+        <View className="gap-1.5">
+          {VOICE_ITEMS.map((item, index) => (
+            <Animated.View
+              key={item.name}
+              entering={FadeInUp.duration(250).delay(index * 120)}
+              exiting={FadeOut.duration(150)}
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
+              <Text className="text-sm text-fg">{item.name}</Text>
+              <Text className="text-sm font-semibold text-fg-muted">{item.amount}</Text>
+            </Animated.View>
+          ))}
+        </View>
+      ) : (
+        <Text className="text-sm font-semibold text-danger">Ouvindo…</Text>
+      )}
+    </Frame>
+  );
+}
+
 const SAMPLE_WEIGHTS = [82.4, 82.1, 82.3, 81.8, 81.6, 81.7, 81.2, 81.0, 80.9, 80.6, 80.7, 80.3];
 
 export function ChartDemo() {

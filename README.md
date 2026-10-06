@@ -105,8 +105,9 @@ O Supabase Studio (interface do banco) fica em http://127.0.0.1:54323.
 | 8 | Lembretes de água e refeições, exportação CSV e PDF | ✅ |
 | 9 | Dashboards: e1RM, peso, adesão à dieta, volume semanal por grupo muscular | ⚠️ |
 | 10 | Meta calórica adaptativa, fotos de progresso, tema claro, acabamento | ⚠️ |
+| 11 | Assistente por voz: fale o que comeu, bebeu, pesou, mediu ou treinou (Gemini grátis) | ⚠️ |
 
-Tudo no plano gratuito: Supabase Free e Expo Go, sem conta paga da Apple. Por isso as
+Tudo no plano gratuito: Supabase Free, Gemini (plano grátis) e Expo Go, sem conta paga da Apple. Por isso as
 notificações da Fase 7 aparecem só dentro do app (push com o app fechado exige build próprio e a
 conta de desenvolvedor da Apple).
 
@@ -479,10 +480,48 @@ passaram no PC.
   leva as classes.
 - **Feed**: duplo toque na foto ou no conteúdo para curtir (coração grande), coração que "pula",
   selo do tipo do post e da notificação.
-- **Tutorial**: carrossel de 6 telas com uma demonstração animada em cada (aparece uma vez depois
+- **Tutorial**: carrossel de 7 telas com uma demonstração animada em cada (aparece uma vez depois
   do cadastro ou da atualização; Ajustes → Sobre → "Ver o tutorial de novo") e uma dica curta no
   topo de cada aba, que some com "Entendi". O que já foi visto fica só neste celular.
 - **Testes**: 205 no Jest e 14 de integração.
 
 ⚠️ **Falta validar no iPhone.** TypeScript, lint, testes, os testes de integração, `expo-doctor`
 (21/21) e o bundle de iOS passaram no PC.
+
+## Assistente por voz
+
+- **Onde**: card "Registrar falando" no topo do Hoje (🎤 já começa a ouvir; ⌨️ para digitar),
+  🎤 no topo da Dieta e no treino em andamento.
+- **Como**: você fala (até 1 minuto) ou digita, por exemplo *"almocei 200 de arroz, 100 de
+  feijão, 2 bifes grelhados e uma coquinha zero, e bebi 500 de água"*. O áudio vai para a função
+  `assistente` do Supabase, que chama o Gemini 3.5 Flash-Lite (grátis, aceita áudio, ~500 pedidos
+  por dia para a chave toda). A IA recebe as refeições, as medidas, o treino em andamento, os
+  treinos do plano e o catálogo de alimentos em códigos curtos (TACO + os seus) e devolve uma
+  lista em JSON com formato fixo. Ela escolhe o **código** do alimento; as kcal e os macros saem
+  do banco do app.
+- **Conferir**: a lista aparece por refeição, com as quantidades editáveis (≈ quando estimadas),
+  as dúvidas em amarelo e as opções parecidas para trocar com um toque. Alimento desconhecido:
+  **Ler código** (o leitor de sempre), **Digitar os macros** (o cadastro, já com o nome) ou
+  **Buscar outro**; a escolha volta para a conferência. Dá para responder ou completar falando de
+  novo (a IA devolve a lista inteira atualizada). **Salvar** grava tudo de uma vez e mostra
+  "Desfazer".
+- **Também registra**: água, peso, medidas (uma medição por dia), séries no treino em andamento
+  (a próxima série válida; o recorde comemora) e "vou treinar perna" (botão para começar).
+- **Privacidade**: o aviso aparece na primeira vez. No plano grátis o Google pode usar o que for
+  enviado para melhorar os produtos dele; a função manda `store: false` e o áudio é apagado do
+  celular logo depois do envio. Só quem está logado consegue usar a função.
+- **Código**: `supabase/functions/assistente/index.ts` (a ponte: confere o login, guarda a chave e
+  repassa; as instruções vêm do app, então ela quase nunca muda) e `src/features/assistant`
+  (instruções, catálogo, leitura da resposta, rascunho, gravação e as telas).
+
+### Instalar a função (uma vez, pelo painel)
+
+1. [Google AI Studio](https://aistudio.google.com/apikey) → **Create API key** (grátis, sem cartão).
+2. Supabase → **Edge Functions → Secrets** → nome `GEMINI_API_KEY`, valor = a chave → Save.
+3. Supabase → **Edge Functions → Deploy a new function → Via Editor** → apagar o exemplo, colar
+   o conteúdo de `supabase/functions/assistente/index.ts`, dar o nome `assistente` → **Deploy function**.
+4. `npm run test:assistente` manda frases reais (o exemplo do almoço; peso, medida e refeição
+   pela hora) e confere o que voltou.
+
+⚠️ **Falta validar no iPhone.** TypeScript, lint, testes e o bundle de iOS passaram no PC; o
+teste contra o Gemini roda depois de instalar a função.

@@ -13,6 +13,7 @@ import {
   SetDemo,
   SettingsDemo,
   SwipeDemo,
+  VoiceDemo,
 } from '@/features/tutorial/demos';
 import { markTutorialSeen } from '@/features/tutorial/seen';
 import { haptics } from '@/lib/haptics';
@@ -39,6 +40,12 @@ const SLIDES: Slide[] = [
     title: 'Dieta sem esforço',
     text: 'Busque na tabela TACO ou leia o código de barras. Copie de ontem, salve refeições e deslize um alimento para tirá-lo.',
     Demo: SwipeDemo,
+  },
+  {
+    icon: 'mic',
+    title: 'Fale e pronto',
+    text: 'Toque no microfone do Hoje e diga o que comeu: o assistente separa os alimentos e as quantidades, pergunta o que não souber e você confere antes de salvar. Também marca água, peso, medidas e séries.',
+    Demo: VoiceDemo,
   },
   {
     icon: 'chart',
