@@ -36,6 +36,35 @@ drop trigger if exists sync_before_write on public.activity_logs;
 create trigger sync_before_write before insert or update on public.activity_logs
   for each row execute function public.sync_before_write();
 
+create table if not exists public.activity_sessions (
+  id uuid primary key,
+  created_at timestamptz not null,
+  updated_at timestamptz not null,
+  deleted_at timestamptz,
+  plan_session_id uuid,
+  kind text not null,
+  name text not null,
+  day text not null,
+  started_at timestamptz not null,
+  finished_at timestamptz,
+  wins integer not null,
+  draws integer not null,
+  losses integer not null,
+  goals integer not null,
+  assists integer not null,
+  notes text,
+  user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  server_updated_at timestamptz not null default now()
+);
+create index if not exists activity_sessions_sync_idx on public.activity_sessions (user_id, server_updated_at, id);
+alter table public.activity_sessions enable row level security;
+drop policy if exists "dono" on public.activity_sessions;
+create policy "dono" on public.activity_sessions for all to authenticated
+  using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
+drop trigger if exists sync_before_write on public.activity_sessions;
+create trigger sync_before_write before insert or update on public.activity_sessions
+  for each row execute function public.sync_before_write();
+
 create table if not exists public.body_measurements (
   id uuid primary key,
   created_at timestamptz not null,
@@ -437,6 +466,7 @@ create table if not exists public.workout_exercises (
   warmup text not null,
   rest_sec integer not null,
   progression_top_reps integer,
+  notes text,
   user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
   server_updated_at timestamptz not null default now()
 );
@@ -486,6 +516,7 @@ create table if not exists public.workouts (
   started_at timestamptz not null,
   finished_at timestamptz,
   rest_ends_at timestamptz,
+  notes text,
   user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
   server_updated_at timestamptz not null default now()
 );

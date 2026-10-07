@@ -11,6 +11,7 @@ import {
   deleteTestAccounts,
   hasSyncServer,
   signInTestAccount,
+  SYNC_TEST_URL,
   signUpTestUser,
 } from '@/sync/test-server';
 
@@ -32,7 +33,9 @@ jest.mock('@/db/client', () => ({
   newId: () => `id-${++mockIdCounter}`,
 }));
 
-const suite = hasSyncServer ? describe : describe.skip;
+// A função do Gemini só existe na nuvem: no Supabase local (Docker) este arquivo é pulado.
+const isLocal = /127\.0\.0\.1|localhost/.test(SYNC_TEST_URL ?? '');
+const suite = hasSyncServer && !isLocal ? describe : describe.skip;
 jest.setTimeout(90_000);
 
 let client: SupabaseClient;

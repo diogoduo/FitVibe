@@ -255,6 +255,36 @@ export const planExercises = sqliteTable(
   (t) => [index('plan_exercises_session_id_idx').on(t.sessionId)],
 );
 
+export const ACTIVITY_SESSION_KINDS = ['football', 'other'] as const;
+export type ActivitySessionKind = (typeof ACTIVITY_SESSION_KINDS)[number];
+
+/**
+ * Uma atividade do plano feita com cronômetro (ou registrada depois): o futebol com as partidas,
+ * gols e assistências, ou outra atividade só com a duração. Em andamento enquanto
+ * `finishedAt` é null. A duração entra no gasto calórico do dia.
+ */
+export const activitySessions = sqliteTable(
+  'activity_sessions',
+  {
+    ...syncColumns,
+    /** Atividade do plano de onde veio (null se foi apagada depois). */
+    planSessionId: text('plan_session_id'),
+    kind: text('kind', { enum: ACTIVITY_SESSION_KINDS }).notNull(),
+    name: text('name').notNull(),
+    /** Dia do calendário em que começou. */
+    day: text('day').notNull(),
+    startedAt: integer('started_at', { mode: 'timestamp_ms' }).notNull(),
+    finishedAt: integer('finished_at', { mode: 'timestamp_ms' }),
+    wins: integer('wins').notNull().default(0),
+    draws: integer('draws').notNull().default(0),
+    losses: integer('losses').notNull().default(0),
+    goals: integer('goals').notNull().default(0),
+    assists: integer('assists').notNull().default(0),
+    notes: text('notes'),
+  },
+  (t) => [index('activity_sessions_day_idx').on(t.day)],
+);
+
 /** Atividade marcada como feita num dia (ex.: o futebol de quinta). */
 export const activityLogs = sqliteTable(
   'activity_logs',
@@ -283,6 +313,8 @@ export const workouts = sqliteTable(
     finishedAt: integer('finished_at', { mode: 'timestamp_ms' }),
     /** Fim do descanso em andamento (timer), para sobreviver a fechar o app. */
     restEndsAt: integer('rest_ends_at', { mode: 'timestamp_ms' }),
+    /** Anotação do treino todo ("dormi mal", "academia cheia"). */
+    notes: text('notes'),
   },
   (t) => [index('workouts_started_at_idx').on(t.startedAt)],
 );
@@ -311,6 +343,8 @@ export const workoutExercises = sqliteTable(
     warmup: text('warmup', { enum: WARMUP_TYPES }).notNull(),
     restSec: integer('rest_sec').notNull(),
     progressionTopReps: integer('progression_top_reps'),
+    /** Anotação deste exercício neste treino; aparece na próxima vez ("banco na posição 3"). */
+    notes: text('notes'),
   },
   (t) => [index('workout_exercises_workout_id_idx').on(t.workoutId)],
 );
@@ -551,6 +585,7 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type Workout = typeof workouts.$inferSelect;
 export type WorkoutExercise = typeof workoutExercises.$inferSelect;
 export type WorkoutSet = typeof workoutSets.$inferSelect;
+export type ActivitySession = typeof activitySessions.$inferSelect;
 export type Food = typeof foods.$inferSelect;
 export type FoodPortion = typeof foodPortions.$inferSelect;
 export type Meal = typeof meals.$inferSelect;

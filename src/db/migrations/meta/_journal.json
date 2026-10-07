@@ -78,6 +78,20 @@
       "when": 1791077811928,
       "tag": "0010_fotos_de_progresso",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1791337904178,
+      "tag": "0011_anotacoes_e_atividades",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1791337915311,
+      "tag": "0012_gatilhos_atividades",
+      "breakpoints": true
     }
   ]
 }

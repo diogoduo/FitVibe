@@ -18,6 +18,49 @@ export function syncedTables(schema: Record<string, unknown>): SQLiteTable[] {
     .sort((a, b) => getTableConfig(a).name.localeCompare(getTableConfig(b).name));
 }
 
+/**
+ * Em que migração do celular ficam os gatilhos da fila de cada tabela sincronizada. A 0007 já
+ * rodou nos celulares: ela fica congelada com as tabelas da época, e cada tabela sincronizada
+ * nova ganha os gatilhos na migração em que nasceu (depois do CREATE TABLE dela).
+ */
+export const LOCAL_TRIGGER_FILES = [
+  {
+    file: '0007_gatilhos_sincronizacao.sql',
+    tables: [
+      'activity_logs',
+      'body_measurements',
+      'diary_entries',
+      'exercise_media',
+      'exercises',
+      'food_favorites',
+      'food_portions',
+      'foods',
+      'goal_versions',
+      'meals',
+      'plan_exercises',
+      'plan_sessions',
+      'plans',
+      'profiles',
+      'saved_meals',
+      'water_logs',
+      'weight_entries',
+      'workout_exercises',
+      'workout_sets',
+      'workouts',
+    ],
+  },
+  { file: '0012_gatilhos_atividades.sql', tables: ['activity_sessions'] },
+] as const;
+
+/** As tabelas de um arquivo de gatilhos, na ordem do esquema. */
+export function tablesForTriggerFile(
+  tables: SQLiteTable[],
+  file: (typeof LOCAL_TRIGGER_FILES)[number],
+): SQLiteTable[] {
+  const names: readonly string[] = file.tables;
+  return tables.filter((table) => names.includes(getTableConfig(table).name));
+}
+
 /** Tipo no Postgres de uma coluna do SQLite. Ids (UUID gerados no celular) viram uuid. */
 export function postgresType(column: SQLiteColumn): string {
   switch (column.columnType) {
@@ -38,6 +81,29 @@ export function postgresType(column: SQLiteColumn): string {
 
 const HEADER = (what: string) =>
   `-- Gerado por scripts/build-sync-sql.mts a partir de src/db/schema.ts. Não edite à mão.\n-- ${what}\n`;
+
+/** Uma tabela sincronizada no servidor: dono, carimbo, RLS e o gatilho da última alteração. */
+export function serverTableSql(table: SQLiteTable): string {
+  const config = getTableConfig(table);
+  const name = `public.${config.name}`;
+  const columns = config.columns.map((column) => {
+    const pk = column.primary ? ' primary key' : column.notNull ? ' not null' : '';
+    return `  ${column.name} ${postgresType(column)}${pk}`;
+  });
+  return `create table if not exists ${name} (
+${columns.join(',\n')},
+  user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  server_updated_at timestamptz not null default now()
+);
+create index if not exists ${config.name}_sync_idx on ${name} (user_id, server_updated_at, id);
+alter table ${name} enable row level security;
+drop policy if exists "dono" on ${name};
+create policy "dono" on ${name} for all to authenticated
+  using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
+drop trigger if exists sync_before_write on ${name};
+create trigger sync_before_write before insert or update on ${name}
+  for each row execute function public.sync_before_write();`;
+}
 
 /**
  * Servidor (Supabase): cada tabela sincronizada com o dono (`user_id`, apagado junto com a
@@ -63,27 +129,7 @@ end;
 $$;`,
   ];
 
-  for (const table of tables) {
-    const config = getTableConfig(table);
-    const name = `public.${config.name}`;
-    const columns = config.columns.map((column) => {
-      const pk = column.primary ? ' primary key' : column.notNull ? ' not null' : '';
-      return `  ${column.name} ${postgresType(column)}${pk}`;
-    });
-    parts.push(`create table if not exists ${name} (
-${columns.join(',\n')},
-  user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
-  server_updated_at timestamptz not null default now()
-);
-create index if not exists ${config.name}_sync_idx on ${name} (user_id, server_updated_at, id);
-alter table ${name} enable row level security;
-drop policy if exists "dono" on ${name};
-create policy "dono" on ${name} for all to authenticated
-  using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
-drop trigger if exists sync_before_write on ${name};
-create trigger sync_before_write before insert or update on ${name}
-  for each row execute function public.sync_before_write();`);
-  }
+  for (const table of tables) parts.push(serverTableSql(table));
 
   parts.push(`-- "Excluir minha conta": apaga o usuário; os dados vão junto (on delete cascade).
 create or replace function public.delete_my_account() returns void
