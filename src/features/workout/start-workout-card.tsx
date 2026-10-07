@@ -8,6 +8,8 @@ import type { Plan } from '@/db/schema';
 import { isoWeekday, toDayKey, todayKey, weekDays, weekdayName } from '@/lib/dates';
 import { useColors } from '@/theme/theme';
 
+import { activityKindFor } from '../activity/rating';
+import { startOrContinueActivity } from '../activity/start';
 import { usePlanSessions, useSessionsSlots } from '../plan/queries';
 import { useActiveWorkout, useFinishedWorkouts } from './queries';
 import { startOrContinueWorkout } from './start';
@@ -21,9 +23,16 @@ export function StartWorkoutCard({ plan }: { plan: Plan }) {
   const colors = useColors();
   const today = todayKey();
   const weekday = isoWeekday(today);
-  const sessions = usePlanSessions(plan.id)
-    .filter((session) => session.kind === 'workout')
-    .sort((a, b) => a.weekday - b.weekday || a.sortOrder - b.sortOrder);
+  const allSessions = usePlanSessions(plan.id).sort(
+    (a, b) => a.weekday - b.weekday || a.sortOrder - b.sortOrder,
+  );
+  const sessions = allSessions.filter((session) => session.kind === 'workout');
+  // Atividades do plano com nome diferente (o futebol de quinta e o de domingo viram um só).
+  const activities = allSessions
+    .filter((session) => session.kind === 'activity')
+    .filter(
+      (session, index, list) => list.findIndex((other) => other.name === session.name) === index,
+    );
   const slots = useSessionsSlots(sessions.map((session) => session.id));
   const { workout: active } = useActiveWorkout();
   const { workouts } = useFinishedWorkouts();
@@ -93,6 +102,33 @@ export function StartWorkoutCard({ plan }: { plan: Plan }) {
             ))}
           </View>
         </>
+      ) : null}
+
+      {activities.length > 0 ? (
+        <View className="gap-2">
+          <Text className="text-sm text-fg-muted">Ou uma atividade, com cronômetro:</Text>
+          {activities.map((session) => (
+            <PressableScale
+              key={session.id}
+              onPress={() => startOrContinueActivity(session)}
+              haptic="select"
+              scaleTo={0.97}
+              accessibilityRole="button"
+              accessibilityLabel={`Começar ${session.name}`}
+              className="flex-row items-center gap-3 rounded-2xl bg-surface-2 px-3 py-3"
+            >
+              <View className="h-9 w-9 items-center justify-center rounded-full bg-primary/15">
+                <Icon
+                  name={activityKindFor(session.name) === 'football' ? 'football' : 'timer'}
+                  size={15}
+                  color={colors.primary}
+                />
+              </View>
+              <Text className="flex-1 text-base font-semibold text-fg">{session.name}</Text>
+              <Icon name="chevronRight" size={14} color={colors['fg-muted']} />
+            </PressableScale>
+          ))}
+        </View>
       ) : null}
     </Card>
   );

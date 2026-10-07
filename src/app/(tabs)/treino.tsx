@@ -9,6 +9,7 @@ import { createEmptyPlan, deletePlan } from '@/features/plan/repository';
 import { createPlanFromTemplate, PLAN_TEMPLATES } from '@/features/plan/templates';
 import { WeekCard } from '@/features/plan/week-card';
 import { TipCard } from '@/features/tutorial/tip-card';
+import { ActiveActivityCard } from '@/features/activity/activity-cards';
 import { ActiveWorkoutCard } from '@/features/workout/active-workout-card';
 import { StartWorkoutCard } from '@/features/workout/start-workout-card';
 
@@ -30,6 +31,7 @@ export default function WorkoutScreen() {
     <Screen title="Treino" subtitle={plan?.name}>
       <TipCard id="treino" />
       <ActiveWorkoutCard />
+      <ActiveActivityCard />
       {plan ? <StartWorkoutCard plan={plan} /> : null}
       {plan ? (
         <>

@@ -9,6 +9,7 @@ import { DayRingsCard } from '@/features/today/day-rings-card';
 import { QuickActions } from '@/features/today/quick-actions';
 import { TipCard } from '@/features/tutorial/tip-card';
 import { WeightSummaryCard } from '@/features/weight/weight-summary-card';
+import { ActiveActivityCard } from '@/features/activity/activity-cards';
 import { ActiveWorkoutCard } from '@/features/workout/active-workout-card';
 
 function formatToday() {
@@ -37,6 +38,7 @@ export default function TodayScreen() {
       <AssistantCard />
       <QuickActions />
       <ActiveWorkoutCard />
+      <ActiveActivityCard />
       <AdaptiveGoalPrompt />
       <RecalcPromptCard />
       <DayRingsCard />

@@ -63,6 +63,9 @@ const ICONS = {
   send: { ios: 'arrow.up.circle.fill', android: 'send' },
   pencil: { ios: 'pencil', android: 'edit' },
   question: { ios: 'questionmark.circle.fill', android: 'help' },
+  football: { ios: 'soccerball', android: 'sports_soccer' },
+  minus: { ios: 'minus', android: 'remove' },
+  note: { ios: 'note.text', android: 'sticky_note_2' },
 } satisfies Record<string, IconSpec>;
 
 export type IconName = keyof typeof ICONS;

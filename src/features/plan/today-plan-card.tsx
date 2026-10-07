@@ -5,15 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { isoWeekday, toDayKey, todayKey, weekdayName } from '@/lib/dates';
 
+import { ActivityActions } from '../activity/activity-cards';
 import { useExercises } from '../exercises/queries';
 import { useActiveWorkout, useFinishedWorkouts } from '../workout/queries';
 import { continueWorkout, startOrContinueWorkout } from '../workout/start';
-import { useActivePlan, useActivityLogs, usePlanSessions, useSessionsSlots } from './queries';
-import { toggleActivityDone } from './repository';
+import { useActivePlan, usePlanSessions, useSessionsSlots } from './queries';
 
 /**
- * Aba Hoje: o treino do dia (com os exercícios e o botão de começar) ou a atividade, com
- * "marcar como feito".
+ * Aba Hoje: o treino do dia (com os exercícios e o botão de começar) ou a atividade (futebol),
+ * com o cronômetro ou "Já joguei".
  */
 export function TodayPlanCard() {
   const today = todayKey();
@@ -26,7 +26,6 @@ export function TodayPlanCard() {
     sessions.filter((session) => session.kind === 'workout').map((session) => session.id),
   );
   const { exercises } = useExercises();
-  const logs = useActivityLogs(today, today);
   const { workout: active } = useActiveWorkout();
   const { workouts: finished } = useFinishedWorkouts();
 
@@ -54,7 +53,6 @@ export function TodayPlanCard() {
   }
 
   const names = new Map(exercises.map((exercise) => [exercise.id, exercise.name]));
-  const done = new Set(logs.map((log) => log.sessionId));
 
   return (
     <Card icon="dumbbell" title={`Treino de hoje · ${weekdayName(weekday)}`}>
@@ -86,11 +84,7 @@ export function TodayPlanCard() {
               {session.name}
               {session.time ? ` às ${session.time}` : ''}
             </Text>
-            <Button
-              label={done.has(session.id) ? 'Feito ✓  (toque para desfazer)' : 'Marcar como feito'}
-              variant={done.has(session.id) ? 'secondary' : 'primary'}
-              onPress={() => toggleActivityDone(session.id, today)}
-            />
+            <ActivityActions session={session} />
           </View>
         ),
       )}
