@@ -17,6 +17,9 @@ com o servidor quando a conexão volta.
   refeição, porções, água e meta de calorias que se ajusta pelo gasto real.
 - **Assistente por voz**: "almocei 200 de arroz, 100 de feijão e 2 bifes" vira registros para
   conferir; também água, peso, medidas e séries do treino.
+- **Gasto × consumo**: o gasto do dia (base + treinos e futebol), o déficit ou superávit e a
+  semana em barras; no domingo, o resumo da semana para postar.
+- **Futebol**: cronômetro, partidas ganhas/empatadas/perdidas, gols, assistências e uma nota.
 - **Progresso**: peso com tendência, força por exercício, volume semanal por músculo, adesão à
   dieta, medidas e fotos de antes e depois.
 - **Social**: perfil com @usuário (privado por padrão), seguir com aprovação, feed com posts de

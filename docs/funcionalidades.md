@@ -18,6 +18,7 @@ Como o FitVibe foi construído, em fases. Cada fase terminou com TypeScript, lin
 | 10   | Meta calórica adaptativa, fotos de progresso, tema claro                                                   | ✅     |
 | —    | Interface nova (ícones, animações, vibração, gestos) e tutorial                                            | ✅     |
 | 11   | Assistente por voz: fale o que comeu, bebeu, pesou, mediu ou treinou                                       | ✅     |
+| 12   | Gasto calórico e saldo do dia/semana, resumo da semana, futebol com nota e anotações nos treinos           | ⚠️     |
 
 Tudo no plano gratuito: Supabase Free, Gemini (plano grátis) e Expo Go, sem conta paga da Apple.
 Por isso as notificações da Fase 7 aparecem só dentro do app (push com o app fechado exige build
@@ -345,3 +346,35 @@ gráficos; tocar ou arrastar mostra o valor do ponto):
 - **Testes**: a validação da função (recusa instrução do app, textos e áudios grandes, dados
   tortos) roda no Jest; `npm run test:assistente` manda frases reais ao Gemini: o exemplo do
   almoço, peso + medida + refeição pela hora, responder a uma pergunta e o treino.
+
+## Fase 12 — Gasto calórico, resumo da semana, futebol e anotações
+
+- **Gasto × consumo** (Hoje): consumido − gasto = déficit ou superávit do dia, com ‹ › entre
+  dias, a conta do gasto e as barras da semana (déficit para baixo, superávit para cima; verde
+  quando combina com o objetivo). O gasto do dia é uma **base** mais o **exercício do dia**
+  (musculação e atividades pela duração, MET do Compendium: musculação 5, futebol 7). O fator de
+  atividade do perfil já inclui os treinos, então a base é o gasto de referência menos o
+  exercício esperado (o do plano, com durações típicas); seguindo o plano, a média da semana
+  bate com a meta, e pular um treino aparece como gasto menor. Com o gasto real da meta
+  adaptativa (3 semanas de dieta e pesagens), a referência passa a ser ele, menos o exercício
+  médio real do período. Passos não entram (o Expo Go não lê o Apple Saúde).
+  `src/features/energy` (contas puras testadas).
+- **Resumo da semana** (segunda a domingo): dieta média, saldo calórico em kcal e kg, treinos
+  feitos × do plano, séries, volume, recordes, futebol, peso (só quando a pessoa compartilha o
+  corpo) e água. Aparece no Hoje no domingo a partir das 18 h e na segunda; a tela
+  `/semana` navega pelas semanas e posta (`src/features/week`).
+- **Futebol** (e outras atividades do plano): "Começar" liga o cronômetro, "Já joguei"
+  registra depois; Ganhei/Empatei/Perdi, gols e assistências; a duração é editável depois. A
+  **nota** (3 a 10) parte de 5,5 e soma o resultado (aproveitamento − 50%, × 4), gols e
+  assistências por partida e o ritmo, com um título ("Craque da rodada", "Dia de pipoca").
+  Finalizar marca o ✓ da semana. Tabela sincronizada `activity_sessions`.
+- **Anotações**: uma por treino e uma por exercício em cada treino; a do exercício aparece na
+  próxima vez ("Nota da última vez"). Também no resumo do treino.
+- **Posts** "Minha semana" e "Futebol" no Feed, com as notificações ("postou o resumo da
+  semana").
+- **Séries**: deslizar uma série para a esquerda exclui (com Desfazer) e "− Série" tira a
+  última ainda não feita.
+- **Migrações**: no celular, a `0011` cria as colunas e a tabela e a `0012` os gatilhos da fila
+  da tabela nova (a `0007` fica congelada com as tabelas da época, e um teste confere que cada
+  tabela sincronizada tem gatilho em exatamente uma migração). Na nuvem,
+  `20261006140000_anotacoes_futebol_semana.sql`.

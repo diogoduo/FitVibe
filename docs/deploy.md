@@ -9,7 +9,8 @@ Tudo no plano gratuito: Supabase Free, Gemini (plano grátis) e EAS Update abert
    1. `20261003120000_sincronizacao.sql` — tabelas sincronizadas, RLS e a última alteração vence;
    2. `20261003180000_social.sql` — perfil público, posts, curtidas, comentários e fotos;
    3. `20261003200000_notificacoes.sql` — notificações e Realtime;
-   4. `20261006120000_assistente_cota.sql` — limite diário do assistente.
+   4. `20261006120000_assistente_cota.sql` — limite diário do assistente;
+   5. `20261006140000_anotacoes_futebol_semana.sql` — anotações, futebol e os posts semana/futebol.
 
    Mudanças futuras no esquema também vão pelo SQL Editor, na ordem dos arquivos.
 
