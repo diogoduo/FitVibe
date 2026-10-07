@@ -41,6 +41,8 @@ export type SyncOutcome =
  */
 export type AccountResult =
   | { status: 'ready' }
+  /** A conta existe, mas o e-mail ainda não foi confirmado (o link foi enviado). */
+  | { status: 'confirm'; email: string }
   | { status: 'conflict'; userId: string; reason: 'both' | 'other-account' }
   | { status: 'error'; message: string };
 
@@ -133,13 +135,14 @@ async function authenticate(
       action === 'signIn'
         ? await supabase.auth.signInWithPassword(credentials)
         : await supabase.auth.signUp(credentials);
-    if (error) return { status: 'error', message: friendlyError(error) };
-    if (!data.session) {
-      return {
-        status: 'error',
-        message: 'Conta criada, mas o servidor pediu confirmação por e-mail.',
-      };
+    if (error) {
+      if (/email not confirmed/i.test(error.message)) {
+        return { status: 'confirm', email: credentials.email };
+      }
+      return { status: 'error', message: friendlyError(error) };
     }
+    // Com "Confirm email" ligado no Supabase, criar conta não entra: espera o link do e-mail.
+    if (!data.session) return { status: 'confirm', email: credentials.email };
     return await prepareAccount(data.session.user.id);
   } catch (error) {
     return { status: 'error', message: friendlyError(error) };
@@ -148,6 +151,17 @@ async function authenticate(
 
 export const signIn = (email: string, password: string) => authenticate('signIn', email, password);
 export const signUp = (email: string, password: string) => authenticate('signUp', email, password);
+
+/** Manda de novo o link de confirmação do cadastro. null = enviado; senão, a mensagem. */
+export async function resendConfirmation(email: string): Promise<string | null> {
+  if (!supabase) return 'Servidor não configurado.';
+  try {
+    const { error } = await supabase.auth.resend({ type: 'signup', email });
+    return error ? friendlyError(error) : null;
+  } catch (error) {
+    return friendlyError(error);
+  }
+}
 
 /** Entrou mas fechou o app antes de escolher os dados: retoma a escolha. */
 export async function resumeAccount(): Promise<AccountResult> {
