@@ -203,6 +203,24 @@ export function moveSlot(slotId: string, direction: -1 | 1) {
 }
 
 /** Marca ou desmarca uma atividade (futebol) como feita no dia. */
+/** Marca (ou desmarca) a atividade como feita no dia, sem alternar. */
+export function setActivityDone(sessionId: string, day: DayKey, done: boolean) {
+  const existing = db
+    .select()
+    .from(activityLogs)
+    .where(
+      and(eq(activityLogs.sessionId, sessionId), eq(activityLogs.day, day), alive(activityLogs)),
+    )
+    .get();
+  if (done && !existing) db.insert(activityLogs).values({ id: newId(), sessionId, day }).run();
+  if (!done && existing) {
+    db.update(activityLogs)
+      .set({ deletedAt: new Date() })
+      .where(eq(activityLogs.id, existing.id))
+      .run();
+  }
+}
+
 export function toggleActivityDone(sessionId: string, day: DayKey) {
   const existing = db
     .select()
