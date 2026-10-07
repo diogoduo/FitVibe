@@ -103,9 +103,11 @@ function recordBaseline(
     .from(exercises)
     .where(eq(exercises.id, exerciseId))
     .get();
-  const reference = (exercise?.referenceSets ?? []).map(
-    (set): DoneSet => ({ load: set.load, reps: set.reps, rir: null }),
-  );
+  const reference = (exercise?.referenceSets ?? []).map((set): DoneSet => ({
+    load: set.load,
+    reps: set.reps,
+    rir: null,
+  }));
   const history = exerciseHistory(exerciseId, options, executor)
     .flatMap((item) => item.sets)
     .map(toDone);
@@ -381,6 +383,11 @@ export function addSet(entryId: string) {
 
 export function removeSet(setId: string) {
   db.update(workoutSets).set({ deletedAt: new Date() }).where(eq(workoutSets.id, setId)).run();
+}
+
+/** "Desfazer" logo depois de excluir uma série. */
+export function restoreSet(setId: string) {
+  db.update(workoutSets).set({ deletedAt: null }).where(eq(workoutSets.id, setId)).run();
 }
 
 export function setRestEndsAt(workoutId: string, restEndsAt: Date | null) {

@@ -4,6 +4,7 @@ import { Alert, Pressable, Text, View } from 'react-native';
 import Animated, { ZoomIn } from 'react-native-reanimated';
 
 import { celebrate } from '@/components/ui/celebration';
+import { showUndo } from '@/components/ui/undo-bar';
 import { Icon } from '@/components/ui/icon';
 import { formatDayLabel, toDayKey } from '@/lib/dates';
 import { useColors } from '@/theme/theme';
@@ -15,7 +16,14 @@ import { describePrescription } from '../plan/prescription';
 import { getSlot } from '../plan/queries';
 import { formatSet } from './format';
 import { RECORD_LABELS, type RecordKind } from './records';
-import { addSet, exerciseHistory, setSkipped, swapWorkoutExercise } from './repository';
+import {
+  addSet,
+  exerciseHistory,
+  removeSet,
+  restoreSet,
+  setSkipped,
+  swapWorkoutExercise,
+} from './repository';
 import { SetRow } from './set-row';
 
 type WorkoutExerciseCardProps = {
@@ -98,6 +106,15 @@ export function WorkoutExerciseCard({
   };
 
   const workingNumber = new Map(working.map((set, index) => [set.id, index]));
+  // "− Série": tira a última válida ainda não feita (a que foi posta a mais sem querer).
+  const lastWorking = working.at(-1);
+  const removable =
+    working.length > 1 && lastWorking && !lastWorking.completedAt ? lastWorking : null;
+  const removeLast = () => {
+    if (!removable) return;
+    removeSet(removable.id);
+    showUndo(`Série ${working.length} excluída.`, () => restoreSet(removable.id));
+  };
 
   return (
     <View className="gap-2 rounded-2xl border border-line bg-surface p-3">
@@ -202,6 +219,7 @@ export function WorkoutExerciseCard({
           ) : null}
 
           <View className="flex-row justify-end gap-5 pt-1">
+            {removable ? <CardAction label="− Série" onPress={removeLast} /> : null}
             <CardAction label="+ Série" onPress={() => addSet(entry.id)} />
             {!anyDone ? <CardAction label="Trocar" onPress={openSwap} /> : null}
             {!anyDone ? (

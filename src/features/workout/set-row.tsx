@@ -5,12 +5,21 @@ import type { LoadType, WorkoutSet } from '@/db/schema';
 import { formatDecimal, parseDecimal, toInputText } from '@/lib/numbers';
 import { Icon } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
+import { SwipeRow } from '@/components/ui/swipe-row';
+import { showUndo } from '@/components/ui/undo-bar';
 import { haptics } from '@/lib/haptics';
 import { useColors, useScheme } from '@/theme/theme';
 
 import { loadUnit } from './format';
 import type { RecordKind } from './records';
-import { completeSet, removeSet, uncompleteSet, updateSet, type SetValues } from './repository';
+import {
+  completeSet,
+  removeSet,
+  restoreSet,
+  uncompleteSet,
+  updateSet,
+  type SetValues,
+} from './repository';
 
 /** Ciclo do botão de RIR: falha (0), 1, 2, 3, 4. */
 const RIR_CYCLE = [0, 1, 2, 3, 4];
@@ -27,7 +36,8 @@ type SetRowProps = {
 
 /**
  * Uma série: carga × reps (ou minutos), RIR nas válidas e o ✓. Os campos já vêm com a sugestão;
- * o que for digitado é gravado ao sair do campo e ao concluir.
+ * o que for digitado é gravado ao sair do campo e ao concluir. Deslizar para a esquerda (ou
+ * segurar o número) exclui, com "Desfazer".
  */
 export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowProps) {
   const colors = useColors();
@@ -87,109 +97,116 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
     if (values) updateSet(set.id, { ...values, rir: next });
   };
 
+  const remove = () => {
+    removeSet(set.id);
+    showUndo(`Série ${label} excluída.`, () => restoreSet(set.id));
+  };
+
   const confirmRemove = () =>
     Alert.alert('Excluir esta série?', undefined, [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Excluir', style: 'destructive', onPress: () => removeSet(set.id) },
+      { text: 'Excluir', style: 'destructive', onPress: remove },
     ]);
 
   const inputClass = `rounded-lg border bg-surface-2 px-2 py-2 text-center text-base text-fg ${invalid ? 'border-danger' : 'border-line'}`;
 
   return (
-    <View
-      className={`flex-row items-center gap-2 rounded-xl px-2 py-1 ${done ? 'bg-success/10' : ''}`}
-    >
-      <Pressable
-        onLongPress={confirmRemove}
-        accessibilityHint="Toque e segure para excluir a série"
-        className="w-11"
+    <SwipeRow actionLabel="Excluir" onAction={remove}>
+      <View
+        className={`flex-row items-center gap-2 rounded-xl px-2 py-1 ${done ? 'bg-success/10' : ''}`}
       >
-        <Text
-          className={`text-sm font-semibold ${working ? 'text-fg' : 'text-fg-muted'}`}
-          numberOfLines={1}
-        >
-          {label}
-        </Text>
-      </Pressable>
-
-      {byTime ? (
-        <View className="flex-1 flex-row items-center gap-1.5">
-          <TextInput
-            value={minutesText}
-            onChangeText={setMinutesText}
-            onBlur={persist}
-            keyboardType="decimal-pad"
-            selectTextOnFocus
-            keyboardAppearance={scheme}
-            selectionColor={colors.primary}
-            accessibilityLabel="Minutos"
-            className={`w-20 ${inputClass}`}
-          />
-          <Text className="text-base text-fg-muted">min</Text>
-        </View>
-      ) : (
-        <View className="flex-1 flex-row items-center gap-1.5">
-          <TextInput
-            value={loadText}
-            onChangeText={setLoadText}
-            onBlur={persist}
-            placeholder={loadType === 'bodyweight' ? '+kg' : loadUnit(loadType)}
-            placeholderTextColor={colors['fg-muted']}
-            keyboardType="decimal-pad"
-            selectTextOnFocus
-            keyboardAppearance={scheme}
-            selectionColor={colors.primary}
-            accessibilityLabel={loadType === 'plates' ? 'Placas' : 'Carga'}
-            className={`w-[70px] ${inputClass}`}
-          />
-          {increased ? <Text className="text-sm font-bold text-primary">↑</Text> : null}
-          <Text className="text-base text-fg-muted">×</Text>
-          <TextInput
-            value={repsText}
-            onChangeText={setRepsText}
-            onBlur={persist}
-            keyboardType="number-pad"
-            selectTextOnFocus
-            keyboardAppearance={scheme}
-            selectionColor={colors.primary}
-            accessibilityLabel="Repetições"
-            className={`w-14 ${inputClass}`}
-          />
-        </View>
-      )}
-
-      {working && !byTime ? (
         <Pressable
-          onPress={cycleRir}
-          accessibilityRole="button"
-          accessibilityLabel="Repetições na reserva"
-          className="w-16 items-center rounded-full bg-surface-2 py-1.5 active:opacity-70"
+          onLongPress={confirmRemove}
+          accessibilityHint="Deslize a série para a esquerda (ou toque e segure) para excluir"
+          className="w-11"
         >
-          <Text className={`text-xs font-semibold ${rir === 0 ? 'text-danger' : 'text-fg'}`}>
-            {rir == null ? 'RIR —' : rir === 0 ? 'Falha' : `RIR ${rir}`}
+          <Text
+            className={`text-sm font-semibold ${working ? 'text-fg' : 'text-fg-muted'}`}
+            numberOfLines={1}
+          >
+            {label}
           </Text>
         </Pressable>
-      ) : null}
 
-      <PressableScale
-        onPress={toggle}
-        scaleTo={0.85}
-        accessibilityRole="checkbox"
-        accessibilityState={{ checked: done }}
-        accessibilityLabel={done ? 'Série feita' : 'Marcar série como feita'}
-        hitSlop={6}
-        className={`h-10 w-10 items-center justify-center rounded-full ${done ? 'bg-success' : 'border-2 border-line bg-surface-2'}`}
-      >
-        <Icon
-          // key: ao concluir, o ✓ remonta e "pula".
-          key={done ? 'feita' : 'aberta'}
-          name="check"
-          size={18}
-          weight="bold"
-          color={done ? colors.background : colors['fg-muted']}
-          animation={done ? { effect: { type: 'bounce' } } : undefined}
-        />
-      </PressableScale>
-    </View>
+        {byTime ? (
+          <View className="flex-1 flex-row items-center gap-1.5">
+            <TextInput
+              value={minutesText}
+              onChangeText={setMinutesText}
+              onBlur={persist}
+              keyboardType="decimal-pad"
+              selectTextOnFocus
+              keyboardAppearance={scheme}
+              selectionColor={colors.primary}
+              accessibilityLabel="Minutos"
+              className={`w-20 ${inputClass}`}
+            />
+            <Text className="text-base text-fg-muted">min</Text>
+          </View>
+        ) : (
+          <View className="flex-1 flex-row items-center gap-1.5">
+            <TextInput
+              value={loadText}
+              onChangeText={setLoadText}
+              onBlur={persist}
+              placeholder={loadType === 'bodyweight' ? '+kg' : loadUnit(loadType)}
+              placeholderTextColor={colors['fg-muted']}
+              keyboardType="decimal-pad"
+              selectTextOnFocus
+              keyboardAppearance={scheme}
+              selectionColor={colors.primary}
+              accessibilityLabel={loadType === 'plates' ? 'Placas' : 'Carga'}
+              className={`w-[70px] ${inputClass}`}
+            />
+            {increased ? <Text className="text-sm font-bold text-primary">↑</Text> : null}
+            <Text className="text-base text-fg-muted">×</Text>
+            <TextInput
+              value={repsText}
+              onChangeText={setRepsText}
+              onBlur={persist}
+              keyboardType="number-pad"
+              selectTextOnFocus
+              keyboardAppearance={scheme}
+              selectionColor={colors.primary}
+              accessibilityLabel="Repetições"
+              className={`w-14 ${inputClass}`}
+            />
+          </View>
+        )}
+
+        {working && !byTime ? (
+          <Pressable
+            onPress={cycleRir}
+            accessibilityRole="button"
+            accessibilityLabel="Repetições na reserva"
+            className="w-16 items-center rounded-full bg-surface-2 py-1.5 active:opacity-70"
+          >
+            <Text className={`text-xs font-semibold ${rir === 0 ? 'text-danger' : 'text-fg'}`}>
+              {rir == null ? 'RIR —' : rir === 0 ? 'Falha' : `RIR ${rir}`}
+            </Text>
+          </Pressable>
+        ) : null}
+
+        <PressableScale
+          onPress={toggle}
+          scaleTo={0.85}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: done }}
+          accessibilityLabel={done ? 'Série feita' : 'Marcar série como feita'}
+          hitSlop={6}
+          className={`h-10 w-10 items-center justify-center rounded-full ${done ? 'bg-success' : 'border-2 border-line bg-surface-2'}`}
+        >
+          <Icon
+            // key: ao concluir, o ✓ remonta e "pula".
+            key={done ? 'feita' : 'aberta'}
+            name="check"
+            size={18}
+            weight="bold"
+            color={done ? colors.background : colors['fg-muted']}
+            animation={done ? { effect: { type: 'bounce' } } : undefined}
+          />
+        </PressableScale>
+      </View>
+    </SwipeRow>
   );
 }
