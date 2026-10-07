@@ -15,7 +15,7 @@ import { recentFoodKeys } from '../foods/repository';
 import { getActivePlan } from '../plan/repository';
 import { getActiveWorkout } from '../workout/repository';
 import { buildFoodCatalog } from './catalog';
-import type { AssistantContext } from './prompt';
+import type { AssistantContext } from './request';
 
 /** Lê do celular o que a IA precisa saber agora (na hora de mandar a fala). */
 export function loadAssistantContext(now = new Date()): AssistantContext {

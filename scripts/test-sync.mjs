@@ -21,7 +21,13 @@ function cloudTarget() {
   const url = read('EXPO_PUBLIC_SUPABASE_URL');
   const key = read('EXPO_PUBLIC_SUPABASE_KEY');
   if (!url || !key) throw new Error('Faltam EXPO_PUBLIC_SUPABASE_URL e EXPO_PUBLIC_SUPABASE_KEY no .env.local');
-  return { url, key };
+  // Conta fixa (já confirmada) para os testes que só precisam de uma pessoa: com "Confirm email"
+  // ligado na nuvem, contas novas não entram na hora.
+  const account = {
+    TEST_ACCOUNT_EMAIL: read('TEST_ACCOUNT_EMAIL') ?? '',
+    TEST_ACCOUNT_PASSWORD: read('TEST_ACCOUNT_PASSWORD') ?? '',
+  };
+  return { url, key, account };
 }
 
 function localTarget() {
@@ -35,7 +41,7 @@ function localTarget() {
   return { url: 'http://127.0.0.1:54321', key };
 }
 
-const { url, key } = process.argv.includes('--cloud') ? cloudTarget() : localTarget();
+const { url, key, account = {} } = process.argv.includes('--cloud') ? cloudTarget() : localTarget();
 const onlyIndex = process.argv.indexOf('--only');
 const pattern =
   onlyIndex >= 0
@@ -49,7 +55,7 @@ const result = spawnSync(
   {
     cwd: root,
     stdio: 'inherit',
-    env: { ...process.env, SYNC_TEST_URL: url, SYNC_TEST_KEY: key },
+    env: { ...process.env, ...account, SYNC_TEST_URL: url, SYNC_TEST_KEY: key },
   },
 );
 process.exit(result.status ?? 1);

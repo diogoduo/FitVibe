@@ -99,6 +99,20 @@ export function testEmail(): string {
   return email;
 }
 
+/**
+ * A conta de teste fixa (TEST_ACCOUNT_EMAIL/PASSWORD no .env.local), já confirmada, logada.
+ * null se não estiver configurada. Não é excluída no fim.
+ */
+export async function signInTestAccount(): Promise<SupabaseClient | null> {
+  const email = process.env.TEST_ACCOUNT_EMAIL;
+  const password = process.env.TEST_ACCOUNT_PASSWORD;
+  if (!email || !password) return null;
+  const client = testClient();
+  const { error } = await client.auth.signInWithPassword({ email, password });
+  if (error) throw error;
+  return client;
+}
+
 /** Conta nova já logada (o cliente fica guardado para a limpeza, sem precisar entrar de novo). */
 export async function signUpTestUser(): Promise<{ client: SupabaseClient; id: string }> {
   const client = testClient();

@@ -4,7 +4,7 @@ import { normalizeForSearch } from '@/lib/text';
 import type { AnyFood } from '../foods/food';
 import { nutrientsFor } from '../foods/nutrition';
 import { MEASUREMENT_FIELDS, type MeasurementKey } from '../measurements/measurement-form';
-import type { AssistantContext, PreviousTurn } from './prompt';
+import type { AssistantContext, PreviousTurn } from './request';
 import type { AiItem, AiResult } from './result';
 
 /**

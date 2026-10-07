@@ -11,7 +11,7 @@ import { fromRow, fromTaco, TACO, type AnyFood } from '../foods/food';
  * "(ml)" marca o que é medido em ml; entre colchetes, as porções cadastradas.
  */
 export type FoodCatalog = {
-  text: string;
+  lines: string[];
   resolve: (code: string) => AnyFood | null;
 };
 
@@ -58,7 +58,7 @@ export function buildFoodCatalog(input: {
   for (const taco of TACO) line(`t${taco.id}`, fromTaco(taco));
 
   return {
-    text: lines.join('\n'),
+    lines,
     // A IA às vezes repete o * do "já usado" no código.
     resolve: (code) => byCode.get(code.replace(/\*$/, '').trim()) ?? null,
   };

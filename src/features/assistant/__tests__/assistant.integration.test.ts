@@ -7,7 +7,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { createTestDb, type TestDb } from '@/db/test-db';
-import { deleteTestAccounts, hasSyncServer, signUpTestUser } from '@/sync/test-server';
+import {
+  deleteTestAccounts,
+  hasSyncServer,
+  signInTestAccount,
+  signUpTestUser,
+} from '@/sync/test-server';
 
 import { ensureDefaultMeals } from '../../diary/repository';
 import { AVANCADO_4X, createPlanFromTemplate } from '../../plan/templates';
@@ -15,7 +20,7 @@ import { startWorkout } from '../../workout/repository';
 import { callAssistant } from '../api';
 import { loadAssistantContext } from '../context';
 import { buildDraft, previousTurn, type Draft, type DraftFood } from '../draft';
-import { buildInput, buildSystemPrompt } from '../prompt';
+import { buildRequest } from '../request';
 import { parseAiResult } from '../result';
 
 let mockDb: TestDb;
@@ -38,10 +43,10 @@ async function ask(
   previous: Draft | null = null,
 ): Promise<Draft> {
   const context = loadAssistantContext(now);
-  const output = await callAssistant(client, {
-    system: buildSystemPrompt(context),
-    input: buildInput({ text, previous: previous ? previousTurn(previous) : null }),
-  });
+  const output = await callAssistant(
+    client,
+    buildRequest({ context, text, previous: previous ? previousTurn(previous) : null }),
+  );
   const result = parseAiResult(output);
   if (!result) throw new Error(`Resposta que não é JSON: ${output.slice(0, 300)}`);
   return buildDraft(result, context, previous);
@@ -70,7 +75,8 @@ suite('assistente (Gemini de verdade)', () => {
   beforeAll(async () => {
     mockDb = await createTestDb();
     ensureDefaultMeals();
-    ({ client } = await signUpTestUser());
+    // Na nuvem (confirmação de e-mail ligada): a conta de teste fixa; no local, uma nova.
+    client = (await signInTestAccount()) ?? (await signUpTestUser()).client;
   });
 
   afterAll(() => deleteTestAccounts());

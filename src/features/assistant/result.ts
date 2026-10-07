@@ -1,6 +1,7 @@
 /**
  * O que a IA devolve: o que ela ouviu e uma lista plana de itens. Cada item tem todos os campos
- * (os que não se aplicam ao tipo vêm null): assim o formato é o mesmo em qualquer modelo.
+ * (os que não se aplicam ao tipo vêm null): assim o formato é o mesmo em qualquer modelo. O JSON
+ * Schema que o Gemini segue fica na função (supabase/functions/assistente, RESULT_SCHEMA).
  */
 export type AiItemKind = 'food' | 'water' | 'weight' | 'measurement' | 'set' | 'start_workout';
 
@@ -33,68 +34,6 @@ export type AiItem = {
 export type AiResult = { transcript: string; items: AiItem[]; questions: string[] };
 
 const KINDS: AiItemKind[] = ['food', 'water', 'weight', 'measurement', 'set', 'start_workout'];
-
-const nullable = (type: string, description: string) => ({ type: [type, 'null'], description });
-
-/** JSON Schema da resposta (o Gemini segue à risca). */
-export const RESULT_SCHEMA = {
-  type: 'object',
-  properties: {
-    transcript: { type: 'string', description: 'O que a pessoa disse, como texto.' },
-    items: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          kind: { type: 'string', enum: KINDS },
-          said: { type: 'string', description: 'O trecho falado que gerou este item.' },
-          day: { type: 'integer', description: '0 = hoje, -1 = ontem.' },
-          meal: nullable('string', 'Nome exato de uma refeição da lista, ou null.'),
-          food: nullable('string', 'Código do alimento no catálogo, ou null.'),
-          options: {
-            type: 'array',
-            items: { type: 'string' },
-            description: 'Até 3 códigos de alimentos parecidos, quando há dúvida.',
-          },
-          name: nullable('string', 'Nome curto do alimento como a pessoa quis dizer.'),
-          amount: nullable('number', 'g/ml (alimento, água), kg (peso) ou cm (medida).'),
-          estimated: { type: 'boolean', description: 'A quantidade foi estimada.' },
-          field: nullable('string', 'Medida: a chave do campo.'),
-          exercise: nullable('string', 'Série: código do exercício.'),
-          load: nullable('number', 'Série: carga em kg.'),
-          reps: nullable('integer', 'Série: repetições.'),
-          rir: nullable('integer', 'Série: repetições na reserva, se dito.'),
-          session: nullable('string', 'Começar treino: código do treino.'),
-          question: nullable('string', 'Pergunta curta se algo ficou incerto.'),
-        },
-        required: [
-          'kind',
-          'said',
-          'day',
-          'meal',
-          'food',
-          'options',
-          'name',
-          'amount',
-          'estimated',
-          'field',
-          'exercise',
-          'load',
-          'reps',
-          'rir',
-          'session',
-          'question',
-        ],
-      },
-    },
-    questions: {
-      type: 'array',
-      items: { type: 'string' },
-      description: 'Dúvidas gerais que não cabem num item.',
-    },
-  },
-  required: ['transcript', 'items', 'questions'],
-} as const;
 
 const text = (value: unknown): string | null =>
   typeof value === 'string' && value.trim() ? value.trim() : null;
