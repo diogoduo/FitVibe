@@ -18,10 +18,13 @@ Tudo no plano gratuito: Supabase Free, Gemini (plano grátis) e EAS Update abert
    qualquer um cria contas em massa ou com o e-mail de outra pessoa.
 4. **Authentication → Emails → SMTP Settings**: o e-mail embutido do Supabase só entrega para
    quem é da equipe do projeto, e no máximo 2 por hora; sem SMTP próprio, ninguém de fora recebe o
-   link de confirmação. Configure um SMTP, por exemplo o [Brevo](https://www.brevo.com) (grátis,
-   300 por dia): host `smtp-relay.brevo.com`, porta 587, usuário e chave SMTP do Brevo, e um
-   remetente verificado lá. Com SMTP próprio o Supabase começa em 30 e-mails por hora (ajustável
-   em **Authentication → Rate Limits**).
+   link de confirmação. Sem pagar nada, dá para usar um **Gmail** (de preferência uma conta só do
+   app): ligue a [verificação em duas etapas](https://myaccount.google.com/signinoptions/twosv),
+   crie uma [senha de app](https://myaccount.google.com/apppasswords) e preencha host
+   `smtp.gmail.com`, porta 587, usuário = o endereço do Gmail, senha = a senha de app (16 letras,
+   sem espaços) e o mesmo Gmail como remetente. O Gmail grátis manda cerca de 500 e-mails por dia.
+   Com SMTP próprio o Supabase começa em 30 e-mails por hora (ajustável em **Authentication → Rate
+   Limits**).
 5. **Authentication → URL Configuration → Site URL**: a página que abre depois de tocar no link de
    confirmação (por exemplo, a página do projeto no GitHub). A confirmação vale mesmo que a página
    não seja do app; a pessoa volta ao app e toca em "Já confirmei, entrar".
