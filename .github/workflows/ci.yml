@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    name: TypeScript, lint e testes
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # O Expo Router gera os tipos das rotas (.expo/types) ao montar o bundle; o tsc precisa deles.
+      - name: Bundle de iOS (gera os tipos das rotas)
+        run: npx expo export --platform ios --no-bytecode --output-dir /tmp/expo-export
+
+      - run: npx tsc --noEmit
+
+      - run: npx expo lint
+
+      # Os testes de integração (Supabase e Gemini de verdade) ficam de fora: sem as variáveis,
+      # eles são pulados.
+      - run: npx jest --ci
