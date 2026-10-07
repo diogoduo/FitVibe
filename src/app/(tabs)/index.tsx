@@ -1,5 +1,6 @@
 import { Screen } from '@/components/ui/screen';
 import { AssistantCard } from '@/features/assistant/assistant-card';
+import { EnergyBalanceCard } from '@/features/energy/energy-balance-card';
 import { WaterCard } from '@/features/diary/water-card';
 import { AdaptiveGoalPrompt } from '@/features/goals/adaptive-cards';
 import { RecalcPromptCard } from '@/features/goals/recalc-prompt-card';
@@ -42,6 +43,7 @@ export default function TodayScreen() {
       <AdaptiveGoalPrompt />
       <RecalcPromptCard />
       <DayRingsCard />
+      <EnergyBalanceCard />
       <TodayPlanCard />
       <WaterCard />
       <WeightSummaryCard />
