@@ -1,4 +1,4 @@
-import { and, eq, isNotNull, isNull } from 'drizzle-orm';
+import { and, desc, eq, isNotNull, isNull } from 'drizzle-orm';
 
 import { db, newId } from '@/db/client';
 import { activitySessions, type ActivitySession } from '@/db/schema';
@@ -132,4 +132,21 @@ export function deleteActivity(id: string) {
     )
     .all();
   if (others.length === 0) setActivityDone(session.planSessionId, session.day, false);
+}
+
+/** Futebóis terminados recentes, para escolher qual postar. */
+export function recentFootballSessions(limit = 10): ActivitySession[] {
+  return db
+    .select()
+    .from(activitySessions)
+    .where(
+      and(
+        eq(activitySessions.kind, 'football'),
+        isNotNull(activitySessions.finishedAt),
+        isNull(activitySessions.deletedAt),
+      ),
+    )
+    .orderBy(desc(activitySessions.startedAt))
+    .limit(limit)
+    .all();
 }

@@ -10,6 +10,9 @@ import { FormScroll } from '@/components/ui/form-scroll';
 import { OptionList } from '@/components/ui/option-list';
 import { TextField } from '@/components/ui/text-field';
 import { POST_KINDS, type PostKind } from '@/db/schema';
+import { activityMinutes, footballRating, statsOf } from '@/features/activity/rating';
+import { recentFootballSessions } from '@/features/activity/repository';
+import { footballSnapshot } from '@/features/activity/snapshot';
 import { useDiaryDay, useMeals } from '@/features/diary/queries';
 import { sumNutrients } from '@/features/foods/nutrition';
 import { createPost } from '@/features/social/outbox';
@@ -26,7 +29,8 @@ import {
 import type { PostContent, SocialProfile } from '@/features/social/types';
 import { formatWorkoutDuration } from '@/features/workout/format';
 import { formatDayLabel, toDayKey, todayKey, type DayKey } from '@/lib/dates';
-import { formatInt } from '@/lib/numbers';
+import { formatDecimal, formatInt } from '@/lib/numbers';
+import { loadWeekSummary, summaryWeekStart } from '@/features/week/summary';
 
 const KIND_OPTIONS: { value: PostKind; title: string; description: string }[] = [
   { value: 'meal', title: 'Refeição', description: 'Os alimentos e as calorias de uma refeição.' },
@@ -37,10 +41,25 @@ const KIND_OPTIONS: { value: PostKind; title: string; description: string }[] = 
   },
   { value: 'goals', title: 'Metas', description: 'Suas metas de calorias, macros e água.' },
   { value: 'day', title: 'Meu dia', description: 'O resumo de hoje: dieta, água e treino.' },
+  {
+    value: 'week',
+    title: 'Minha semana',
+    description: 'Saldo calórico, treinos, recordes e futebol da semana.',
+  },
+  { value: 'football', title: 'Futebol', description: 'Partidas, gols, assistências e a nota.' },
   { value: 'photo', title: 'Só foto', description: 'Uma foto com legenda.' },
 ];
 
-type Params = { tipo?: string; refeicao?: string; dia?: string; treino?: string };
+type Params = {
+  tipo?: string;
+  refeicao?: string;
+  dia?: string;
+  treino?: string;
+  /** Segunda-feira da semana do resumo. */
+  semana?: string;
+  /** Sessão de futebol. */
+  atividade?: string;
+};
 
 /** Novo post. Abre do feed (escolhe o tipo) ou já com o tipo (Dieta, resumo do treino, Hoje). */
 export default function NewPostScreen() {
@@ -64,8 +83,16 @@ function buildContent(
   mealId: string | null,
   workoutId: string | null,
   me: SocialProfile,
+  weekStart: DayKey,
+  activityId: string | null,
 ): PostContent | null {
   switch (kind) {
+    case 'week':
+      return { kind, data: loadWeekSummary(weekStart, { shareBody: me.share_body }) };
+    case 'football': {
+      const data = activityId ? footballSnapshot(activityId) : null;
+      return data ? { kind, data } : null;
+    }
     case 'meal': {
       const data = mealId ? mealSnapshot(day, mealId) : null;
       return data ? { kind, data } : null;
@@ -95,14 +122,16 @@ function Composer({ me, params }: { me: SocialProfile; params: Params }) {
   const [kind, setKind] = useState<PostKind | null>(asKind(params.tipo));
   const [mealId, setMealId] = useState<string | null>(params.refeicao ?? null);
   const [workoutId, setWorkoutId] = useState<string | null>(params.treino ?? null);
+  const [activityId, setActivityId] = useState<string | null>(params.atividade ?? null);
+  const weekStart = params.semana ?? summaryWeekStart();
   const [photo, setPhoto] = useState<LocalPhoto | null>(null);
   const [caption, setCaption] = useState('');
   const [busy, setBusy] = useState(false);
 
   // O treino consulta o histórico (recordes): calcula só quando a escolha muda, não a cada letra.
   const content = useMemo(
-    () => buildContent(kind, day, mealId, workoutId, me),
-    [kind, day, mealId, workoutId, me],
+    () => buildContent(kind, day, mealId, workoutId, me, weekStart, activityId),
+    [kind, day, mealId, workoutId, me, weekStart, activityId],
   );
   const missingPhoto = kind === 'photo' && !photo;
 
@@ -134,6 +163,7 @@ function Composer({ me, params }: { me: SocialProfile; params: Params }) {
 
       {kind === 'meal' ? <MealPicker day={day} value={mealId} onChange={setMealId} /> : null}
       {kind === 'workout' ? <WorkoutPicker value={workoutId} onChange={setWorkoutId} /> : null}
+      {kind === 'football' ? <FootballPicker value={activityId} onChange={setActivityId} /> : null}
       {kind === 'goals' && !content ? (
         <Text className="text-base text-fg-muted">Nenhuma meta definida ainda.</Text>
       ) : null}
@@ -270,6 +300,31 @@ function WorkoutPicker({
         value: workout.id,
         title: workout.name,
         description: `${formatDayLabel(toDayKey(workout.startedAt))} · ${formatWorkoutDuration(workout.startedAt, workout.finishedAt!)}`,
+      }))}
+      value={value}
+      onChange={onChange}
+    />
+  );
+}
+
+function FootballPicker({
+  value,
+  onChange,
+}: {
+  value: string | null;
+  onChange: (id: string) => void;
+}) {
+  const [sessions] = useState(() => recentFootballSessions());
+  if (sessions.length === 0) {
+    return <Text className="text-base text-fg-muted">Nenhum futebol registrado ainda.</Text>;
+  }
+  return (
+    <OptionList
+      label="Futebol"
+      options={sessions.map((session) => ({
+        value: session.id,
+        title: `${formatDayLabel(session.day)} · nota ${formatDecimal(footballRating(statsOf(session)).score)}`,
+        description: `${activityMinutes(session)} min · ${session.wins}V ${session.draws}E ${session.losses}D · ${session.goals} gols`,
       }))}
       value={value}
       onChange={onChange}

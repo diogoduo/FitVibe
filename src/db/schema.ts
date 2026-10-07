@@ -548,7 +548,7 @@ export const progressPhotos = sqliteTable(
   (t) => [index('progress_photos_taken_on_idx').on(t.takenOn)],
 );
 
-export const POST_KINDS = ['meal', 'workout', 'goals', 'day', 'photo'] as const;
+export const POST_KINDS = ['meal', 'workout', 'goals', 'day', 'photo', 'week', 'football'] as const;
 export type PostKind = (typeof POST_KINDS)[number];
 
 /**

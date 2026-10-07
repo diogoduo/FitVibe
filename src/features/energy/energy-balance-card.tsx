@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, Text, View } from 'react-native';
 
@@ -125,6 +126,14 @@ export function EnergyBalanceCard() {
           : `Semana: ${balanceText(summary.totalKcal).toLowerCase()} kcal ≈ ${formatDecimal(Math.abs(summary.kg))} kg ` +
             `(${summary.loggedDays} ${summary.loggedDays === 1 ? 'dia registrado' : 'dias registrados'}).`}
       </Text>
+      <Pressable
+        onPress={() => router.push({ pathname: '/semana', params: { inicio: week[0] } })}
+        accessibilityRole="button"
+        hitSlop={8}
+        className="self-start active:opacity-60"
+      >
+        <Text className="text-sm font-semibold text-primary">Resumo da semana ›</Text>
+      </Pressable>
     </Card>
   );
 }

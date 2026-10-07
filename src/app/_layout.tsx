@@ -140,6 +140,7 @@ function AppStack() {
           <Stack.Screen name="sessao/[id]" options={pushed} />
           <Stack.Screen name="registro/[id]" options={pushed} />
           <Stack.Screen name="atividade/[id]" options={pushed} />
+          <Stack.Screen name="semana" options={pushed} />
           <Stack.Screen name="resumo/[id]" options={pushed} />
           <Stack.Screen name="alimentos" options={pushed} />
           <Stack.Screen name="alimento" options={formSheet} />

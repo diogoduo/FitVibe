@@ -95,7 +95,8 @@ export function goalsSnapshot(day: DayKey = todayKey()): GoalsPostData | null {
 
 type WorkoutTotals = { durationMin: number; totalSets: number; volumeKg: number };
 
-function workoutDetails(workout: Workout) {
+/** Exercícios, séries válidas feitas e os totais de um treino (post, resumo da semana). */
+export function workoutDetails(workout: Workout) {
   const entries = db
     .select()
     .from(workoutExercises)

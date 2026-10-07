@@ -23,7 +23,7 @@ export function mealPhrase(name: string | undefined): string {
   return article ? `${article} ${name.trim().toLowerCase()}` : `a refeição "${name.trim()}"`;
 }
 
-/** "postou ___": o café da manhã, o treino Pernas, as metas, o resumo do dia, uma foto. */
+/** "postou ___": o café da manhã, o treino Pernas, as metas, o resumo do dia/semana, o futebol. */
 export function postPhrase(data: NotificationData): string {
   switch (data.post_kind) {
     case 'meal':
@@ -34,6 +34,10 @@ export function postPhrase(data: NotificationData): string {
       return 'as metas';
     case 'day':
       return 'o resumo do dia';
+    case 'week':
+      return 'o resumo da semana';
+    case 'football':
+      return 'o futebol';
     default:
       return 'uma foto';
   }

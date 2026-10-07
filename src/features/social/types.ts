@@ -48,12 +48,62 @@ export type DaySnapshot = {
   body?: { weightKg: number | null };
 };
 
+/** O futebol do dia: partidas, gols, assistências, tempo e a nota. */
+export type FootballPostData = {
+  name: string;
+  day: DayKey;
+  minutes: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goals: number;
+  assists: number;
+  score: number;
+  title: string;
+};
+
+/** O resumo da semana (segunda a domingo), até o dia em que foi montado. */
+export type WeekPostData = {
+  from: DayKey;
+  to: DayKey;
+  /** Dias da semana que já passaram (até hoje), para "até agora". */
+  daysElapsed: number;
+  diet: { loggedDays: number; avgKcal: number; avgProtein: number } | null;
+  /** Saldo calórico dos dias registrados: negativo = déficit. */
+  balance: { totalKcal: number; kg: number; loggedDays: number } | null;
+  training: {
+    done: number;
+    planned: number;
+    sets: number;
+    volumeKg: number;
+    minutes: number;
+    names: string[];
+  };
+  records: { exercise: string; kinds: string[] }[];
+  football: {
+    sessions: number;
+    wins: number;
+    draws: number;
+    losses: number;
+    goals: number;
+    assists: number;
+    minutes: number;
+    bestScore: number | null;
+    bestTitle: string | null;
+  } | null;
+  /** Tendência do peso no começo e no fim (só quando a pessoa compartilha o corpo). */
+  weight: { startKg: number; endKg: number } | null;
+  waterAvgMl: number | null;
+};
+
 export type PostDataByKind = {
   meal: MealPostData;
   workout: WorkoutPostData;
   goals: GoalsPostData;
   day: DaySnapshot;
   photo: Record<string, never>;
+  week: WeekPostData;
+  football: FootballPostData;
 };
 
 /** Um post já com o tipo dos dados amarrado ao `kind`. */
