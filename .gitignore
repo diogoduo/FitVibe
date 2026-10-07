@@ -36,8 +36,14 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-example
 
 # generated native folders
 /ios
 /android
+
+# anotações pessoais (fora do GitHub)
+*.local.md
+
+# arquivos do agente de IA (ficam só no PC)
+.claude/
+AGENTS.md
