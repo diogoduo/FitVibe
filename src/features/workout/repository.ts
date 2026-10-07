@@ -33,13 +33,13 @@ export function getActiveWorkout(executor: DbExecutor = db) {
 
 /**
  * As vezes em que o exercício foi feito em treinos terminados, da mais recente para a mais
- * antiga, com as séries válidas concluídas de cada uma.
+ * antiga, com as séries válidas concluídas de cada uma e a anotação daquele dia.
  */
 export function exerciseHistory(
   exerciseId: string,
   options: { before?: Date; excludeWorkoutId?: string; limit?: number } = {},
   executor: DbExecutor = db,
-): { workout: Workout; sets: WorkoutSet[] }[] {
+): { workout: Workout; sets: WorkoutSet[]; notes: string | null }[] {
   const rows = executor
     .select({ workout: workouts, entry: workoutExercises })
     .from(workoutExercises)
@@ -76,10 +76,14 @@ export function exerciseHistory(
     .all();
 
   // O mesmo exercício pode aparecer duas vezes num treino (extra): junta por treino.
-  const byWorkout = new Map<string, { workout: Workout; sets: WorkoutSet[] }>();
+  const byWorkout = new Map<
+    string,
+    { workout: Workout; sets: WorkoutSet[]; notes: string | null }
+  >();
   for (const { workout, entry } of rows) {
-    const item = byWorkout.get(workout.id) ?? { workout, sets: [] };
+    const item = byWorkout.get(workout.id) ?? { workout, sets: [], notes: null };
     item.sets.push(...sets.filter((set) => set.workoutExerciseId === entry.id));
+    item.notes = item.notes ?? entry.notes;
     byWorkout.set(workout.id, item);
   }
   const result = [...byWorkout.values()].filter((item) => item.sets.length > 0);
@@ -383,6 +387,21 @@ export function addSet(entryId: string) {
 
 export function removeSet(setId: string) {
   db.update(workoutSets).set({ deletedAt: new Date() }).where(eq(workoutSets.id, setId)).run();
+}
+
+export function setWorkoutNotes(workoutId: string, notes: string) {
+  db.update(workouts)
+    .set({ notes: notes.trim() || null })
+    .where(eq(workouts.id, workoutId))
+    .run();
+}
+
+/** Anotação do exercício neste treino (aparece na próxima vez, junto do "Última vez"). */
+export function setExerciseNotes(entryId: string, notes: string) {
+  db.update(workoutExercises)
+    .set({ notes: notes.trim() || null })
+    .where(eq(workoutExercises.id, entryId))
+    .run();
 }
 
 /** "Desfazer" logo depois de excluir uma série. */

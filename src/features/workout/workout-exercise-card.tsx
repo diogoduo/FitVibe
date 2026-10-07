@@ -21,9 +21,11 @@ import {
   exerciseHistory,
   removeSet,
   restoreSet,
+  setExerciseNotes,
   setSkipped,
   swapWorkoutExercise,
 } from './repository';
+import { NoteField } from './note-field';
 import { SetRow } from './set-row';
 
 type WorkoutExerciseCardProps = {
@@ -59,6 +61,7 @@ export function WorkoutExerciseCard({
       : null,
   );
   const [records, setRecords] = useState<RecordKind[]>([]);
+  const [noting, setNoting] = useState(Boolean(entry.notes));
 
   const { volume, effort } = describePrescription(entry);
   const working = sets.filter((set) => set.kind === 'working');
@@ -151,7 +154,16 @@ export function WorkoutExerciseCard({
           Última vez ({formatDayLabel(toDayKey(last.workout.startedAt)).toLowerCase()}):{' '}
           {last.sets.map((set) => formatSet(set, loadType)).join(' · ')}
         </Text>
-      ) : exercise?.referenceSets?.length ? (
+      ) : null}
+      {last?.notes ? (
+        <View className="flex-row items-start gap-1.5">
+          <Icon name="note" size={13} color={colors['fg-muted']} />
+          <Text className="flex-1 text-sm italic text-fg-muted">
+            Nota da última vez: {last.notes}
+          </Text>
+        </View>
+      ) : null}
+      {!last && exercise?.referenceSets?.length ? (
         <Text className="text-sm text-fg-muted">
           Referência:{' '}
           {exercise.referenceSets.map((set) => formatReferenceSet(set, loadType)).join(' · ')}
@@ -218,7 +230,17 @@ export function WorkoutExerciseCard({
             </Animated.View>
           ) : null}
 
+          {noting ? (
+            <NoteField
+              value={entry.notes}
+              onSave={(text) => setExerciseNotes(entry.id, text)}
+              placeholder="Nota deste exercício (ex.: banco na posição 3)"
+              autoFocus={!entry.notes}
+            />
+          ) : null}
+
           <View className="flex-row justify-end gap-5 pt-1">
+            {!noting ? <CardAction label="Nota" onPress={() => setNoting(true)} /> : null}
             {removable ? <CardAction label="− Série" onPress={removeLast} /> : null}
             <CardAction label="+ Série" onPress={() => addSet(entry.id)} />
             {!anyDone ? <CardAction label="Trocar" onPress={openSwap} /> : null}

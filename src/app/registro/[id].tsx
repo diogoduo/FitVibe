@@ -3,12 +3,14 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { openAssistant } from '@/features/assistant/assistant-card';
 import { useAllExercises } from '@/features/exercises/queries';
 import { formatWorkoutDuration } from '@/features/workout/format';
 import { useWorkout, useWorkoutEntries, useWorkoutSets } from '@/features/workout/queries';
-import { deleteWorkout, finishWorkout } from '@/features/workout/repository';
+import { NoteField } from '@/features/workout/note-field';
+import { deleteWorkout, finishWorkout, setWorkoutNotes } from '@/features/workout/repository';
 import { beginRest, stopRest } from '@/features/workout/rest';
 import { RestTimerBar } from '@/features/workout/rest-timer-bar';
 import { WorkoutExerciseCard } from '@/features/workout/workout-exercise-card';
@@ -114,7 +116,7 @@ export default function WorkoutLogScreen() {
         {active ? (
           <Text className="text-sm leading-5 text-fg-muted">
             As cargas já vêm com a sugestão (↑ = subir carga). Ajuste se precisar e toque no ✓; o
-            descanso começa sozinho. Toque e segure o número da série para excluí-la.
+            descanso começa sozinho. Deslize uma série para a esquerda para excluí-la.
           </Text>
         ) : null}
 
@@ -129,6 +131,14 @@ export default function WorkoutLogScreen() {
             onRest={(seconds, name) => beginRest(id, seconds, `Próxima série: ${name}.`)}
           />
         ))}
+
+        <Card icon="note" title="Anotações do treino">
+          <NoteField
+            value={workout.notes}
+            onSave={(text) => setWorkoutNotes(id, text)}
+            placeholder="Ex.: dormi mal, academia cheia, ombro incomodou"
+          />
+        </Card>
 
         <Button
           label="Adicionar exercício"

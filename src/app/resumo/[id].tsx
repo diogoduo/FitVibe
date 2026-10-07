@@ -133,9 +133,18 @@ export default function WorkoutSummaryScreen() {
                   ? 'Pulado'
                   : done.map((set) => formatSet(set, exercise?.loadType ?? 'kg')).join(' · ')}
               </Text>
+              {entry.notes ? (
+                <Text className="text-sm italic text-fg-muted">Nota: {entry.notes}</Text>
+              ) : null}
             </View>
           ))}
         </Card>
+
+        {workout.notes ? (
+          <Card icon="note" title="Anotações do treino">
+            <Text className="text-base leading-6 text-fg">{workout.notes}</Text>
+          </Card>
+        ) : null}
 
         {canPost ? (
           <Button
