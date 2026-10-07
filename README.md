@@ -1,6 +1,6 @@
 # FitVibe
 
-[![CI](https://github.com/diogoduo/Gym-Diet/actions/workflows/ci.yml/badge.svg)](https://github.com/diogoduo/Gym-Diet/actions/workflows/ci.yml)
+[![CI](https://github.com/diogoduo/FitVibe/actions/workflows/ci.yml/badge.svg)](https://github.com/diogoduo/FitVibe/actions/workflows/ci.yml)
 
 App de treino e dieta **offline-first**, com sincronização e um lado social. React Native, Expo e
 Supabase. Feito por **Diogo Duo**.

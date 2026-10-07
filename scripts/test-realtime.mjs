@@ -18,6 +18,14 @@ const key = read('EXPO_PUBLIC_SUPABASE_KEY');
 if (!url || !key)
   throw new Error('Faltam EXPO_PUBLIC_SUPABASE_URL e EXPO_PUBLIC_SUPABASE_KEY no .env.local');
 
+// Com a confirmação de e-mail ligada, cada conta temporária mandaria um e-mail (pelo Gmail do
+// app) para um endereço inventado; muitos e-mails devolvidos podem bloquear a conta.
+const settings = await fetch(`${url}/auth/v1/settings`, { headers: { apikey: key } }).then((r) => r.json());
+if (settings.mailer_autoconfirm === false) {
+  console.error('A confirmação de e-mail está ligada na nuvem: este teste cria contas novas e não roda mais lá.');
+  process.exit(1);
+}
+
 const users = [];
 
 async function newUser(label) {

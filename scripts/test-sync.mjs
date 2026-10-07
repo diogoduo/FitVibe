@@ -47,6 +47,20 @@ const pattern =
   onlyIndex >= 0
     ? String.raw`${process.argv[onlyIndex + 1]}[^/\\]*\.integration\.test\.ts$`
     : String.raw`\.integration\.test\.ts$`;
+// Na nuvem com a confirmação de e-mail ligada, criar contas temporárias mandaria e-mails (pelo
+// Gmail do app) para endereços inventados: só o teste do assistente roda, com a conta fixa.
+if (process.argv.includes('--cloud')) {
+  const settings = await fetch(`${url}/auth/v1/settings`, { headers: { apikey: key } }).then((r) => r.json());
+  const onlyAssistant = onlyIndex >= 0 && process.argv[onlyIndex + 1] === 'assistant';
+  if (settings.mailer_autoconfirm === false && !onlyAssistant) {
+    console.error('A confirmação de e-mail está ligada na nuvem: rode estes testes no Supabase local (npm run test:sync).');
+    process.exit(1);
+  }
+  if (settings.mailer_autoconfirm === false && !account.TEST_ACCOUNT_EMAIL) {
+    console.error('Falta a conta de teste confirmada no .env.local (TEST_ACCOUNT_EMAIL e TEST_ACCOUNT_PASSWORD).');
+    process.exit(1);
+  }
+}
 console.log(`Testes de integração contra ${url}\n`);
 
 const result = spawnSync(
