@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <title>FitVibe</title>
+    <style>
+      :root {
+        --background: #f6f6f8;
+        --surface: #ffffff;
+        --line: #d9d9e0;
+        --fg: #111114;
+        --fg-muted: #5c5c68;
+        --primary: #4d7c0f;
+        --on-primary: #ffffff;
+        --success: #15803d;
+        --warning: #b45309;
+        --danger: #dc2626;
+        color-scheme: light dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --background: #0b0b0f;
+          --surface: #16161c;
+          --line: #2a2a35;
+          --fg: #f4f4f6;
+          --fg-muted: #a1a1ad;
+          --primary: #a3e635;
+          --on-primary: #0b0b0f;
+          --success: #4ade80;
+          --warning: #fbbf24;
+          --danger: #f87171;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px 16px;
+        background: var(--background);
+        color: var(--fg);
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.5;
+      }
+      main {
+        width: 100%;
+        max-width: 420px;
+        padding: 28px 24px;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: var(--surface);
+        text-align: center;
+      }
+      .brand {
+        margin: 0 0 20px;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--fg-muted);
+      }
+      .badge {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 16px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--tone) 18%, transparent);
+        color: var(--tone);
+      }
+      .badge svg {
+        width: 36px;
+        height: 36px;
+      }
+      h1 {
+        margin: 0 0 10px;
+        font-size: 24px;
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+      }
+      p {
+        margin: 0 0 12px;
+        color: var(--fg-muted);
+        font-size: 16px;
+      }
+      p strong {
+        color: var(--fg);
+      }
+      .button {
+        display: block;
+        margin-top: 20px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: var(--primary);
+        color: var(--on-primary);
+        font-size: 16px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .hint {
+        margin-top: 10px;
+        font-size: 13px;
+      }
+      .detail {
+        font-size: 13px;
+        word-break: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="brand">FitVibe</p>
+      <div class="badge" id="badge" aria-hidden="true"></div>
+      <h1 id="title">FitVibe</h1>
+      <div id="body">
+        <p>App de treino e dieta. Esta página confirma o e-mail de quem cria a conta no app.</p>
+      </div>
+      <a class="button" id="open" hidden>Abrir o FitVibe</a>
+      <p class="hint" id="open-hint" hidden>Abre no Expo Go, logado na conta de testes.</p>
+    </main>
+
+    <script>
+      // O Supabase volta para cá depois do link do e-mail: com os códigos de acesso no "#"
+      // (deu certo) ou com error/error_code (link usado, expirado ou inválido). Nada daqui é
+      // enviado a lugar nenhum; os códigos saem do endereço na hora.
+      (function () {
+        var APP_LINK =
+          'exp://u.expo.dev/cbad6eb8-cb13-433c-ae39-844fd1f0abc2?runtime-version=exposdk%3A57.0.0&channel-name=production';
+        var ICONS = {
+          ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+          warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v6"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9.5"/></svg>',
+          error:
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>',
+        };
+
+        var hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+        var query = new URLSearchParams(window.location.search);
+        var get = function (key) {
+          return hash.get(key) || query.get(key);
+        };
+        var errorCode = get('error_code') || get('error');
+        var confirmed = Boolean(get('access_token') || get('code') || get('type') === 'signup');
+
+        if (errorCode || confirmed) {
+          // Tira os códigos do endereço (e do histórico do navegador).
+          history.replaceState(null, '', window.location.pathname);
+        }
+
+        var badge = document.getElementById('badge');
+        var title = document.getElementById('title');
+        var body = document.getElementById('body');
+        var open = document.getElementById('open');
+        var openHint = document.getElementById('open-hint');
+
+        function show(tone, icon, heading, paragraphs, withButton) {
+          badge.style.setProperty('--tone', 'var(--' + tone + ')');
+          badge.innerHTML = ICONS[icon];
+          title.textContent = heading;
+          body.innerHTML = '';
+          paragraphs.forEach(function (html) {
+            var p = document.createElement('p');
+            p.innerHTML = html;
+            body.appendChild(p);
+          });
+          if (withButton) {
+            open.href = APP_LINK;
+            open.hidden = false;
+            openHint.hidden = false;
+          }
+        }
+
+        if (confirmed && !errorCode) {
+          show(
+            'success',
+            'ok',
+            'E-mail confirmado!',
+            [
+              'Sua conta do FitVibe está pronta.',
+              'Volte ao app e toque em <strong>“Já confirmei, entrar”</strong>.',
+            ],
+            true,
+          );
+        } else if (errorCode === 'otp_expired') {
+          show(
+            'warning',
+            'warn',
+            'Este link já foi usado ou expirou',
+            [
+              'Cada link vale uma vez só, e pedir um e-mail novo anula o anterior.',
+              'Se você já tinha aberto este link, a conta provavelmente já está confirmada: volte ao app e toque em <strong>“Já confirmei, entrar”</strong>.',
+              'Se o app disser que falta confirmar, toque em <strong>“Reenviar o e-mail”</strong> e abra só o e-mail mais novo.',
+            ],
+            true,
+          );
+        } else if (errorCode) {
+          var description = (get('error_description') || '').replace(/\+/g, ' ');
+          show('danger', 'error', 'Não deu para confirmar', [
+            'Volte ao app e toque em <strong>“Reenviar o e-mail”</strong> para receber um link novo.',
+          ]);
+          if (description) {
+            var detail = document.createElement('p');
+            detail.className = 'detail';
+            detail.textContent = 'Detalhe: ' + description;
+            body.appendChild(detail);
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>

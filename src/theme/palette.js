@@ -5,7 +5,8 @@
  * classes (`bg-surface`, `text-fg-muted`...) seguem o tema ativo. O código TS importa
  * os hex direto só onde o NativeWind não alcança (tab bar nativa, tema do router).
  *
- * O escuro é o padrão do app; o claro (Ajustes → Aparência) troca as variáveis com `vars()`
+ * O escuro é o padrão do app; o claro (Ajustes → Aparência) vem das variáveis de
+ * `prefers-color-scheme` e o app força o modo com Appearance.setColorScheme
  * em src/theme/theme.tsx. No código TS, use `useColors()` em vez de importar a paleta.
  * Fica em .js (CommonJS) porque o tailwind.config.js também precisa ler este arquivo.
  */

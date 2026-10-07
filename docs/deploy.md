@@ -26,8 +26,11 @@ Tudo no plano gratuito: Supabase Free, Gemini (plano grátis) e EAS Update abert
    Com SMTP próprio o Supabase começa em 30 e-mails por hora (ajustável em **Authentication → Rate
    Limits**).
 5. **Authentication → URL Configuration → Site URL**: a página que abre depois de tocar no link de
-   confirmação (por exemplo, a página do projeto no GitHub). A confirmação vale mesmo que a página
-   não seja do app; a pessoa volta ao app e toca em "Já confirmei, entrar".
+   confirmação. O repositório publica uma pelo GitHub Pages (pasta `site/`, workflow
+   `pages.yml`; em **Settings → Pages**, a origem é **GitHub Actions**):
+   `https://<usuário>.github.io/<repositório>/`. Ela diz "E-mail confirmado" ou, com link já usado
+   ou expirado, o que fazer, e tira os códigos de acesso do endereço. A pessoa volta ao app e toca
+   em "Já confirmei, entrar".
 6. **Project Settings → API Keys**: copie a URL do projeto e a **publishable key** para o
    `.env.local` (a secreta nunca entra no app):
    ```
