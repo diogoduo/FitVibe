@@ -18,7 +18,7 @@ Como o FitVibe foi construído, em fases. Cada fase terminou com TypeScript, lin
 | 10   | Meta calórica adaptativa, fotos de progresso, tema claro                                                   | ✅     |
 | —    | Interface nova (ícones, animações, vibração, gestos) e tutorial                                            | ✅     |
 | 11   | Assistente por voz: fale o que comeu, bebeu, pesou, mediu ou treinou                                       | ✅     |
-| 12   | Gasto calórico e saldo do dia/semana, resumo da semana, futebol com nota e anotações nos treinos           | ⚠️     |
+| 12   | Gasto calórico e saldo do dia/semana, resumo da semana, futebol com nota e anotações nos treinos           | ✅     |
 
 Tudo no plano gratuito: Supabase Free, Gemini (plano grátis) e Expo Go, sem conta paga da Apple.
 Por isso as notificações da Fase 7 aparecem só dentro do app (push com o app fechado exige build
