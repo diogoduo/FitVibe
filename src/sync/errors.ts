@@ -1,5 +1,10 @@
 /** Mensagens de erro do servidor (login, rede) em português. Sem dependências do app. */
-const AUTH_ERRORS: [RegExp, string][] = [
+const AUTH_ERRORS: [RegExp, string | ((match: RegExpExecArray) => string)][] = [
+  // "For security purposes, you can only request this after 45 seconds."
+  [
+    /only request this after (\d+) seconds?/i,
+    (match) => `Espere ${match[1]} segundos para pedir outro e-mail.`,
+  ],
   [/invalid login credentials/i, 'E-mail ou senha errados.'],
   [/already registered|already exists/i, 'Já existe uma conta com este e-mail. Use "Entrar".'],
   [/password should be at least|weak password/i, 'A senha precisa ter pelo menos 6 caracteres.'],
@@ -22,5 +27,9 @@ export function friendlyError(error: unknown): string {
       : typeof error === 'object' && error != null && 'message' in error
         ? String(error.message)
         : String(error);
-  return AUTH_ERRORS.find(([pattern]) => pattern.test(message))?.[1] ?? message;
+  for (const [pattern, friendly] of AUTH_ERRORS) {
+    const match = pattern.exec(message);
+    if (match) return typeof friendly === 'string' ? friendly : friendly(match);
+  }
+  return message;
 }

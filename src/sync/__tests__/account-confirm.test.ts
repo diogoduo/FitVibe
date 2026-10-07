@@ -64,4 +64,11 @@ it('reenviar o link', async () => {
   await expect(resendConfirmation('ana@email.com')).resolves.toBe(
     'Muitas tentativas em pouco tempo. Espere alguns minutos e tente de novo.',
   );
+  // O intervalo mínimo do Supabase entre dois e-mails para a mesma pessoa.
+  mockAuth.resend.mockResolvedValue({
+    error: new Error('For security purposes, you can only request this after 45 seconds.'),
+  });
+  await expect(resendConfirmation('ana@email.com')).resolves.toBe(
+    'Espere 45 segundos para pedir outro e-mail.',
+  );
 });

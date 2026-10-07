@@ -9,6 +9,7 @@ import { ChoiceChips } from '@/components/ui/choice-chips';
 import { FormScroll } from '@/components/ui/form-scroll';
 import { TextField } from '@/components/ui/text-field';
 import { askConflict } from '@/features/account/conflict';
+import { useNow } from '@/lib/use-now';
 import { getProfile } from '@/features/profile/queries';
 import { resendConfirmation, signIn, signUp, type AccountResult } from '@/sync/account';
 import { supabase } from '@/sync/supabase';
@@ -17,6 +18,8 @@ type Mode = 'signIn' | 'signUp';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD = 6;
+/** O Supabase só manda outro e-mail para a mesma pessoa depois disso (Minimum interval). */
+const RESEND_COOLDOWN_SEC = 60;
 
 /**
  * Entrar ou criar conta. Abre dos Ajustes (com perfil) ou do cadastro ("Já tenho conta"),
@@ -32,7 +35,11 @@ export default function AccountScreen() {
   const [error, setError] = useState<string | null>(null);
   // Conta criada (ou login) esperando o link do e-mail.
   const [pending, setPending] = useState<string | null>(null);
-  const [resent, setResent] = useState(false);
+  const [resentAt, setResentAt] = useState<number | null>(null);
+  const now = useNow(1000);
+  const waitSec = resentAt
+    ? Math.max(0, RESEND_COOLDOWN_SEC - Math.floor((now - resentAt) / 1000))
+    : 0;
 
   const emailError = EMAIL.test(email.trim()) ? undefined : 'Digite um e-mail válido.';
   const passwordError =
@@ -84,7 +91,7 @@ export default function AccountScreen() {
     setError(null);
     const failed = await resendConfirmation(pending);
     if (failed) setError(failed);
-    else setResent(true);
+    else setResentAt(Date.now());
   };
 
   if (!supabase) {
@@ -107,9 +114,11 @@ export default function AccountScreen() {
             Enviamos um link para <Text className="font-semibold">{pending}</Text>. Abra o e-mail
             (pode estar no spam ou em Promoções), toque no link e volte aqui.
           </Text>
-          {resent ? (
-            <Text className="text-sm text-success">
-              Enviamos de novo. Confira a caixa de entrada.
+          {resentAt ? (
+            <Text className="text-sm leading-5 text-fg-muted">
+              Pedimos um e-mail novo. Se não chegar em 1 minuto (veja também o spam), sua conta
+              provavelmente já está confirmada: o Supabase não manda outro para conta confirmada.
+              Toque em <Text className="font-semibold text-fg">“Já confirmei, entrar”</Text>.
             </Text>
           ) : null}
         </Card>
@@ -123,9 +132,9 @@ export default function AccountScreen() {
           <View className="gap-3">
             <Button label="Já confirmei, entrar" onPress={() => void submit('signIn')} />
             <Button
-              label="Reenviar o e-mail"
+              label={waitSec > 0 ? `Reenviar em ${waitSec} s` : 'Reenviar o e-mail'}
               variant="secondary"
-              disabled={resent}
+              disabled={waitSec > 0}
               onPress={() => void resend()}
             />
             <Button
@@ -133,7 +142,7 @@ export default function AccountScreen() {
               variant="secondary"
               onPress={() => {
                 setPending(null);
-                setResent(false);
+                setResentAt(null);
                 setError(null);
               }}
             />
