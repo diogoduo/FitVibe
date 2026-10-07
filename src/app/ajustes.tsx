@@ -53,7 +53,7 @@ export default function SettingsScreen() {
       <DataSourcesCard />
       <Card icon="info" title="Sobre">
         <Text className="text-base text-fg">FitVibe {appVersion}</Text>
-        <Text className="text-sm text-fg-muted">Feito pela Duo</Text>
+        <Text className="text-sm text-fg-muted">Feito por Diogo Duo</Text>
         <Text className="text-sm text-fg-muted">
           Expo SDK {sdkVersion} · {Platform.OS} {Platform.Version}
         </Text>
