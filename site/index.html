@@ -176,10 +176,14 @@
       (function () {
         var UPDATE =
           'u.expo.dev/cbad6eb8-cb13-433c-ae39-844fd1f0abc2?runtime-version=exposdk%3A57.0.0&channel-name=production';
-        // No Android o Chrome às vezes ignora links exp://: o "intent" abre o Expo Go direto (ou
-        // a Play Store, se ele não estiver instalado).
-        var APP_LINK = /Android/i.test(navigator.userAgent)
-          ? 'intent://' + UPDATE + '#Intent;scheme=exp;package=host.exp.exponent;end'
+        // iPhone: pelo Expo Go. Android: o Expo Go 57.0.9 não abre updates publicados
+        // (expo/expo#50139), então lá é o APK do FitVibe, aberto pelo esquema dele.
+        var ANDROID = /Android/i.test(navigator.userAgent);
+        // APK do build bf685029 (versão 1.0.0). Build novo = trocar este link (docs/deploy.md).
+        var APK_URL =
+          'https://expo.dev/artifacts/eas/qn-XJ-zaYd3XKHCGw0_v8u8BSHqDvSm45-QSSbf54hA.apk';
+        var APP_LINK = ANDROID
+          ? 'intent://#Intent;scheme=fitvibe;package=com.diogoduo.fitvibe;end'
           : 'exp://' + UPDATE;
         var ICONS = {
           ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
@@ -209,6 +213,17 @@
         var open = document.getElementById('open');
         var openHint = document.getElementById('open-hint');
 
+        function appendSteps(items) {
+          var steps = document.createElement('ol');
+          steps.className = 'steps';
+          items.forEach(function (html) {
+            var li = document.createElement('li');
+            li.innerHTML = html;
+            steps.appendChild(li);
+          });
+          body.appendChild(steps);
+        }
+
         function show(tone, icon, heading, paragraphs, withButton) {
           badge.style.setProperty('--tone', 'var(--' + tone + ')');
           badge.innerHTML = ICONS[icon];
@@ -222,6 +237,9 @@
           if (withButton) {
             open.href = APP_LINK;
             open.hidden = false;
+            openHint.textContent = ANDROID
+              ? 'Abre o app FitVibe instalado neste celular.'
+              : 'Abre no Expo Go, logado na conta Expo convidada.';
             openHint.hidden = false;
           }
         }
@@ -260,21 +278,28 @@
             detail.textContent = 'Detalhe: ' + description;
             body.appendChild(detail);
           }
+        } else if (ANDROID) {
+          // Convite no Android: baixar e instalar o APK (sem Expo Go e sem convite do Expo).
+          show('primary', 'phone', 'Testar o FitVibe', [], false);
+          appendSteps([
+            'Toque em <strong>Baixar o FitVibe</strong> (155 MB: melhor no Wi-Fi) e abra o arquivo quando terminar.',
+            'Se o Android pedir, permita <strong>instalar apps desconhecidos</strong> para o navegador e toque em <strong>Instalar</strong>. Se o Play Protect avisar que não conhece o app, toque em “Mais detalhes” → “Instalar mesmo assim”.',
+            'Abra o FitVibe e crie a sua conta com um e-mail de verdade (chega um link para confirmar).',
+          ]);
+          open.href = APK_URL;
+          open.textContent = 'Baixar o FitVibe';
+          open.hidden = false;
+          openHint.textContent = 'Não precisa de Expo Go. As atualizações chegam sozinhas no app.';
+          openHint.hidden = false;
         } else {
-          // Sem códigos no endereço: é o link de convite para testar o app.
+          // Convite no iPhone: pelo Expo Go, com o convite da organização no Expo.
           show('primary', 'phone', 'Testar o FitVibe', [], true);
-          var steps = document.createElement('ol');
-          steps.className = 'steps';
-          [
-            'Instale o <strong>Expo Go</strong> (<a href="https://apps.apple.com/app/expo-go/id982107779">iPhone</a> ou <a href="https://play.google.com/store/apps/details?id=host.exp.exponent">Android</a>) e entre nele com uma conta Expo (é grátis).',
+          appendSteps([
+            'Instale o <strong>Expo Go</strong> (<a href="https://apps.apple.com/app/expo-go/id982107779">App Store</a>) e entre nele com uma conta Expo (é grátis).',
             'Mande o seu usuário do Expo para quem te chamou e aceite o convite que chega no seu e-mail.',
-            'Volte aqui <strong>neste celular</strong> e toque em <strong>Abrir o FitVibe</strong>. No app, crie a sua conta com um e-mail de verdade (chega um link para confirmar).',
-          ].forEach(function (html) {
-            var li = document.createElement('li');
-            li.innerHTML = html;
-            steps.appendChild(li);
-          });
-          body.appendChild(steps);
+            'Volte aqui <strong>neste iPhone</strong> e toque em <strong>Abrir o FitVibe</strong>. No app, crie a sua conta com um e-mail de verdade (chega um link para confirmar).',
+            'Tem Android? Abra este mesmo link no celular Android para baixar o app.',
+          ]);
 
           // Plano B: colar o endereço no Expo Go ("Enter URL manually").
           var fallback = document.createElement('p');

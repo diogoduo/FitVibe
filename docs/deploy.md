@@ -76,7 +76,8 @@ da Apple.
 
 - `app.json`: `owner` e `extra.eas.projectId` ligam o app ao projeto no expo.dev (criado com
   `npx eas-cli@latest init`); `runtimeVersion.policy = "sdkVersion"` (`exposdk:57.0.0`) é o que o
-  Expo Go aceita. Não mude o `slug` nem o `owner`: o link de atualização depende deles.
+  Expo Go aceita. O `owner` tem que ser o dono do projeto no expo.dev (hoje a organização
+  `duodiogos-team`); não mude o `slug`: o link de atualização depende dele.
 - As variáveis `EXPO_PUBLIC_*` do `.env.local` precisam estar no ambiente `production` do EAS:
   `npx eas-cli@latest env:set production --name EXPO_PUBLIC_SUPABASE_URL --value ... --visibility plaintext`
   (e o mesmo para a chave publishable).
@@ -93,9 +94,27 @@ da Apple.
   Para convidar alguém, mande a página do site (https://diogoduo.github.io/FitVibe/): sem os
   códigos do e-mail no endereço, ela mostra os passos e o botão que abre o app (o WhatsApp não
   deixa tocar em links `exp://`). A página de membros da organização no expo.dev é só para o dono.
-- **Dados no Expo Go**: cada projeto publicado guarda os dados num espaço próprio (pelo dono do
-  projeto). Trocar de dono ou abrir pela primeira vez começa vazio; entrar na conta baixa o que
-  está na nuvem.
+- **Dados no Expo Go**: cada projeto publicado guarda os dados num espaço próprio (o `scopeKey`,
+  que continuou `@duodiogo/duo-gym-diet` depois da troca de dono). Abrir pela primeira vez começa
+  vazio; entrar na conta baixa o que está na nuvem.
 - **Limite**: o Expo Go roda um SDK por vez. Quando o Expo Go da App Store passar para o próximo
   SDK (App Store ou Play Store), o app para de abrir até o projeto ser atualizado e publicado de
   novo.
+
+## 4. Android: APK próprio
+
+O Expo Go 57.0.9 do Android não abre updates publicados: ele manda o pedido sem o login
+([expo/expo#50139](https://github.com/expo/expo/issues/50139)). Até sair uma versão corrigida,
+quem usa Android instala um APK do FitVibe, gerado de graça pelo EAS Build:
+
+- `eas.json`, perfil `apk`: distribuição interna, canal `production`, ambiente `production` (as
+  `EXPO_PUBLIC_*` do EAS) e `buildType: apk`. No `app.json`, `android.package =
+com.diogoduo.fitvibe` e `android.runtimeVersion.policy = appVersion` (o runtime do APK é a
+  `version`, hoje `1.0.0`; o iPhone continua em `exposdk:57.0.0` para o Expo Go).
+- **Gerar**: `npx eas-cli@latest build --platform android --profile apk`. A chave de assinatura
+  fica no EAS (gerada no primeiro build). O link do APK vai em `APK_URL` no `site/index.html`: no
+  Android, a página de convite mostra o botão de baixar.
+- **Atualizar**: o `npm run publicar` já manda para o APK (canal `production`, runtime `1.0.0`).
+  Só precisa de um APK novo quando mudar algo nativo (SDK novo, biblioteca com código nativo,
+  permissões, ícone): aí suba a `version` (1.0.1...) e gere outro; senão o update novo não chega
+  ao APK antigo, que fica no que já tinha.

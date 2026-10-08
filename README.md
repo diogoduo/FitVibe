@@ -87,7 +87,8 @@ fitvibe/
 ## Como rodar
 
 > Quer testar no seu celular (iPhone ou Android) sem rodar nada? Me peça acesso pelo [LinkedIn](https://www.linkedin.com/in/duodiogo/):
-> o app abre pelo Expo Go para quem é convidado ([como funciona](docs/deploy.md#3-publicar-para-o-expo-go-sem-o-pc-ligado)).
+> no iPhone o app abre pelo Expo Go para quem é convidado, e no Android é um APK
+> ([como funciona](docs/deploy.md#3-publicar-para-o-expo-go-sem-o-pc-ligado)).
 
 Pré-requisitos: Node.js 20 ou mais novo, Docker Desktop (Supabase local) e o app **Expo Go** no
 celular, na mesma Wi-Fi do PC. Desde o SDK 57, o Expo Go no iPhone só abre projetos em
