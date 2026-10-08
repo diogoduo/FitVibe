@@ -3,10 +3,18 @@
 [![CI](https://github.com/diogoduo/FitVibe/actions/workflows/ci.yml/badge.svg)](https://github.com/diogoduo/FitVibe/actions/workflows/ci.yml)
 
 App de treino e dieta **offline-first**, com sincronização e um lado social. React Native, Expo e
-Supabase. Feito por **Diogo Duo**.
+Supabase. Feito por [**Diogo Duo**](https://www.linkedin.com/in/duodiogo/).
 
 Tudo é gravado primeiro no celular, então funciona no subsolo da academia sem sinal, e sincroniza
 com o servidor quando a conexão volta.
+
+<p align="center">
+  <img src="docs/screenshots/hoje.jpg" width="180" alt="Hoje: anéis de calorias, proteína e água, e o gasto × consumo">
+  <img src="docs/screenshots/treino.jpg" width="180" alt="Treino: treino em andamento e o plano da semana">
+  <img src="docs/screenshots/treino-ao-vivo.jpg" width="180" alt="Treino em andamento: aquecimento, séries com carga sugerida e RIR">
+  <img src="docs/screenshots/dieta.jpg" width="180" alt="Dieta: refeição com os alimentos da TACO e as calorias">
+  <img src="docs/screenshots/biblioteca.jpg" width="180" alt="Biblioteca de exercícios com fotos">
+</p>
 
 ## O que ele faz
 
@@ -39,7 +47,7 @@ com o servidor quando a conexão volta.
 - **Assistente por voz** com Gemini: a IA escolhe o **código** do alimento num catálogo enviado
   em linhas curtas e as calorias saem do banco do app, sem inventar números. As instruções e o
   limite diário por pessoa ficam numa Edge Function do Supabase.
-- **Testes**: mais de 210 no Jest (contas puras e gravações num SQLite em memória com as mesmas
+- **Testes**: mais de 230 no Jest (contas puras e gravações num SQLite em memória com as mesmas
   migrações do app) e testes de integração contra um Supabase de verdade.
 
 ## Stack
@@ -73,12 +81,12 @@ fitvibe/
 │   └── functions/assistente/ # Edge Function do assistente (Gemini)
 ├── site/                     # página de confirmação de e-mail (Site URL do Supabase)
 ├── scripts/                  # catálogo, TACO, SQL da sincronização, Supabase local, testes
-└── docs/                     # funcionalidades fase a fase e deploy
+└── docs/                     # funcionalidades fase a fase, deploy e prints
 ```
 
 ## Como rodar
 
-> Quer testar no seu iPhone sem rodar nada? Me peça acesso pelo [GitHub](https://github.com/diogoduo):
+> Quer testar no seu iPhone sem rodar nada? Me peça acesso pelo [LinkedIn](https://www.linkedin.com/in/duodiogo/):
 > o app abre pelo Expo Go para quem é convidado ([como funciona](docs/deploy.md#3-publicar-para-o-expo-go-sem-o-pc-ligado)).
 
 Pré-requisitos: Node.js 20 ou mais novo, Docker Desktop (Supabase local) e o app **Expo Go** no
