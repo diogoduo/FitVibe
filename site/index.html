@@ -109,6 +109,33 @@
       .steps li {
         margin-bottom: 10px;
       }
+      .fallback {
+        margin-top: 24px;
+      }
+      code {
+        display: block;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--background);
+        color: var(--fg);
+        font-size: 12px;
+        text-align: left;
+        word-break: break-all;
+        user-select: all;
+      }
+      .copy {
+        margin-top: 10px;
+        padding: 10px 16px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: transparent;
+        color: var(--primary);
+        font: inherit;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+      }
       .button {
         display: block;
         margin-top: 20px;
@@ -147,8 +174,13 @@
       // (deu certo) ou com error/error_code (link usado, expirado ou inválido). Nada daqui é
       // enviado a lugar nenhum; os códigos saem do endereço na hora.
       (function () {
-        var APP_LINK =
-          'exp://u.expo.dev/cbad6eb8-cb13-433c-ae39-844fd1f0abc2?runtime-version=exposdk%3A57.0.0&channel-name=production';
+        var UPDATE =
+          'u.expo.dev/cbad6eb8-cb13-433c-ae39-844fd1f0abc2?runtime-version=exposdk%3A57.0.0&channel-name=production';
+        // No Android o Chrome às vezes ignora links exp://: o "intent" abre o Expo Go direto (ou
+        // a Play Store, se ele não estiver instalado).
+        var APP_LINK = /Android/i.test(navigator.userAgent)
+          ? 'intent://' + UPDATE + '#Intent;scheme=exp;package=host.exp.exponent;end'
+          : 'exp://' + UPDATE;
         var ICONS = {
           ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
           warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v6"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9.5"/></svg>',
@@ -243,6 +275,29 @@
             steps.appendChild(li);
           });
           body.appendChild(steps);
+
+          // Plano B: colar o endereço no Expo Go ("Enter URL manually").
+          var fallback = document.createElement('p');
+          fallback.className = 'hint fallback';
+          fallback.innerHTML =
+            'Se o botão não abrir: copie o endereço e cole no Expo Go, em <strong>“Enter URL manually”</strong>.';
+          var address = document.createElement('code');
+          address.textContent = 'exp://' + UPDATE;
+          var copy = document.createElement('button');
+          copy.type = 'button';
+          copy.className = 'copy';
+          copy.textContent = 'Copiar endereço';
+          copy.addEventListener('click', function () {
+            navigator.clipboard.writeText(address.textContent).then(
+              function () {
+                copy.textContent = 'Copiado!';
+              },
+              function () {
+                copy.textContent = 'Segure o endereço para copiar';
+              },
+            );
+          });
+          document.querySelector('main').append(fallback, address, copy);
         }
       })();
     </script>
