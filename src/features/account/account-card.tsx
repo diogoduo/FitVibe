@@ -59,7 +59,7 @@ export function AccountCard() {
       run('Conferindo a conta…', async () => {
         const result = await resumeAccount();
         if (result.status !== 'conflict') return result;
-        return askConflict(result, () => setBusy('Baixando os dados da conta…'));
+        return askConflict(result, setBusy);
       });
     return (
       <Card icon="cloud" title="Conta">

@@ -72,7 +72,7 @@ export default function AccountScreen() {
       setMode('signIn');
       return;
     }
-    await finish(await askConflict(result, () => setBusy('Baixando os dados da conta…')));
+    await finish(await askConflict(result, setBusy));
   };
 
   const submit = async (as: Mode = mode) => {

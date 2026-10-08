@@ -4,10 +4,28 @@ import { replaceLocalWithAccount, signOut, type AccountResult } from '@/sync/acc
 
 type Conflict = Extract<AccountResult, { status: 'conflict' }>;
 
-const MESSAGES: Record<Conflict['reason'], string> = {
-  both: 'Esta conta já tem dados salvos, e este celular também. Dá para trocar os dados do celular pelos da conta (os deste celular são apagados) ou cancelar e sair da conta.',
-  'other-account':
-    'Os dados deste celular são de outra conta. Dá para trocá-los pelos desta conta (continuam salvos na outra) ou cancelar e sair.',
+/**
+ * "other-account" só acontece com a conta vazia (conta nova): trocar os dados do celular pelos
+ * dela é começar do zero, e o aviso diz isso com essas palavras.
+ */
+const PROMPTS: Record<
+  Conflict['reason'],
+  { title: string; message: string; confirm: string; busy: string }
+> = {
+  both: {
+    title: 'Usar os dados da conta?',
+    message:
+      'Esta conta já tem dados salvos, e este celular também. Dá para trocar os dados do celular pelos da conta (os deste celular são apagados) ou cancelar e sair da conta.',
+    confirm: 'Usar os da conta',
+    busy: 'Baixando os dados da conta…',
+  },
+  'other-account': {
+    title: 'Começar do zero nesta conta?',
+    message:
+      'Esta conta ainda não tem dados, e os deste celular são de outra conta (continuam salvos nela). Para usar esta, o celular é limpo e você faz o cadastro de novo. Ou cancele e saia.',
+    confirm: 'Começar do zero',
+    busy: 'Limpando o celular…',
+  },
 };
 
 /**
@@ -16,20 +34,21 @@ const MESSAGES: Record<Conflict['reason'], string> = {
  */
 export function askConflict(
   conflict: Conflict,
-  onReplacing: () => void,
+  onReplacing: (busyLabel: string) => void,
 ): Promise<AccountResult | null> {
+  const prompt = PROMPTS[conflict.reason];
   return new Promise((resolve) =>
-    Alert.alert('Usar os dados da conta?', MESSAGES[conflict.reason], [
+    Alert.alert(prompt.title, prompt.message, [
       {
         text: 'Cancelar',
         style: 'cancel',
         onPress: () => void signOut('keep').then(() => resolve(null)),
       },
       {
-        text: 'Usar os da conta',
+        text: prompt.confirm,
         style: 'destructive',
         onPress: () => {
-          onReplacing();
+          onReplacing(prompt.busy);
           void replaceLocalWithAccount(conflict.userId).then(resolve);
         },
       },
