@@ -16,6 +16,9 @@ type GoalBreakdownCardProps = {
 
 /** A conta da meta passo a passo: TMB → gasto total → ajuste do objetivo → meta → macros. */
 export function GoalBreakdownCard({ input, goals, weightSource }: GoalBreakdownCardProps) {
+  // g/kg de verdade (sobre o peso usado nos macros), já com os ajustes.
+  const perKg = (grams: number) => Math.round((grams / goals.macroWeightKg) * 10) / 10;
+  const reducedWeight = goals.macroWeightKg < input.weightKg;
   return (
     <Card icon="flame" title="Sua meta diária">
       <Step
@@ -51,29 +54,41 @@ export function GoalBreakdownCard({ input, goals, weightSource }: GoalBreakdownC
         </Text>
       ) : null}
 
+      {goals.warnings.belowBmr || goals.warnings.macrosReduced || reducedWeight ? (
+        <View className="gap-2 rounded-2xl bg-warning/10 p-3">
+          {goals.warnings.belowBmr ? (
+            <Text className="text-sm leading-5 text-warning">
+              A meta ({formatInt(goals.kcal)} kcal) está abaixo da sua TMB ({formatInt(goals.bmr)}{' '}
+              kcal). Dá para seguir, mas fique de olho em cansaço e queda de rendimento; um ritmo
+              mais lento ajuda.
+            </Text>
+          ) : null}
+          {reducedWeight ? (
+            <Text className="text-sm leading-5 text-warning">
+              Com IMC acima de 30, proteína e gordura são calculadas sobre{' '}
+              {formatKg(goals.macroWeightKg)} (o peso de IMC 27 na sua altura), não sobre o peso
+              todo.
+            </Text>
+          ) : null}
+          {goals.warnings.macrosReduced ? (
+            <Text className="text-sm leading-5 text-warning">
+              Para sobrar caloria para o carboidrato, a gordura (e, se precisou, a proteína) ficou
+              abaixo dos g/kg escolhidos.
+            </Text>
+          ) : null}
+        </View>
+      ) : null}
+
       <MacroTiles
         proteinG={goals.proteinG}
         carbsG={goals.carbsG}
         fatG={goals.fatG}
         details={{
-          protein: `${formatDecimal(input.proteinPerKg)} g/kg`,
+          protein: `${formatDecimal(perKg(goals.proteinG))} g/kg`,
           carbs: 'o resto',
-          fat: `${formatDecimal(input.fatPerKg)} g/kg`,
+          fat: `${formatDecimal(perKg(goals.fatG))} g/kg`,
         }}
       />
-
-      {goals.warnings.belowBmr ? (
-        <Text className="text-sm leading-5 text-warning">
-          A meta está abaixo da sua TMB. Dá para seguir, mas fique de olho em cansaço e queda de
-          rendimento no treino.
-        </Text>
-      ) : null}
-      {goals.warnings.carbsShortfall ? (
-        <Text className="text-sm leading-5 text-warning">
-          Proteína e gordura já passam da meta de calorias, então o carboidrato ficou em zero.
-          Diminua os g/kg ou aumente as calorias.
-        </Text>
-      ) : null}
 
       <Text className="text-sm text-fg-muted">
         Calculado com {formatKg(input.weightKg)} ({weightSource}).

@@ -59,7 +59,8 @@ describe('computeGoals', () => {
       proteinG: 164,
       fatG: 66, // 65,6
       carbsG: 321, // (2534 − 164×4 − 66×9) / 4
-      warnings: { belowBmr: false, carbsShortfall: false },
+      macroWeightKg: 82,
+      warnings: { belowBmr: false, macrosReduced: false },
     });
   });
 
@@ -77,10 +78,43 @@ describe('computeGoals', () => {
     expect(goals.carbsG).toBe(Math.round((2400 - 164 * 4 - 66 * 9) / 4));
   });
 
-  it('avisa quando a meta fica abaixo da TMB e quando não sobra caloria para carboidrato', () => {
+  it('meta muito baixa: avisa da TMB e encolhe proteína e gordura, sem zerar o carboidrato', () => {
     const low = computeGoals({ ...base, kcalOverride: 1200 });
-    expect(low.warnings.belowBmr).toBe(true);
-    expect(low.warnings.carbsShortfall).toBe(true);
-    expect(low.carbsG).toBe(0);
+    expect(low.warnings).toEqual({ belowBmr: true, macrosReduced: true });
+    // Proteína + gordura cabem em 75%; o resto (≥ 25%) é carboidrato.
+    expect(low.proteinG * 4 + low.fatG * 9).toBeLessThanOrEqual(1200 * 0.75 + 5);
+    expect(low.carbsG).toBeGreaterThanOrEqual(Math.floor((1200 * 0.25) / 4) - 2);
+  });
+
+  it('perfil pesado com déficit grande (128 kg, 1,80 m, 20 anos, sedentário, −1 kg/sem)', () => {
+    const heavy = computeGoals({
+      ...base,
+      ageYears: 20,
+      heightCm: 180,
+      weightKg: 128,
+      activityLevel: 'sedentary',
+      weeklyRateKg: 1,
+    });
+    // TMB 2.310 × 1,2 = 2.772 − 1.100 = 1.672 (abaixo da TMB: avisa)
+    expect(heavy).toMatchObject({ bmr: 2310, tdee: 2772, kcal: 1672 });
+    expect(heavy.warnings.belowBmr).toBe(true);
+    // IMC 39,5: os g/kg usam o peso de IMC 27 (87,5 kg), não os 128 kg (que davam 256 g de
+    // proteína e 102 g de gordura, mais que a meta toda).
+    expect(heavy.macroWeightKg).toBe(87.5);
+    expect(heavy.proteinG).toBe(175);
+    expect(heavy.warnings.macrosReduced).toBe(true);
+    expect(heavy.fatG).toBeGreaterThanOrEqual(44); // nunca abaixo de 0,5 g/kg
+    expect(heavy.carbsG).toBeGreaterThan(0);
+    // Os macros fecham com a meta (só o arredondamento de diferença).
+    const total = heavy.proteinG * 4 + heavy.carbsG * 4 + heavy.fatG * 9;
+    expect(Math.abs(total - heavy.kcal)).toBeLessThanOrEqual(10);
+  });
+
+  it('IMC normal ou musculoso não muda: os g/kg seguem o peso todo', () => {
+    // 86 kg em 1,78 m (IMC 27): igual a antes.
+    const goals = computeGoals({ ...base, weightKg: 86 });
+    expect(goals.macroWeightKg).toBe(86);
+    expect(goals.proteinG).toBe(172);
+    expect(goals.warnings.macrosReduced).toBe(false);
   });
 });
