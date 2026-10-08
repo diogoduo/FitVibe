@@ -123,7 +123,13 @@ function AppStack() {
     <>
       <TutorialLauncher hasProfile={hasProfile} />
       <Stack
-        screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+          // Cabeçalho sólido: o translúcido deixava aparecer o que rola por trás (botões verdes).
+          headerStyle: { backgroundColor: colors.background },
+          headerShadowVisible: false,
+        }}
       >
         <Stack.Protected guard={hasProfile}>
           <Stack.Screen name="(tabs)" />
