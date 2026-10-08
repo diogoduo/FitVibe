@@ -25,8 +25,9 @@ export default function TabsLayout() {
       <NativeTabs.Trigger name="feed">
         <NativeTabs.Trigger.Label>Feed</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="square.stack.fill" md="dynamic_feed" />
+        {/* Com texto, o Expo Router ignora o `hidden` (mostrava "0"): sem não lidas, sem texto. */}
         <NativeTabs.Trigger.Badge hidden={unread === 0}>
-          {unread > 9 ? '9+' : String(unread)}
+          {unread === 0 ? undefined : unread > 9 ? '9+' : String(unread)}
         </NativeTabs.Trigger.Badge>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="meu-perfil">
