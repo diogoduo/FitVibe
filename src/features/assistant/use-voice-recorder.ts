@@ -12,8 +12,15 @@ import { useRef } from 'react';
 /** Uma fala longa cabe folgado; passa disso, a caixa de fala para sozinha. */
 export const MAX_RECORDING_SEC = 60;
 
-/** m4a/AAC leve (~8 KB por segundo): voz não precisa de mais. Com o nível do som (metering). */
-const OPTIONS: RecordingOptions = { ...RecordingPresets.LOW_QUALITY, isMeteringEnabled: true };
+/**
+ * m4a/AAC leve (~8 KB por segundo): voz não precisa de mais. Com o nível do som (metering). No
+ * Android o preset grava 3GP/AMR, que o Gemini não aceita: lá também vai m4a/AAC.
+ */
+const OPTIONS: RecordingOptions = {
+  ...RecordingPresets.LOW_QUALITY,
+  isMeteringEnabled: true,
+  android: { extension: '.m4a', outputFormat: 'mpeg4', audioEncoder: 'aac' },
+};
 
 export type Recording = { base64: string; mimeType: string; durationMs: number };
 
