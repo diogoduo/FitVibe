@@ -179,9 +179,8 @@
         // iPhone: pelo Expo Go. Android: o Expo Go 57.0.9 não abre updates publicados
         // (expo/expo#50139), então lá é o APK do FitVibe, aberto pelo esquema dele.
         var ANDROID = /Android/i.test(navigator.userAgent);
-        // APK do build bf685029 (versão 1.0.0). Build novo = trocar este link (docs/deploy.md).
-        var APK_URL =
-          'https://expo.dev/artifacts/eas/qn-XJ-zaYd3XKHCGw0_v8u8BSHqDvSm45-QSSbf54hA.apk';
+        // O FitVibe.apk da release mais recente do GitHub (o link do EAS expira em 90 dias).
+        var APK_URL = 'https://github.com/diogoduo/FitVibe/releases/latest/download/FitVibe.apk';
         var APP_LINK = ANDROID
           ? 'intent://#Intent;scheme=fitvibe;package=com.diogoduo.fitvibe;end'
           : 'exp://' + UPDATE;

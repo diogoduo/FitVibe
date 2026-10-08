@@ -112,8 +112,9 @@ quem usa Android instala um APK do FitVibe, gerado de graça pelo EAS Build:
 com.diogoduo.fitvibe` e `android.runtimeVersion.policy = appVersion` (o runtime do APK é a
   `version`, hoje `1.0.0`; o iPhone continua em `exposdk:57.0.0` para o Expo Go).
 - **Gerar**: `npx eas-cli@latest build --platform android --profile apk`. A chave de assinatura
-  fica no EAS (gerada no primeiro build). O link do APK vai em `APK_URL` no `site/index.html`: no
-  Android, a página de convite mostra o botão de baixar.
+  fica no EAS (gerada no primeiro build). O EAS apaga o arquivo em 90 dias, então o APK vai para
+  uma release do GitHub com o nome `FitVibe.apk`: a página de convite baixa de
+  `releases/latest/download/FitVibe.apk`, que sempre aponta para a release mais recente.
 - **Atualizar**: o `npm run publicar` já manda para o APK (canal `production`, runtime `1.0.0`).
   Só precisa de um APK novo quando mudar algo nativo (SDK novo, biblioteca com código nativo,
   permissões, ícone): aí suba a `version` (1.0.1...) e gere outro; senão o update novo não chega
