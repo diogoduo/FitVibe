@@ -104,27 +104,34 @@ export function StrengthCard() {
               {formatDayLabel(first!.day).toLowerCase()})
             </Text>
           ) : null}
-          <LineChart
-            key={selected.id}
-            series={[
-              {
-                points: series.map((point) => ({
-                  x: daysBetween(start, point.day),
-                  y: point.value,
-                })),
-                color: colors.primary,
-                dots: true,
-              },
-            ]}
-            describe={(x) => {
-              const point = series.find((item) => daysBetween(start, item.day) === x);
-              return point
-                ? `${formatDayLabel(point.day)}: ${formatDecimal(point.value)} ${unit} (${point.best})`
-                : '';
-            }}
-            formatY={(value) => formatDecimal(value)}
-            xLabels={[formatDayLabel(first!.day), formatDayLabel(last!.day)]}
-          />
+          {series.length < 2 ? (
+            // Com um ponto só, o gráfico vira uma linha em pé ("16,3 – 16,3", "Ontem … Ontem").
+            <Text className="text-sm leading-5 text-fg-muted">
+              Faça este exercício mais uma vez para ver a evolução.
+            </Text>
+          ) : (
+            <LineChart
+              key={selected.id}
+              series={[
+                {
+                  points: series.map((point) => ({
+                    x: daysBetween(start, point.day),
+                    y: point.value,
+                  })),
+                  color: colors.primary,
+                  dots: true,
+                },
+              ]}
+              describe={(x) => {
+                const point = series.find((item) => daysBetween(start, item.day) === x);
+                return point
+                  ? `${formatDayLabel(point.day)}: ${formatDecimal(point.value)} ${unit} (${point.best})`
+                  : '';
+              }}
+              formatY={(value) => formatDecimal(value)}
+              xLabels={[formatDayLabel(first!.day), formatDayLabel(last!.day)]}
+            />
+          )}
         </>
       )}
       <Pressable
