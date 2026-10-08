@@ -86,7 +86,7 @@ fitvibe/
 
 ## Como rodar
 
-> Quer testar no seu iPhone sem rodar nada? Me peça acesso pelo [LinkedIn](https://www.linkedin.com/in/duodiogo/):
+> Quer testar no seu celular (iPhone ou Android) sem rodar nada? Me peça acesso pelo [LinkedIn](https://www.linkedin.com/in/duodiogo/):
 > o app abre pelo Expo Go para quem é convidado ([como funciona](docs/deploy.md#3-publicar-para-o-expo-go-sem-o-pc-ligado)).
 
 Pré-requisitos: Node.js 20 ou mais novo, Docker Desktop (Supabase local) e o app **Expo Go** no

@@ -1,12 +1,14 @@
 /**
- * Publica a versão atual do app para os iPhones (EAS Update, canal "production").
- * Quem abre o FitVibe pelo Expo Go (logado na conta duodiogo) recebe na próxima abertura.
+ * Publica a versão atual do app para iPhone e Android (EAS Update, canal "production").
+ * Quem abre o FitVibe pelo Expo Go (logado numa conta Expo da organização) recebe na próxima
+ * abertura.
  *
  *   npm run publicar
  *
  * Só publica o que já está no git (nada de alteração pela metade) e usa a mensagem do último
  * commit. As variáveis EXPO_PUBLIC_* vêm do ambiente "production" do EAS (eas env:list).
- * Só iOS: a versão web não existe (o expo-sqlite no navegador pede outra configuração).
+ * "all" no eas update é iOS + Android (a versão web não existe: o expo-sqlite no navegador pede
+ * outra configuração).
  */
 import { execFileSync, spawnSync } from 'node:child_process';
 import path from 'node:path';
@@ -36,7 +38,7 @@ const result = spawnSync(
     '--environment',
     'production',
     '--platform',
-    'ios',
+    'all',
     '--message',
     quoted,
     '--non-interactive',

@@ -81,14 +81,21 @@ da Apple.
   `npx eas-cli@latest env:set production --name EXPO_PUBLIC_SUPABASE_URL --value ... --visibility plaintext`
   (e o mesmo para a chave publishable).
 - **Publicar**: commit e `npm run publicar` (recusa se houver alteração sem commit e usa a mensagem
-  do último commit). Os celulares baixam ao abrir o app, às vezes só na segunda abertura.
+  do último commit). Sai para iPhone e Android juntos (`--platform all` no eas update não inclui a
+  web). Os celulares baixam ao abrir o app, às vezes só na segunda abertura. O Android quase não
+  foi testado: a gravação de voz lá foi trocada para m4a/AAC (o padrão era 3GP/AMR, que o Gemini
+  não aceita).
 - **Abrir**: o Expo Go só abre updates de projetos da conta logada nele ou de uma organização da
   qual a pessoa faz parte. Para outras pessoas testarem, ponha o projeto numa organização do Expo e
   convide cada uma como **Viewer** (só abre pelo Expo Go, não mexe em nada). O link é
   `exp://u.expo.dev/<projectId>?runtime-version=exposdk%3A57.0.0&channel-name=production`, ou o QR
   code de `https://qr.expo.dev/eas-update?projectId=<projectId>&runtimeVersion=exposdk:57.0.0&channel=production&slug=exp`.
+  Para convidar alguém, mande a página do site (https://diogoduo.github.io/FitVibe/): sem os
+  códigos do e-mail no endereço, ela mostra os passos e o botão que abre o app (o WhatsApp não
+  deixa tocar em links `exp://`). A página de membros da organização no expo.dev é só para o dono.
 - **Dados no Expo Go**: cada projeto publicado guarda os dados num espaço próprio (pelo dono do
   projeto). Trocar de dono ou abrir pela primeira vez começa vazio; entrar na conta baixa o que
   está na nuvem.
 - **Limite**: o Expo Go roda um SDK por vez. Quando o Expo Go da App Store passar para o próximo
-  SDK, o app para de abrir até o projeto ser atualizado e publicado de novo.
+  SDK (App Store ou Play Store), o app para de abrir até o projeto ser atualizado e publicado de
+  novo.
