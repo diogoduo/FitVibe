@@ -91,8 +91,23 @@
         color: var(--fg-muted);
         font-size: 16px;
       }
-      p strong {
+      p strong,
+      li strong {
         color: var(--fg);
+      }
+      a:not(.button) {
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .steps {
+        margin: 4px 0 0;
+        padding-left: 22px;
+        text-align: left;
+        color: var(--fg-muted);
+        font-size: 16px;
+      }
+      .steps li {
+        margin-bottom: 10px;
       }
       .button {
         display: block;
@@ -124,7 +139,7 @@
         <p>App de treino e dieta. Esta página confirma o e-mail de quem cria a conta no app.</p>
       </div>
       <a class="button" id="open" hidden>Abrir o FitVibe</a>
-      <p class="hint" id="open-hint" hidden>Abre no Expo Go, logado na conta de testes.</p>
+      <p class="hint" id="open-hint" hidden>Abre no Expo Go, logado na conta Expo convidada.</p>
     </main>
 
     <script>
@@ -139,6 +154,8 @@
           warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v6"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9.5"/></svg>',
           error:
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>',
+          phone:
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18h2"/></svg>',
         };
 
         var hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
@@ -211,6 +228,21 @@
             detail.textContent = 'Detalhe: ' + description;
             body.appendChild(detail);
           }
+        } else {
+          // Sem códigos no endereço: é o link de convite para testar o app.
+          show('primary', 'phone', 'Testar o FitVibe', [], true);
+          var steps = document.createElement('ol');
+          steps.className = 'steps';
+          [
+            'Instale o <strong>Expo Go</strong> (<a href="https://apps.apple.com/app/expo-go/id982107779">iPhone</a> ou <a href="https://play.google.com/store/apps/details?id=host.exp.exponent">Android</a>) e entre nele com uma conta Expo (é grátis).',
+            'Mande o seu usuário do Expo para quem te chamou e aceite o convite que chega no seu e-mail.',
+            'Volte aqui <strong>neste celular</strong> e toque em <strong>Abrir o FitVibe</strong>. No app, crie a sua conta com um e-mail de verdade (chega um link para confirmar).',
+          ].forEach(function (html) {
+            var li = document.createElement('li');
+            li.innerHTML = html;
+            steps.appendChild(li);
+          });
+          body.appendChild(steps);
         }
       })();
     </script>
