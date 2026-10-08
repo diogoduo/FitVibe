@@ -19,6 +19,10 @@
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "com.diogoduo.fitvibe",
+      "runtimeVersion": {
+        "policy": "appVersion"
+      },
       "adaptiveIcon": {
         "backgroundColor": "#0B0B0F",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
