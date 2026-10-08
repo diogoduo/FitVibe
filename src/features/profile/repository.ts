@@ -3,6 +3,7 @@ import { eq, isNotNull } from 'drizzle-orm';
 import { db, newId } from '@/db/client';
 import {
   activityLogs,
+  activitySessions,
   appSettings,
   bodyMeasurements,
   diaryEntries,
@@ -85,36 +86,44 @@ export function dismissRecalc(profileId: string, trendKg: number) {
 }
 
 /**
+ * Tudo o que é dado da pessoa no celular: "Apagar todos os dados" e a troca de conta apagam
+ * estas tabelas. Um teste confere que nenhuma tabela nova fica de fora (só as de controle da
+ * sincronização, que o resetSync limpa).
+ */
+export const WIPED_TABLES = [
+  diaryEntries,
+  savedMeals,
+  meals,
+  waterLogs,
+  foodPortions,
+  foodFavorites,
+  foods,
+  workoutSets,
+  workoutExercises,
+  workouts,
+  activitySessions,
+  activityLogs,
+  planExercises,
+  planSessions,
+  plans,
+  exerciseMedia,
+  exercises,
+  weightEntries,
+  bodyMeasurements,
+  goalVersions,
+  profiles,
+  postOutbox,
+  progressPhotos,
+];
+
+/**
  * Apaga tudo do banco (exclusão de verdade, não lógica). Os arquivos de mídia são apagados à
  * parte (media/files.ts), porque não ficam no banco. O `where` evita a otimização de
  * truncate do SQLite, que não avisa o change listener e deixaria as telas desatualizadas.
  */
 export function wipeAllData() {
   db.transaction((tx) => {
-    for (const table of [
-      diaryEntries,
-      savedMeals,
-      meals,
-      waterLogs,
-      foodPortions,
-      foodFavorites,
-      foods,
-      workoutSets,
-      workoutExercises,
-      workouts,
-      activityLogs,
-      planExercises,
-      planSessions,
-      plans,
-      exerciseMedia,
-      exercises,
-      weightEntries,
-      bodyMeasurements,
-      goalVersions,
-      profiles,
-      postOutbox,
-      progressPhotos,
-    ]) {
+    for (const table of WIPED_TABLES) {
       tx.delete(table).where(isNotNull(table.id)).run();
     }
     tx.delete(appSettings).where(isNotNull(appSettings.key)).run();

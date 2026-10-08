@@ -1,6 +1,9 @@
-import { isNull } from 'drizzle-orm';
+import { is, isNull } from 'drizzle-orm';
+import { getTableConfig, SQLiteTable } from 'drizzle-orm/sqlite-core';
 
+import * as schema from '@/db/schema';
 import {
+  activitySessions,
   exercises,
   goalVersions,
   planSessions,
@@ -13,7 +16,10 @@ import {
 import { createTestDb, type TestDb } from '@/db/test-db';
 import { todayKey } from '@/lib/dates';
 
+import { logFinishedActivity } from '../../activity/repository';
 import { AVANCADO_4X, createPlanFromTemplate } from '../../plan/templates';
+import { addWeightEntry } from '../../weight/repository';
+import { computeTrend } from '../../weight/trend';
 import { startWorkout } from '../../workout/repository';
 import type { ProfileData } from '../profile-form';
 import {
@@ -22,6 +28,7 @@ import {
   recalculateGoals,
   updateProfile,
   wipeAllData,
+  WIPED_TABLES,
 } from '../repository';
 
 let mockDb: TestDb;
@@ -138,5 +145,30 @@ describe('wipeAllData', () => {
     expect(mockDb.select().from(profiles).all()).toEqual([]);
     expect(mockDb.select().from(weightEntries).all()).toEqual([]);
     expect(goals()).toEqual([]);
+  });
+
+  it('nenhuma tabela de dados fica de fora (só as de controle da sincronização)', () => {
+    const control = ['sync_state', 'sync_cursors', 'sync_queue', 'app_settings'];
+    const all = (Object.values(schema) as unknown[])
+      .filter((value): value is SQLiteTable => is(value, SQLiteTable))
+      .map((table) => getTableConfig(table).name)
+      .filter((name) => !control.includes(name))
+      .sort();
+    expect(WIPED_TABLES.map((table) => getTableConfig(table).name).sort()).toEqual(all);
+  });
+
+  it('trocar de conta não mistura pesagens nem futebóis da conta anterior', () => {
+    // Conta anterior: ~86 kg, um futebol.
+    createProfile(data, 86);
+    addWeightEntry({ measuredAt: new Date(2026, 9, 1, 8, 0), weightKg: 85.4, note: null });
+    logFinishedActivity({ planSessionId: null, name: 'Futebol', minutes: 90 });
+    // "Usar os dados da conta" (replaceLocalWithAccount) começa por aqui.
+    wipeAllData();
+    expect(mockDb.select().from(activitySessions).all()).toEqual([]);
+    // Conta nova: o cadastro grava 128 kg; a tendência é só dela.
+    createProfile({ ...data, heightCm: 180 }, 128);
+    const weights = mockDb.select().from(weightEntries).all();
+    expect(weights.map((entry) => entry.weightKg)).toEqual([128]);
+    expect(computeTrend(weights).at(-1)?.trendKg).toBe(128);
   });
 });
