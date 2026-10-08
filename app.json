@@ -4,6 +4,7 @@
     "slug": "duo-gym-diet",
     "owner": "duodiogos-team",
     "version": "1.0.0",
+    "platforms": ["ios", "android"],
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
