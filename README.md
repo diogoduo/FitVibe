@@ -63,6 +63,7 @@ fitvibe/
 │   │   ├── weight/ measurements/ progress/ progress-photos/
 │   │   ├── social/ notifications/ account/       # perfil público, feed, conta
 │   │   ├── assistant/                            # assistente por voz
+│   │   ├── energy/ week/ activity/               # gasto calórico, resumo da semana, futebol
 │   │   └── reminders/ export/ today/ tutorial/
 │   ├── lib/                  # datas e números em pt-BR, haptics, Supabase
 │   ├── sync/                 # motor de sincronização e conta
@@ -70,11 +71,15 @@ fitvibe/
 ├── supabase/
 │   ├── migrations/           # esquema do servidor, RLS e regras do social
 │   └── functions/assistente/ # Edge Function do assistente (Gemini)
+├── site/                     # página de confirmação de e-mail (Site URL do Supabase)
 ├── scripts/                  # catálogo, TACO, SQL da sincronização, Supabase local, testes
 └── docs/                     # funcionalidades fase a fase e deploy
 ```
 
 ## Como rodar
+
+> Quer testar no seu iPhone sem rodar nada? Me peça acesso pelo [GitHub](https://github.com/diogoduo):
+> o app abre pelo Expo Go para quem é convidado ([como funciona](docs/deploy.md#3-publicar-para-o-expo-go-sem-o-pc-ligado)).
 
 Pré-requisitos: Node.js 20 ou mais novo, Docker Desktop (Supabase local) e o app **Expo Go** no
 celular, na mesma Wi-Fi do PC. Desde o SDK 57, o Expo Go no iPhone só abre projetos em
