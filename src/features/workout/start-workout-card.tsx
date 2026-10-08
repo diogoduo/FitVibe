@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
@@ -47,7 +48,8 @@ export function StartWorkoutCard({ plan }: { plan: Plan }) {
   );
   const count = (sessionId: string) => slots.filter((slot) => slot.sessionId === sessionId).length;
   const todays = sessions.filter((session) => session.weekday === weekday);
-  const others = sessions.filter((session) => session.weekday !== weekday);
+  // Treino sem exercícios não entra na lista (abriria com "0 de 0 séries").
+  const others = sessions.filter((session) => session.weekday !== weekday && count(session.id) > 0);
 
   return (
     <Card icon="play" title="Treinar agora">
@@ -60,12 +62,21 @@ export function StartWorkoutCard({ plan }: { plan: Plan }) {
               {doneThisWeek.has(session.id) ? ' · já feito esta semana' : ''}
             </Text>
           </View>
-          <Button
-            label="Começar treino"
-            icon="play"
-            haptic="firm"
-            onPress={() => startOrContinueWorkout(session.id)}
-          />
+          {count(session.id) > 0 ? (
+            <Button
+              label="Começar treino"
+              icon="play"
+              haptic="firm"
+              onPress={() => startOrContinueWorkout(session.id)}
+            />
+          ) : (
+            <Button
+              label="Adicionar exercícios"
+              icon="plus"
+              variant="secondary"
+              onPress={() => router.push({ pathname: '/sessao/[id]', params: { id: session.id } })}
+            />
+          )}
         </View>
       ))}
 

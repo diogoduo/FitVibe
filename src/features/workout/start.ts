@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { Alert } from 'react-native';
 
-import { getActiveWorkout, startWorkout } from './repository';
+import { EmptySessionError, getActiveWorkout, startWorkout } from './repository';
 import { ensureNotificationPermission } from './rest';
 
 const openWorkout = (id: string) => router.push({ pathname: '/registro/[id]', params: { id } });
@@ -19,7 +19,20 @@ export function startOrContinueWorkout(sessionId: string) {
     ]);
     return;
   }
-  const id = active?.id ?? startWorkout(sessionId);
+  let id: string;
+  try {
+    id = active?.id ?? startWorkout(sessionId);
+  } catch (error) {
+    if (!(error instanceof EmptySessionError)) throw error;
+    Alert.alert(error.message, 'Adicione os exercícios no plano para poder começar.', [
+      { text: 'Agora não', style: 'cancel' },
+      {
+        text: 'Adicionar exercícios',
+        onPress: () => router.push({ pathname: '/sessao/[id]', params: { id: sessionId } }),
+      },
+    ]);
+    return;
+  }
   void ensureNotificationPermission();
   openWorkout(id);
 }

@@ -3,6 +3,7 @@ import { and, asc, eq, isNull } from 'drizzle-orm';
 import { exercises, planSessions, workoutExercises, workouts, workoutSets } from '@/db/schema';
 import { createTestDb, type TestDb } from '@/db/test-db';
 
+import { addSession, getActivePlan } from '../../plan/repository';
 import { AVANCADO_4X, createPlanFromTemplate } from '../../plan/templates';
 import {
   addExerciseToWorkout,
@@ -11,6 +12,7 @@ import {
   deleteWorkout,
   exerciseHistory,
   finishWorkout,
+  EmptySessionError,
   getActiveWorkout,
   setSkipped,
   startWorkout,
@@ -91,6 +93,13 @@ describe('começar o treino de segunda', () => {
       ['working', null, 10, null],
       ['working', null, 10, null],
     ]);
+  });
+
+  it('treino do plano sem exercícios não começa (abriria com 0 de 0 séries)', () => {
+    const plan = getActivePlan()!;
+    const empty = addSession(plan.id, { weekday: 6, kind: 'workout', name: 'Peito', time: null });
+    expect(() => startWorkout(empty)).toThrow(EmptySessionError);
+    expect(getActiveWorkout()).toBeNull();
   });
 
   it('só um treino em andamento: começar de novo devolve o mesmo', () => {

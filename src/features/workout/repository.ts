@@ -219,12 +219,27 @@ function insertEntry(
  * Começa um treino do plano: copia os exercícios e a prescrição do dia e gera as séries com
  * aquecimento e sugestão de carga. Se já há um treino em andamento, devolve ele.
  */
+/** O treino do plano ainda não tem exercícios: não dá para começar. */
+export class EmptySessionError extends Error {
+  constructor(readonly sessionName: string) {
+    super(`"${sessionName}" ainda não tem exercícios.`);
+  }
+}
+
 export function startWorkout(sessionId: string): string {
   return db.transaction((tx) => {
     const active = getActiveWorkout(tx);
     if (active) return active.id;
     const session = tx.select().from(planSessions).where(eq(planSessions.id, sessionId)).get();
     if (!session) throw new Error('Treino não encontrado.');
+    const slots = tx
+      .select()
+      .from(planExercises)
+      .where(and(eq(planExercises.sessionId, sessionId), alive(planExercises)))
+      .orderBy(asc(planExercises.sortOrder))
+      .all();
+    // Sem exercícios, o treino abriria com "0 de 0 séries válidas".
+    if (slots.length === 0) throw new EmptySessionError(session.name);
 
     const workoutId = newId();
     tx.insert(workouts)
@@ -235,12 +250,6 @@ export function startWorkout(sessionId: string): string {
         startedAt: new Date(),
       })
       .run();
-    const slots = tx
-      .select()
-      .from(planExercises)
-      .where(and(eq(planExercises.sessionId, sessionId), alive(planExercises)))
-      .orderBy(asc(planExercises.sortOrder))
-      .all();
     slots.forEach((slot, index) => {
       const exercise = tx.select().from(exercises).where(eq(exercises.id, slot.exerciseId)).get();
       if (exercise) insertEntry(tx, workoutId, exercise, prescriptionOf(slot), index, slot.id);

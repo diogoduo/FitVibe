@@ -69,6 +69,7 @@ export function TodayPlanCard() {
             </Text>
             <WorkoutActions
               sessionId={session.id}
+              hasExercises={slots.some((slot) => slot.sessionId === session.id)}
               activeId={active?.planSessionId === session.id ? active.id : null}
               doneTodayId={
                 finished.find(
@@ -94,10 +95,12 @@ export function TodayPlanCard() {
 
 function WorkoutActions({
   sessionId,
+  hasExercises,
   activeId,
   doneTodayId,
 }: {
   sessionId: string;
+  hasExercises: boolean;
   activeId: string | null;
   doneTodayId: string | null;
 }) {
@@ -115,6 +118,19 @@ function WorkoutActions({
           icon="list"
           variant="secondary"
           onPress={() => router.push({ pathname: '/resumo/[id]', params: { id: doneTodayId } })}
+        />
+      </>
+    );
+  }
+  if (!hasExercises) {
+    return (
+      <>
+        <Text className="text-sm text-fg-muted">Este treino ainda não tem exercícios.</Text>
+        <Button
+          label="Adicionar exercícios"
+          icon="plus"
+          variant="secondary"
+          onPress={() => router.push({ pathname: '/sessao/[id]', params: { id: sessionId } })}
         />
       </>
     );
