@@ -3,6 +3,7 @@ import { Text, TextInput, View, type TextInputProps } from 'react-native';
 import { useColors, useScheme } from '@/theme/theme';
 
 import { Field } from './field';
+import { continuous } from './shape';
 
 type TextFieldProps = Pick<
   TextInputProps,
@@ -43,6 +44,7 @@ export function TextField({
     <Field label={label} error={error} hint={hint}>
       <View
         className={`flex-row items-center rounded-xl border bg-surface-2 px-3 ${error ? 'border-danger' : 'border-line'}`}
+        style={continuous}
       >
         <TextInput
           {...inputProps}

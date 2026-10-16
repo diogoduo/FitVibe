@@ -56,7 +56,7 @@ export function StartWorkoutCard({ plan }: { plan: Plan }) {
       {todays.map((session) => (
         <View key={session.id} className="gap-2">
           <View>
-            <Text className="text-2xl font-extrabold tracking-tight text-fg">{session.name}</Text>
+            <Text className="text-2xl font-bold text-fg">{session.name}</Text>
             <Text className="text-sm text-fg-muted">
               Treino de hoje · {count(session.id)} exercícios
               {doneThisWeek.has(session.id) ? ' · já feito esta semana' : ''}
@@ -96,7 +96,7 @@ export function StartWorkoutCard({ plan }: { plan: Plan }) {
                 scaleTo={0.97}
                 accessibilityRole="button"
                 accessibilityLabel={`Começar ${session.name}`}
-                className="flex-row items-center gap-3 rounded-2xl bg-surface-2 px-3 py-3"
+                className="flex-row items-center gap-3 rounded-xl bg-surface-2 px-3 py-3"
               >
                 <View className="h-9 w-9 items-center justify-center rounded-full bg-primary/15">
                   <Icon name="play" size={14} color={colors.primary} />
@@ -126,7 +126,7 @@ export function StartWorkoutCard({ plan }: { plan: Plan }) {
               scaleTo={0.97}
               accessibilityRole="button"
               accessibilityLabel={`Começar ${session.name}`}
-              className="flex-row items-center gap-3 rounded-2xl bg-surface-2 px-3 py-3"
+              className="flex-row items-center gap-3 rounded-xl bg-surface-2 px-3 py-3"
             >
               <View className="h-9 w-9 items-center justify-center rounded-full bg-primary/15">
                 <Icon

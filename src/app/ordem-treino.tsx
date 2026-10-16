@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { FormScroll } from '@/components/ui/form-scroll';
 import { OrderButtons } from '@/components/ui/order-buttons';
+import { continuous } from '@/components/ui/shape';
 import { ExerciseThumb } from '@/features/exercises/exercise-thumb';
 import { useAllExercises } from '@/features/exercises/queries';
 import { useWorkoutEntries } from '@/features/workout/queries';
@@ -31,6 +32,7 @@ export default function WorkoutOrderScreen() {
               <View
                 key={entry.id}
                 className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface p-3"
+                style={continuous}
               >
                 <ExerciseThumb name={name} catalogKey={exercise?.catalogKey ?? null} width={44} />
                 <Text

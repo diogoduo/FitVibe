@@ -1,8 +1,10 @@
 import { Text, View } from 'react-native';
-import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import { Icon } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
+import { continuous } from '@/components/ui/shape';
+import { enterUp, exitFade } from '@/lib/motion';
 import { useColors } from '@/theme/theme';
 
 import { dismissTip, useDismissedTips } from './seen';
@@ -26,10 +28,14 @@ export function TipCard({ id }: { id: TipId }) {
   if (dismissed.includes(id)) return null;
 
   return (
-    <Animated.View entering={FadeInDown.duration(300)} exiting={FadeOut.duration(200)}>
+    <Animated.View entering={enterUp()} exiting={exitFade()}>
       <View
         className="flex-row items-start gap-3 rounded-2xl border p-3"
-        style={{ borderColor: `${colors.primary}55`, backgroundColor: `${colors.primary}14` }}
+        style={{
+          ...continuous,
+          borderColor: `${colors.primary}55`,
+          backgroundColor: `${colors.primary}14`,
+        }}
       >
         <Icon name="lightbulb" size={18} color={colors.primary} />
         <View className="flex-1 gap-2">
@@ -38,6 +44,7 @@ export function TipCard({ id }: { id: TipId }) {
             onPress={() => dismissTip(id, dismissed)}
             haptic="select"
             accessibilityRole="button"
+            hitSlop={10}
             className="self-start rounded-full bg-primary px-3 py-1.5"
           >
             <Text className="text-xs font-bold text-on-primary">Entendi</Text>

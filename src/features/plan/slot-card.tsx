@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
 import { OrderButtons } from '@/components/ui/order-buttons';
+import { continuous } from '@/components/ui/shape';
 import type { Exercise, PlanExercise } from '@/db/schema';
 
 import { ExerciseThumb } from '../exercises/exercise-thumb';
@@ -30,7 +31,10 @@ export function SlotCard({
   const name = exercise?.name ?? 'Exercício excluído';
 
   return (
-    <View className="flex-row gap-2 rounded-2xl border border-line bg-surface p-3">
+    <View
+      className="flex-row gap-2 rounded-2xl border border-line bg-surface p-3"
+      style={continuous}
+    >
       <Pressable
         onPress={() => router.push({ pathname: '/prescricao/[id]', params: { id: slot.id } })}
         accessibilityRole="button"

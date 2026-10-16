@@ -2,13 +2,18 @@ import { router } from 'expo-router';
 import type { ReactNode } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
+import { continuous } from '@/components/ui/shape';
+
 import { Avatar } from './avatar';
 import type { PersonRow as Person } from './types';
 
 /** Uma pessoa numa lista (busca, seguidores, pedidos): toque abre o perfil. */
 export function PersonRow({ person, right }: { person: Person; right?: ReactNode }) {
   return (
-    <View className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface px-3 py-3">
+    <View
+      className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface px-3 py-3"
+      style={continuous}
+    >
       <Pressable
         onPress={() =>
           router.push({ pathname: '/u/[username]', params: { username: person.username } })
@@ -54,6 +59,7 @@ export function RowAction({
       disabled={disabled}
       accessibilityRole="button"
       className={`rounded-lg px-3 py-2 active:opacity-70 disabled:opacity-50 ${styles[0]}`}
+      style={continuous}
     >
       <Text className={`text-sm font-semibold ${styles[1]}`}>{label}</Text>
     </Pressable>

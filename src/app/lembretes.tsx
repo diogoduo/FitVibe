@@ -160,7 +160,7 @@ export default function RemindersScreen() {
       </View>
 
       <View className="gap-3">
-        <Text className="text-sm font-semibold uppercase tracking-wider text-fg-muted">
+        <Text className="text-footnote font-semibold uppercase tracking-wide text-fg-muted">
           Refeições
         </Text>
         {visibleMeals.map((meal) => {

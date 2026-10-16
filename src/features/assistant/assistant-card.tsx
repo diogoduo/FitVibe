@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 
 import { Icon } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
+import { continuous } from '@/components/ui/shape';
 import { useColors } from '@/theme/theme';
 
 /** Abre o assistente: `voz` já começa a ouvir; `texto` abre para digitar. */
@@ -13,7 +14,10 @@ export const openAssistant = (modo: 'voz' | 'texto' = 'voz') =>
 export function AssistantCard() {
   const colors = useColors();
   return (
-    <View className="flex-row items-center gap-3 rounded-3xl border border-line bg-surface p-3">
+    <View
+      className="flex-row items-center gap-3 rounded-card border border-line bg-surface p-4"
+      style={continuous}
+    >
       <PressableScale
         onPress={() => openAssistant('voz')}
         haptic="firm"

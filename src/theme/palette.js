@@ -34,7 +34,7 @@ const palette = {
     line: '#D9D9E0',
     fg: '#111114',
     'fg-muted': '#5C5C68',
-    primary: '#4D7C0F',
+    primary: '#44700D', // 4,5:1 ou mais sobre todos os fundos claros
     'on-primary': '#FFFFFF',
     success: '#15803D',
     warning: '#B45309',

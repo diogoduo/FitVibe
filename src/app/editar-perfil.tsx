@@ -190,7 +190,7 @@ function ProfileForm({ me }: { me: SocialProfile | null }) {
       />
 
       <View className="gap-2">
-        <Text className="text-sm font-semibold uppercase tracking-wider text-fg-muted">
+        <Text className="text-footnote font-semibold uppercase tracking-wide text-fg-muted">
           O seu dia no perfil
         </Text>
         <ToggleField

@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import { ChoiceChips } from '@/components/ui/choice-chips';
 import { HeaderButton } from '@/components/ui/header-button';
 import { Screen } from '@/components/ui/screen';
+import { continuous } from '@/components/ui/shape';
 import { RealExpenditureCard } from '@/features/goals/adaptive-cards';
 import { ProgressPhotosCard } from '@/features/progress-photos/progress-photos-card';
 import { MeasurementsCard } from '@/features/measurements/measurements-card';
@@ -104,6 +105,7 @@ function MyHeader({ me }: { me: SocialProfile }) {
           onPress={() => router.push('/solicitacoes')}
           accessibilityRole="button"
           className="flex-row items-center justify-between rounded-2xl border border-primary bg-primary/15 px-4 py-3 active:opacity-70"
+          style={continuous}
         >
           <Text className="text-base font-semibold text-primary">
             {pending === 1 ? '1 pedido para seguir você' : `${pending} pedidos para seguir você`}

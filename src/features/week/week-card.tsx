@@ -53,7 +53,7 @@ export function WeekSummaryCard() {
       <View className="flex-row flex-wrap gap-y-3">
         {stats.map((stat) => (
           <View key={stat.label} className="w-1/2 pr-2">
-            <Text className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
+            <Text className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
               {stat.label}
             </Text>
             <Text className="text-xl font-extrabold text-fg">{stat.value}</Text>

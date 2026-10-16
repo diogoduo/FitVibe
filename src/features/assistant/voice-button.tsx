@@ -5,11 +5,13 @@ import Animated, {
   useSharedValue,
   withRepeat,
   withSequence,
+  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 
 import { Icon } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
+import { SPRING_PRESS } from '@/lib/motion';
 import { useColors } from '@/theme/theme';
 
 /** dB do microfone (-160 a 0) → 0 a 1; a fala fica entre -50 e -10 dB. */
@@ -38,22 +40,25 @@ export function VoiceButton({
   const breathe = useSharedValue(0);
 
   useEffect(() => {
-    halo.set(withTiming(recording ? level : 0, { duration: 120 }));
+    // Segue a voz quadro a quadro, com mola curta (sem degraus quando o nível pula).
+    halo.set(withSpring(recording ? level : 0, SPRING_PRESS));
   }, [halo, level, recording]);
 
   useEffect(() => {
+    // "Respirando" enquanto espera: ciclo de 1,8 s e amplitude pequena (oscilação lenta e
+    // larga cansa a vista). Ao gravar, volta a partir de onde está.
     breathe.set(
       recording
-        ? withTiming(0)
+        ? withSpring(0, SPRING_PRESS)
         : withRepeat(
-            withSequence(withTiming(1, { duration: 1400 }), withTiming(0, { duration: 1400 })),
+            withSequence(withTiming(1, { duration: 900 }), withTiming(0, { duration: 900 })),
             -1,
           ),
     );
   }, [breathe, recording]);
 
   const haloStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: 1 + halo.get() * 0.55 + breathe.get() * 0.12 }],
+    transform: [{ scale: 1 + halo.get() * 0.55 + breathe.get() * 0.08 }],
     opacity: 0.25 + halo.get() * 0.35,
   }));
 

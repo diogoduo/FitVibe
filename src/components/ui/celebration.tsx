@@ -2,18 +2,18 @@ import { useEffect, useSyncExternalStore } from 'react';
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import Animated, {
   Easing,
-  FadeOut,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withTiming,
-  ZoomIn,
 } from 'react-native-reanimated';
 
 import { haptics } from '@/lib/haptics';
+import { enterPop, exitFade } from '@/lib/motion';
 import { useColors, type Colors } from '@/theme/theme';
 
 import { Icon } from './icon';
+import { continuous } from './shape';
 
 /**
  * Comemoração de recorde: confete caindo e um troféu no meio da tela por uns 2 segundos.
@@ -88,9 +88,11 @@ function Badge({ title, subtitle }: { title: string; subtitle?: string }) {
   const colors = useColors();
   return (
     <Animated.View
-      entering={ZoomIn.springify().damping(12)}
-      exiting={FadeOut.duration(250)}
+      // Comemoração: o quique leve é de propósito (é o único momento de festa do treino).
+      entering={enterPop()}
+      exiting={exitFade()}
       style={{
+        ...continuous,
         alignItems: 'center',
         gap: 8,
         paddingHorizontal: 28,

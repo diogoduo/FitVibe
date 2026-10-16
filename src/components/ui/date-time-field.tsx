@@ -6,6 +6,7 @@ import { formatDayKey, formatTime, toDayKey } from '@/lib/dates';
 import { useColors } from '@/theme/theme';
 
 import { Field } from './field';
+import { continuous } from './shape';
 
 export type DateTimeFieldProps = {
   label: string;
@@ -65,6 +66,7 @@ export function DateTimeField({
         onPress={() => setStep('date')}
         accessibilityRole="button"
         className="rounded-xl border border-line bg-surface-2 px-3 py-3 active:opacity-70"
+        style={continuous}
       >
         <Text className="text-base text-fg">{text}</Text>
       </Pressable>

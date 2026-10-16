@@ -29,11 +29,11 @@ export function WeightHistoryCard() {
       ) : (
         <View>
           <View className="flex-row pb-2">
-            <Text className="flex-1 text-xs uppercase tracking-wider text-fg-muted">Quando</Text>
-            <Text className="w-24 text-right text-xs uppercase tracking-wider text-fg-muted">
+            <Text className="flex-1 text-xs uppercase tracking-wide text-fg-muted">Quando</Text>
+            <Text className="w-24 text-right text-xs uppercase tracking-wide text-fg-muted">
               Peso
             </Text>
-            <Text className="w-24 text-right text-xs uppercase tracking-wider text-fg-muted">
+            <Text className="w-24 text-right text-xs uppercase tracking-wide text-fg-muted">
               Tendência
             </Text>
           </View>

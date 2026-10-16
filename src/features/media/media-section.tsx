@@ -4,6 +4,7 @@ import { Alert, Linking, Pressable, Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { continuous } from '@/components/ui/shape';
 import type { ExerciseMedia } from '@/db/schema';
 
 import { deleteMedia, mediaFileExists, mediaFileUri, pickMediaFromLibrary } from './files';
@@ -49,6 +50,7 @@ export function MediaSection({ exerciseId }: { exerciseId: string }) {
           accessibilityRole="link"
           accessibilityHint="Toque para abrir; toque e segure para excluir"
           className="flex-row items-center gap-3 rounded-xl bg-surface-2 px-3 py-3 active:opacity-70"
+          style={continuous}
         >
           <Text className="text-lg">🔗</Text>
           <View className="flex-1">
@@ -69,6 +71,7 @@ export function MediaSection({ exerciseId }: { exerciseId: string }) {
               accessibilityRole="button"
               accessibilityLabel={item.kind === 'video' ? 'Vídeo' : 'Foto'}
               className="h-24 w-24 items-center justify-center overflow-hidden rounded-xl bg-surface-2 active:opacity-70"
+              style={continuous}
             >
               {!mediaFileExists(item.fileName!) ? (
                 <Text className="px-2 text-center text-xs text-fg-muted">Em outro celular</Text>

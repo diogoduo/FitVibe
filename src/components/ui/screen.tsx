@@ -1,8 +1,9 @@
 import { Children, isValidElement, useState, type ReactNode } from 'react';
 import { Platform, ScrollView, Text, View } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { enterUp } from '@/lib/motion';
 import { useColors } from '@/theme/theme';
 
 type ScreenProps = {
@@ -13,8 +14,8 @@ type ScreenProps = {
   children?: ReactNode;
 };
 
-/** Cada cartão entra deslizando um pouco depois do anterior (só na primeira vez). */
-const enter = (index: number) => FadeInDown.duration(380).delay(Math.min(index, 6) * 55);
+/** Cada cartão sobe um pouco depois do anterior, com mola (só na primeira vez). */
+const enter = (index: number) => enterUp(Math.min(index, 6) * 55);
 
 const SPACING = 16;
 
@@ -34,7 +35,7 @@ export function Screen({ title, subtitle, action, children }: ScreenProps) {
       >
         <View className="flex-row items-center gap-3 pt-4">
           <View className="flex-1">
-            <Text className="text-3xl font-extrabold tracking-tight text-fg">{title}</Text>
+            <Text className="text-3xl font-bold text-fg">{title}</Text>
             {subtitle ? <Text className="mt-1 text-base text-fg-muted">{subtitle}</Text> : null}
           </View>
           {action}

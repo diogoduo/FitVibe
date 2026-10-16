@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 import { useColors } from '@/theme/theme';
 
 import { Icon, type IconName } from './icon';
+import { continuous } from './shape';
 
 type CardProps = {
   title?: string;
@@ -19,7 +20,7 @@ type CardProps = {
 export function Card({ title, icon, iconColor, action, children }: CardProps) {
   const colors = useColors();
   return (
-    <View className="gap-3 rounded-3xl border border-line bg-surface p-4">
+    <View className="gap-3 rounded-card border border-line bg-surface p-4" style={continuous}>
       {title ? (
         <View className="flex-row items-center gap-2">
           {icon ? (
@@ -27,7 +28,7 @@ export function Card({ title, icon, iconColor, action, children }: CardProps) {
               <Icon name={icon} size={14} color={iconColor ?? colors.primary} weight="semibold" />
             </View>
           ) : null}
-          <Text className="flex-1 text-sm font-semibold uppercase tracking-wider text-fg-muted">
+          <Text className="flex-1 text-footnote font-semibold uppercase tracking-wide text-fg-muted">
             {title}
           </Text>
           {action}

@@ -1,6 +1,8 @@
 import { Image } from 'expo-image';
 import { Text, View } from 'react-native';
 
+import { continuous } from '@/components/ui/shape';
+
 import { catalogImages } from './catalog';
 
 type ExerciseThumbProps = {
@@ -18,7 +20,7 @@ export function ExerciseThumb({ name, catalogKey, width = 60 }: ExerciseThumbPro
   if (!image) {
     return (
       <View
-        style={size}
+        style={[size, continuous]}
         className="items-center justify-center rounded-lg bg-surface-2"
         accessibilityElementsHidden
       >

@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { useRef, useState, type ComponentType } from 'react';
 import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
-import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,7 @@ import {
 } from '@/features/tutorial/demos';
 import { markTutorialSeen } from '@/features/tutorial/seen';
 import { haptics } from '@/lib/haptics';
+import { enterPop, enterUp } from '@/lib/motion';
 import { useColors } from '@/theme/theme';
 
 type Slide = { icon: IconName; kicker?: string; title: string; text: string; Demo: ComponentType };
@@ -156,7 +157,7 @@ function SlideContent({ slide }: { slide: Slide }) {
   const { Demo } = slide;
   return (
     <>
-      <Animated.View entering={ZoomIn.springify().damping(13)} style={{ alignItems: 'center' }}>
+      <Animated.View entering={enterPop()} style={{ alignItems: 'center' }}>
         <View
           className="h-20 w-20 items-center justify-center rounded-full"
           style={{ backgroundColor: `${colors.primary}26` }}
@@ -164,18 +165,16 @@ function SlideContent({ slide }: { slide: Slide }) {
           <Icon name={slide.icon} size={38} color={colors.primary} />
         </View>
       </Animated.View>
-      <Animated.View entering={FadeInDown.delay(120).duration(400)} style={{ gap: 8 }}>
+      <Animated.View entering={enterUp(120)} style={{ gap: 8 }}>
         {slide.kicker ? (
-          <Text className="text-center text-sm font-semibold uppercase tracking-wider text-primary">
+          <Text className="text-center text-footnote font-semibold uppercase tracking-wide text-primary">
             {slide.kicker}
           </Text>
         ) : null}
-        <Text className="text-center text-3xl font-extrabold tracking-tight text-fg">
-          {slide.title}
-        </Text>
+        <Text className="text-center text-3xl font-bold text-fg">{slide.title}</Text>
         <Text className="text-center text-base leading-6 text-fg-muted">{slide.text}</Text>
       </Animated.View>
-      <Animated.View entering={FadeInUp.delay(260).duration(450)}>
+      <Animated.View entering={enterUp(260)}>
         <Demo />
       </Animated.View>
     </>

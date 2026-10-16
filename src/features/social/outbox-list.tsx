@@ -1,5 +1,6 @@
 import { Alert, Pressable, Text, View } from 'react-native';
 
+import { continuous } from '@/components/ui/shape';
 import type { OutboxPost } from '@/db/schema';
 
 import { POST_KIND_LABELS } from './post-body';
@@ -22,6 +23,7 @@ export function OutboxList({ userId }: { userId: string }) {
         <View
           key={post.id}
           className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3"
+          style={continuous}
         >
           <View className="flex-1 gap-0.5">
             <Text className="text-base font-semibold text-fg">

@@ -73,9 +73,7 @@ function Stat({ icon, label, text }: { icon: IconName; label: string; text: stri
         <Icon name={icon} size={13} color={colors.primary} weight="semibold" />
       </View>
       <View className="flex-1">
-        <Text className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
-          {label}
-        </Text>
+        <Text className="text-xs font-semibold uppercase tracking-wide text-fg-muted">{label}</Text>
         <Text className="text-base leading-6 text-fg">{text}</Text>
       </View>
     </View>
@@ -166,9 +164,7 @@ function FootballBody({ data }: { data: FootballPostData }) {
         {data.name} · {minutesText(data.minutes)}
       </Text>
       <View className="flex-row items-baseline gap-2">
-        <Text className="text-4xl font-extrabold tracking-tight text-primary">
-          {formatDecimal(data.score)}
-        </Text>
+        <Text className="text-4xl font-extrabold text-primary">{formatDecimal(data.score)}</Text>
         <Text className="text-lg font-semibold text-fg">{data.title}</Text>
       </View>
       <Text className="text-base text-fg-muted">

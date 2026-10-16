@@ -81,7 +81,7 @@ export function MeasurementsCard() {
 function OlderMeasurements({ measurements }: { measurements: BodyMeasurement[] }) {
   return (
     <View>
-      <Text className="pb-1 text-xs uppercase tracking-wider text-fg-muted">Anteriores</Text>
+      <Text className="pb-1 text-xs uppercase tracking-wide text-fg-muted">Anteriores</Text>
       {measurements.map((measurement) => {
         const count = MEASUREMENT_FIELDS.filter(({ key }) => measurement[key] != null).length;
         return (

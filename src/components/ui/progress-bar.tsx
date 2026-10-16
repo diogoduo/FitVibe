@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
 import { View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
+import { SPRING_VALUE } from '@/lib/motion';
 import { useColors } from '@/theme/theme';
 
-/** Barra de progresso que enche com animação; passou do máximo, fica na cor de aviso. */
+/**
+ * Barra de progresso que enche com mola (parte de onde está, sem quique); passou do máximo, fica
+ * na cor de aviso.
+ */
 export function ProgressBar({
   value,
   max,
@@ -22,7 +26,7 @@ export function ProgressBar({
   const width = useSharedValue(0);
 
   useEffect(() => {
-    width.set(withTiming(percent, { duration: 600 }));
+    width.set(withSpring(percent, SPRING_VALUE));
   }, [percent, width]);
 
   const animated = useAnimatedStyle(() => ({ width: `${width.get()}%` }));

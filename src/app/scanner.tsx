@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
+import { continuous } from '@/components/ui/shape';
 import type { FoodKey } from '@/db/schema';
 import { pickFood } from '@/features/assistant/store';
 import { lookupBarcode } from '@/features/foods/open-food-facts';
@@ -109,7 +110,7 @@ export default function ScannerScreen() {
         onBarcodeScanned={status ? undefined : onScanned}
       />
       <View className="absolute inset-x-0 top-1/3 items-center" pointerEvents="none">
-        <View className="h-40 w-72 rounded-2xl border-2 border-primary" />
+        <View className="h-40 w-72 rounded-2xl border-2 border-primary" style={continuous} />
       </View>
       <View
         className="absolute inset-x-0 bottom-0 items-center gap-3 bg-black/70 px-6 pt-4"

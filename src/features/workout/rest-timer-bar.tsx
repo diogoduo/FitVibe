@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { continuous } from '@/components/ui/shape';
 import type { Workout } from '@/db/schema';
 import { useNow } from '@/lib/use-now';
 
@@ -36,7 +37,7 @@ export function RestTimerBar({ workout }: { workout: Workout }) {
       style={{ paddingBottom: insets.bottom + 10 }}
     >
       <View className="flex-1">
-        <Text className="text-xs font-medium uppercase tracking-wider text-fg-muted">Descanso</Text>
+        <Text className="text-xs font-medium uppercase tracking-wide text-fg-muted">Descanso</Text>
         <Text
           className={`text-3xl font-bold ${over ? 'text-success' : 'text-fg'}`}
           accessibilityLiveRegion="polite"
@@ -61,6 +62,7 @@ function TimerButton({ label, onPress }: { label: string; onPress: () => void })
       onPress={onPress}
       accessibilityRole="button"
       className="h-11 min-w-14 items-center justify-center rounded-xl bg-surface-2 px-3 active:opacity-70"
+      style={continuous}
     >
       <Text className="text-base font-semibold text-primary">{label}</Text>
     </Pressable>

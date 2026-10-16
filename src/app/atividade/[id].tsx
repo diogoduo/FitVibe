@@ -1,13 +1,14 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, Text, TextInput, View } from 'react-native';
-import Animated, { ZoomIn } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { celebrate } from '@/components/ui/celebration';
 import { Icon } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
+import { continuous } from '@/components/ui/shape';
 import type { ActivitySession } from '@/db/schema';
 import { useActivity } from '@/features/activity/queries';
 import { activityMinutes, footballRating, statsOf } from '@/features/activity/rating';
@@ -25,6 +26,7 @@ import { useMySocialProfile } from '@/features/social/queries';
 import { formatWorkoutDuration } from '@/features/workout/format';
 import { formatDayLabel } from '@/lib/dates';
 import { haptics } from '@/lib/haptics';
+import { enterPop } from '@/lib/motion';
 import { formatDecimal, formatInt, parseDecimal } from '@/lib/numbers';
 import { useNow } from '@/lib/use-now';
 import { useColors, useScheme } from '@/theme/theme';
@@ -99,7 +101,7 @@ export default function ActivityScreen() {
         <Card icon={football ? 'football' : 'timer'} title={running ? 'Rolando' : 'Terminado'}>
           {running ? (
             <Text
-              className="text-center text-5xl font-extrabold tracking-tight text-fg"
+              className="text-center text-5xl font-extrabold text-fg"
               style={{ fontVariant: ['tabular-nums'] }}
             >
               {clock(now - session.startedAt.getTime())}
@@ -122,10 +124,10 @@ export default function ActivityScreen() {
           <Card icon="trophy" title={running ? 'Nota até agora' : 'Nota do dia'}>
             <Animated.View
               key={rating.title}
-              entering={ZoomIn.springify().damping(14)}
+              entering={enterPop()}
               style={{ alignItems: 'center', gap: 2 }}
             >
-              <Text className="text-6xl font-extrabold tracking-tight text-primary">
+              <Text className="text-6xl font-extrabold text-primary">
                 {formatDecimal(rating.score)}
               </Text>
               <Text className="text-lg font-semibold text-fg">{rating.title}</Text>
@@ -194,7 +196,7 @@ function FootballCounters({ session }: { session: ActivitySession }) {
               scaleTo={0.92}
               accessibilityRole="button"
               accessibilityLabel={`${result.label}: ${session[result.counter]}`}
-              className="w-full items-center gap-0.5 rounded-2xl bg-surface-2 py-3"
+              className="w-full items-center gap-0.5 rounded-xl bg-surface-2 py-3"
             >
               <Text className="text-3xl font-extrabold" style={{ color: colors[result.tone] }}>
                 {session[result.counter]}
@@ -293,7 +295,8 @@ function DurationField({ session, minutes }: { session: ActivitySession; minutes
         selectTextOnFocus
         selectionColor={colors.primary}
         accessibilityLabel="Duração em minutos"
-        className="min-w-24 rounded-2xl bg-surface-2 px-3 py-1 text-center text-5xl font-extrabold text-fg"
+        className="min-w-24 rounded-xl bg-surface-2 px-3 py-1 text-center text-5xl font-extrabold text-fg"
+        style={continuous}
       />
       <Text className="pb-3 text-lg font-semibold text-fg-muted">min</Text>
     </View>
@@ -317,6 +320,7 @@ function NotesField({ session }: { session: ActivitySession }) {
         maxLength={500}
         accessibilityLabel="Anotações"
         className="min-h-16 rounded-xl border border-line bg-surface-2 px-3 py-2 text-base text-fg"
+        style={continuous}
       />
     </Card>
   );

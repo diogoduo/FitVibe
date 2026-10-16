@@ -9,6 +9,8 @@ import Animated, {
 
 import { useColors } from '@/theme/theme';
 
+import { continuous } from './shape';
+
 /** Bloco que pulsa no lugar do conteúdo enquanto ele carrega. */
 export function Skeleton({
   width = '100%',
@@ -38,7 +40,7 @@ export function Skeleton({
 /** Esqueleto de um cartão de post/pessoa: avatar, duas linhas e um bloco. */
 export function SkeletonCard({ withImage = false }: { withImage?: boolean }) {
   return (
-    <View className="gap-3 rounded-2xl border border-line bg-surface p-4">
+    <View className="gap-3 rounded-card border border-line bg-surface p-4" style={continuous}>
       <View className="flex-row items-center gap-3">
         <Skeleton width={40} height={40} radius={20} />
         <View className="flex-1 gap-2">

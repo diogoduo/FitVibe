@@ -3,12 +3,14 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Pressable, Text, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { FadeOut, ZoomIn } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import { Icon } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
+import { continuous } from '@/components/ui/shape';
 import { formatTimeAgo } from '@/lib/dates';
 import { haptics } from '@/lib/haptics';
+import { enterPop, exitFade } from '@/lib/motion';
 import { queryClient } from '@/lib/query-client';
 import { useNow } from '@/lib/use-now';
 import { parseTimestamp } from '@/sync/convert';
@@ -62,7 +64,7 @@ export function PostCard({ post, linkToPost = true, onDeleted }: PostCardProps) 
     ]);
 
   return (
-    <View className="gap-3 rounded-3xl border border-line bg-surface p-4">
+    <View className="gap-3 rounded-card border border-line bg-surface p-4" style={continuous}>
       <View className="flex-row items-center gap-3">
         <Pressable
           onPress={openProfile}
@@ -164,8 +166,8 @@ function PostInteractive({ post, linkToPost }: { post: FeedPost; linkToPost: boo
               />
             ) : (
               <View
-                style={{ aspectRatio: photoRatio(post) }}
-                className="items-center justify-center rounded-2xl bg-surface-2"
+                style={[{ aspectRatio: photoRatio(post) }, continuous]}
+                className="items-center justify-center rounded-xl bg-surface-2"
               >
                 <Text className="text-sm text-fg-muted">Foto indisponível</Text>
               </View>
@@ -183,11 +185,7 @@ function PostInteractive({ post, linkToPost }: { post: FeedPost; linkToPost: boo
 
           {burst ? (
             <View pointerEvents="none" className="absolute inset-0 items-center justify-center">
-              <Animated.View
-                key={burst}
-                entering={ZoomIn.springify().damping(10)}
-                exiting={FadeOut.duration(200)}
-              >
+              <Animated.View key={burst} entering={enterPop()} exiting={exitFade()}>
                 <Icon
                   name="heartFill"
                   size={96}

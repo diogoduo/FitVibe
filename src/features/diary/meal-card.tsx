@@ -1,14 +1,16 @@
 import { router } from 'expo-router';
 import { Alert, Pressable, Text, View } from 'react-native';
-import Animated, { FadeInDown, FadeOutLeft, LinearTransition } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import { Icon, type IconName } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
 import { SwipeRow } from '@/components/ui/swipe-row';
 import { showUndo } from '@/components/ui/undo-bar';
+import { continuous } from '@/components/ui/shape';
 import type { DiaryEntry, Meal } from '@/db/schema';
 import { addDays, type DayKey } from '@/lib/dates';
 import { haptics } from '@/lib/haptics';
+import { enterUp, exitLeft, layoutSpring } from '@/lib/motion';
 import { formatDecimal, formatInt } from '@/lib/numbers';
 import { useColors } from '@/theme/theme';
 
@@ -48,7 +50,7 @@ export function MealCard({ meal, day, entries, canCopyYesterday, canPost }: Meal
     ]);
 
   return (
-    <View className="gap-2 rounded-3xl border border-line bg-surface p-4">
+    <View className="gap-2 rounded-card border border-line bg-surface p-4" style={continuous}>
       <View className="flex-row items-center gap-3">
         <View className="h-9 w-9 items-center justify-center rounded-full bg-primary/15">
           <Icon name={icon} size={17} color={colors.primary} />
@@ -70,9 +72,9 @@ export function MealCard({ meal, day, entries, canCopyYesterday, canPost }: Meal
       {entries.map((entry) => (
         <Animated.View
           key={entry.id}
-          entering={FadeInDown.duration(250)}
-          exiting={FadeOutLeft.duration(200)}
-          layout={LinearTransition.duration(200)}
+          entering={enterUp()}
+          exiting={exitLeft()}
+          layout={layoutSpring()}
         >
           <SwipeRow
             actionLabel="Tirar"

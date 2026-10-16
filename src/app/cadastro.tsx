@@ -120,6 +120,7 @@ export default function SignUpScreen() {
             <Pressable
               onPress={() => router.push('/conta')}
               accessibilityRole="link"
+              hitSlop={10}
               className="self-start py-1 active:opacity-70"
             >
               <Text className="text-base font-semibold text-primary">

@@ -1,11 +1,13 @@
 import { router } from 'expo-router';
 import { Pressable, Text, TextInput, View } from 'react-native';
-import Animated, { FadeInDown, FadeOutLeft, LinearTransition } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import { Icon, type IconName } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
+import { continuous } from '@/components/ui/shape';
 import { formatDayLabel, todayKey } from '@/lib/dates';
 import { haptics } from '@/lib/haptics';
+import { enterUp, exitLeft, layoutSpring } from '@/lib/motion';
 import { formatDecimal, formatInt, formatKg, parseDecimal, toInputText } from '@/lib/numbers';
 import { useColors, useScheme } from '@/theme/theme';
 
@@ -82,7 +84,7 @@ function Section({
 }) {
   const colors = useColors();
   return (
-    <View className="gap-1 rounded-3xl border border-line bg-surface p-4">
+    <View className="gap-1 rounded-card border border-line bg-surface p-4" style={continuous}>
       <View className="flex-row items-center gap-2 pb-1">
         <View className="h-7 w-7 items-center justify-center rounded-full bg-primary/15">
           <Icon name={icon} size={14} color={colors.primary} weight="semibold" />
@@ -100,9 +102,9 @@ function Row({ item, children }: { item: DraftItem; children: React.ReactNode })
   const colors = useColors();
   return (
     <Animated.View
-      entering={FadeInDown.duration(220)}
-      exiting={FadeOutLeft.duration(180)}
-      layout={LinearTransition.duration(180)}
+      entering={enterUp()}
+      exiting={exitLeft()}
+      layout={layoutSpring()}
       style={{ flexDirection: 'row', gap: 8, paddingVertical: 8 }}
     >
       <View style={{ flex: 1 }}>{children}</View>
@@ -188,7 +190,7 @@ function FoodRow({ item }: { item: DraftFood }) {
       ) : null}
 
       {item.food ? null : (
-        <View className="gap-2 rounded-2xl bg-warning/10 p-3">
+        <View className="gap-2 rounded-xl bg-warning/10 p-3" style={continuous}>
           <Text className="text-sm leading-5 text-fg">
             Não achei “{item.name}” no banco de alimentos. Como você quer cadastrar?
           </Text>
@@ -339,6 +341,7 @@ function AmountInput({
   return (
     <View
       className={`flex-row items-center rounded-xl border px-2 ${estimated ? 'border-warning' : 'border-line'} bg-surface-2`}
+      style={continuous}
     >
       {estimated ? <Text className="text-sm text-warning">≈</Text> : null}
       <TextInput

@@ -1,7 +1,7 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/button';
@@ -26,6 +26,7 @@ import {
 import { understand } from '@/features/assistant/understand';
 import { RECORD_LABELS } from '@/features/workout/records';
 import { haptics } from '@/lib/haptics';
+import { enterFade, enterUp } from '@/lib/motion';
 import { useSession } from '@/sync/hooks';
 import { useColors } from '@/theme/theme';
 
@@ -135,11 +136,11 @@ export default function AssistantScreen() {
         ) : null}
 
         {ready && !draft ? (
-          <Animated.View entering={FadeIn.duration(200)} style={{ gap: 20, paddingTop: 8 }}>
+          <Animated.View entering={enterFade()} style={{ gap: 20, paddingTop: 8 }}>
             <Composer onSubmit={submit} busy={busy} autoStart={modo === 'voz'} />
             {!busy && !error ? (
               <View className="gap-1.5 px-1">
-                <Text className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
+                <Text className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
                   Exemplos
                 </Text>
                 {EXAMPLES.map((example) => (
@@ -155,7 +156,7 @@ export default function AssistantScreen() {
         {busy ? <Thinking /> : null}
 
         {error ? (
-          <Animated.View entering={FadeInDown.duration(200)}>
+          <Animated.View entering={enterUp()}>
             <Card icon="info" iconColor={colors.danger} title="Não deu certo">
               <Text className="text-base leading-6 text-fg">{error.message}</Text>
               {error.detail && error.code === 'failed' ? (
@@ -174,7 +175,7 @@ export default function AssistantScreen() {
         ) : null}
 
         {draft ? (
-          <Animated.View entering={FadeInDown.duration(250)} style={{ gap: 12 }}>
+          <Animated.View entering={enterUp()} style={{ gap: 12 }}>
             <Card icon="waveform" title="Você disse">
               {draft.transcripts.map((transcript, index) => (
                 <Text key={index} className="text-base italic leading-6 text-fg">
@@ -205,7 +206,7 @@ export default function AssistantScreen() {
             )}
 
             <View className="gap-1.5 pt-1">
-              <Text className="px-1 text-xs font-semibold uppercase tracking-wider text-fg-muted">
+              <Text className="px-1 text-xs font-semibold uppercase tracking-wide text-fg-muted">
                 Faltou algo? Responder ou completar
               </Text>
               <Composer onSubmit={submit} busy={busy} compact />
@@ -216,7 +217,7 @@ export default function AssistantScreen() {
 
       {draft && !busy && toSave > 0 ? (
         <Animated.View
-          entering={FadeInDown.duration(200)}
+          entering={enterUp()}
           style={{
             gap: 6,
             borderTopWidth: 1,
@@ -250,7 +251,7 @@ export default function AssistantScreen() {
 function Thinking() {
   const colors = useColors();
   return (
-    <Animated.View entering={FadeIn.duration(200)}>
+    <Animated.View entering={enterFade()}>
       <Card>
         <View className="flex-row items-center gap-3">
           <Spinner />

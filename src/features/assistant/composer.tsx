@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Linking, Pressable, Text, TextInput, View } from 'react-native';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import { Icon } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
+import { continuous } from '@/components/ui/shape';
+import { enterFade, exitFade } from '@/lib/motion';
 import { useColors, useScheme } from '@/theme/theme';
 
 import { MAX_RECORDING_SEC, useVoiceRecorder, type Recording } from './use-voice-recorder';
@@ -103,7 +105,10 @@ export function Composer({
   const level = levelFromMetering(voice.state.metering);
 
   const textBox = (
-    <View className="flex-row items-end gap-2 rounded-2xl border border-line bg-surface-2 py-1.5 pl-3 pr-1.5">
+    <View
+      className="flex-row items-end gap-2 rounded-2xl border border-line bg-surface-2 py-1.5 pl-3 pr-1.5"
+      style={continuous}
+    >
       <TextInput
         value={text}
         onChangeText={setText}
@@ -176,8 +181,8 @@ export function Composer({
 function RecordingStatus({ ms, onCancel }: { ms: number; onCancel: () => void }) {
   return (
     <Animated.View
-      entering={FadeIn.duration(150)}
-      exiting={FadeOut.duration(150)}
+      entering={enterFade()}
+      exiting={exitFade()}
       style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}
     >
       <Text className="text-base font-semibold text-danger">

@@ -3,6 +3,7 @@ import { Alert, ScrollView, Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { continuous } from '@/components/ui/shape';
 import type { MuscleGroup } from '@/db/schema';
 import { MUSCLE_LABELS } from '@/features/exercises/labels';
 import { useAllExercises } from '@/features/exercises/queries';
@@ -168,8 +169,11 @@ export default function WorkoutSummaryScreen() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <View className="flex-1 items-center gap-0.5 rounded-2xl border border-line bg-surface py-3">
-      <Text className="text-xs font-medium uppercase tracking-wider text-fg-muted">{label}</Text>
+    <View
+      className="flex-1 items-center gap-0.5 rounded-2xl border border-line bg-surface py-3"
+      style={continuous}
+    >
+      <Text className="text-xs font-medium uppercase tracking-wide text-fg-muted">{label}</Text>
       <Text className="text-lg font-bold text-fg">{value}</Text>
     </View>
   );

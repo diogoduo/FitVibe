@@ -112,7 +112,7 @@ export default function FoodSearchScreen() {
             </View>
             {showSaved ? (
               <View className="gap-1 pt-1">
-                <Text className="text-xs font-medium uppercase tracking-wider text-fg-muted">
+                <Text className="text-xs font-medium uppercase tracking-wide text-fg-muted">
                   Refeições salvas
                 </Text>
                 {savedMeals.map((saved) => (

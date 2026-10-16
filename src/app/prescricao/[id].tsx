@@ -8,6 +8,7 @@ import { ChoiceChips } from '@/components/ui/choice-chips';
 import { FormScroll } from '@/components/ui/form-scroll';
 import { TextField } from '@/components/ui/text-field';
 import { ToggleField } from '@/components/ui/toggle-field';
+import { continuous } from '@/components/ui/shape';
 import type { Exercise } from '@/db/schema';
 import { ExerciseThumb } from '@/features/exercises/exercise-thumb';
 import { exerciseSubtitle } from '@/features/exercises/labels';
@@ -100,6 +101,7 @@ export default function PrescriptionScreen() {
           onPress={() => router.push({ pathname: '/exercicio/[id]', params: { id: exercise.id } })}
           accessibilityRole="button"
           className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface p-3 active:opacity-70"
+          style={continuous}
         >
           <ExerciseThumb name={exercise.name} catalogKey={exercise.catalogKey} />
           <View className="flex-1">

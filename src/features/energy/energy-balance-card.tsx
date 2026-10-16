@@ -76,14 +76,12 @@ export function EnergyBalanceCard() {
         <Figure label="Gasto" value={day.expenditureKcal} />
         <Text className="pb-1 text-lg text-fg-muted">=</Text>
         <View className="items-end">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
-            Saldo
-          </Text>
+          <Text className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Saldo</Text>
           {day.balanceKcal == null ? (
-            <Text className="text-2xl font-extrabold text-fg-muted">—</Text>
+            <Text className="text-xl font-extrabold text-fg-muted">—</Text>
           ) : (
             <Text
-              className="text-2xl font-extrabold"
+              className="text-xl font-extrabold"
               style={{ color: onTrack(day.balanceKcal, goal) ? colors.success : colors.warning }}
             >
               {day.balanceKcal > 0 ? '+' : day.balanceKcal < 0 ? '−' : ''}
@@ -141,8 +139,8 @@ export function EnergyBalanceCard() {
 function Figure({ label, value }: { label: string; value: number | null }) {
   return (
     <View>
-      <Text className="text-xs font-semibold uppercase tracking-wider text-fg-muted">{label}</Text>
-      <Text className="text-2xl font-extrabold text-fg">
+      <Text className="text-xs font-semibold uppercase tracking-wide text-fg-muted">{label}</Text>
+      <Text className="text-xl font-extrabold text-fg">
         {value == null ? '—' : formatInt(value)}
       </Text>
     </View>

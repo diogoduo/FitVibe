@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TextInput } from 'react-native';
 
+import { continuous } from '@/components/ui/shape';
 import { useColors, useScheme } from '@/theme/theme';
 
 /** Anotação curta que grava ao sair do campo (treino ou exercício). */
@@ -34,6 +35,7 @@ export function NoteField({
       maxLength={500}
       accessibilityLabel={placeholder}
       className="min-h-11 rounded-xl border border-line bg-surface-2 px-3 py-2 text-base text-fg"
+      style={continuous}
     />
   );
 }

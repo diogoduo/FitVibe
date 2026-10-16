@@ -21,7 +21,7 @@ export function DaySummary({ snapshot }: { snapshot: DaySnapshot }) {
     <View className="gap-3">
       {training ? (
         <View className="gap-1">
-          <Text className="text-sm font-semibold uppercase tracking-wider text-fg-muted">
+          <Text className="text-footnote font-semibold uppercase tracking-wide text-fg-muted">
             Treino
           </Text>
           {training.workouts.length === 0 ? (
@@ -46,7 +46,7 @@ export function DaySummary({ snapshot }: { snapshot: DaySnapshot }) {
 
       {diet ? (
         <View className="gap-2">
-          <Text className="text-sm font-semibold uppercase tracking-wider text-fg-muted">
+          <Text className="text-footnote font-semibold uppercase tracking-wide text-fg-muted">
             Dieta
           </Text>
           <Text className="text-xl font-bold text-fg">

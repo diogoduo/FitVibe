@@ -44,7 +44,7 @@ export function DayRingsCard() {
         accessibilityLabel="Abrir a Dieta"
         className="flex-row items-center gap-4"
       >
-        <ActivityRings rings={rings} size={132} stroke={15} />
+        <ActivityRings rings={rings} size={120} stroke={14} />
         <View className="flex-1 gap-3">
           <Legend
             icon="flame"
@@ -99,9 +99,7 @@ function Legend({
     <View className="gap-0.5">
       <View className="flex-row items-center gap-1.5">
         <Icon name={icon} size={12} color={color} weight="bold" />
-        <Text className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
-          {label}
-        </Text>
+        <Text className="text-xs font-semibold uppercase tracking-wide text-fg-muted">{label}</Text>
       </View>
       <Text className="text-base text-fg-muted">
         <AnimatedNumber

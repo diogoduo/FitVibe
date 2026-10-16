@@ -1,5 +1,6 @@
 import { Text, View } from 'react-native';
 
+import { continuous } from '@/components/ui/shape';
 import { formatInt } from '@/lib/numbers';
 
 type MacroTilesProps = {
@@ -23,8 +24,11 @@ export function MacroTiles({ proteinG, carbsG, fatG, details }: MacroTilesProps)
 
 function Tile({ name, grams, detail }: { name: string; grams: number; detail?: string }) {
   return (
-    <View className="flex-1 items-center gap-0.5 rounded-xl bg-surface-2 px-1 py-3">
-      <Text className="text-xs font-medium uppercase tracking-wider text-fg-muted">{name}</Text>
+    <View
+      className="flex-1 items-center gap-0.5 rounded-xl bg-surface-2 px-1 py-3"
+      style={continuous}
+    >
+      <Text className="text-xs font-medium uppercase tracking-wide text-fg-muted">{name}</Text>
       <Text className="text-xl font-bold text-fg">{formatInt(grams)} g</Text>
       {detail ? <Text className="text-xs text-fg-muted">{detail}</Text> : null}
     </View>

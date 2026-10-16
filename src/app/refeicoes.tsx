@@ -4,6 +4,7 @@ import { Pressable, Switch, Text, TextInput, View } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { FormScroll } from '@/components/ui/form-scroll';
 import { TextField } from '@/components/ui/text-field';
+import { continuous } from '@/components/ui/shape';
 import type { Meal } from '@/db/schema';
 import { useMeals } from '@/features/diary/queries';
 import {
@@ -67,7 +68,10 @@ function MealRow({ meal, isFirst, isLast }: { meal: Meal; isFirst: boolean; isLa
   };
 
   return (
-    <View className="flex-row items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2">
+    <View
+      className="flex-row items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2"
+      style={continuous}
+    >
       <TextInput
         value={name}
         onChangeText={setName}

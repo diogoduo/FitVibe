@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native';
 
 import { Card } from '@/components/ui/card';
+import { continuous } from '@/components/ui/shape';
 import { formatDecimal, formatInt, formatKg, formatSignedInt } from '@/lib/numbers';
 
 import { activityTitle, goalLabel } from '../profile/options';
@@ -55,7 +56,7 @@ export function GoalBreakdownCard({ input, goals, weightSource }: GoalBreakdownC
       ) : null}
 
       {goals.warnings.belowBmr || goals.warnings.macrosReduced || reducedWeight ? (
-        <View className="gap-2 rounded-2xl bg-warning/10 p-3">
+        <View className="gap-2 rounded-xl bg-warning/10 p-3" style={continuous}>
           {goals.warnings.belowBmr ? (
             <Text className="text-sm leading-5 text-warning">
               A meta ({formatInt(goals.kcal)} kcal) está abaixo da sua TMB ({formatInt(goals.bmr)}{' '}

@@ -1,6 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 
 import { Field } from './field';
+import { continuous } from './shape';
 
 type OptionListProps<T extends string> = {
   label?: string;
@@ -30,6 +31,7 @@ export function OptionList<T extends string>({
               accessibilityRole="radio"
               accessibilityState={{ selected }}
               className={`flex-row items-center gap-3 rounded-xl border px-4 py-3 active:opacity-70 ${selected ? 'border-primary bg-primary/15' : 'border-line bg-surface-2'}`}
+              style={continuous}
             >
               <View
                 className={`h-5 w-5 items-center justify-center rounded-full border-2 ${selected ? 'border-primary' : 'border-fg-muted'}`}

@@ -2,20 +2,19 @@ import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import Animated, {
   Easing,
-  FadeInUp,
-  FadeOut,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withRepeat,
   withSequence,
   withTiming,
-  ZoomIn,
 } from 'react-native-reanimated';
 
 import { ActivityRings } from '@/components/charts/activity-rings';
 import { LineChart } from '@/components/charts/line-chart';
 import { Icon } from '@/components/ui/icon';
+import { continuous } from '@/components/ui/shape';
+import { enterGrow, enterPop, enterUp, exitFade } from '@/lib/motion';
 import { useColors } from '@/theme/theme';
 
 /**
@@ -35,7 +34,12 @@ function useBlink(ms: number) {
 
 function Frame({ children }: { children: React.ReactNode }) {
   return (
-    <View className="w-full gap-3 rounded-3xl border border-line bg-surface p-4">{children}</View>
+    <View
+      className="w-full gap-3 rounded-card border border-line bg-surface p-4"
+      style={continuous}
+    >
+      {children}
+    </View>
   );
 }
 
@@ -83,15 +87,15 @@ export function SetDemo() {
       <Text className="text-base font-semibold text-fg">Supino reto com barra</Text>
       <View
         className="flex-row items-center gap-2 rounded-xl px-2 py-1.5"
-        style={{ backgroundColor: done ? `${colors.success}1A` : 'transparent' }}
+        style={{ ...continuous, backgroundColor: done ? `${colors.success}1A` : 'transparent' }}
       >
         <Text className="w-8 text-sm font-semibold text-fg">1</Text>
-        <View className="rounded-lg border border-line bg-surface-2 px-3 py-2">
+        <View className="rounded-lg border border-line bg-surface-2 px-3 py-2" style={continuous}>
           <Text className="text-base text-fg">30</Text>
         </View>
         <Text className="text-sm font-bold text-primary">↑</Text>
         <Text className="text-base text-fg-muted">×</Text>
-        <View className="rounded-lg border border-line bg-surface-2 px-3 py-2">
+        <View className="rounded-lg border border-line bg-surface-2 px-3 py-2" style={continuous}>
           <Text className="text-base text-fg">8</Text>
         </View>
         <View className="flex-1" />
@@ -118,8 +122,8 @@ export function SetDemo() {
       </View>
       {done ? (
         <Animated.View
-          entering={ZoomIn.springify().damping(14)}
-          exiting={FadeOut.duration(150)}
+          entering={enterGrow()}
+          exiting={exitFade()}
           style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
         >
           <Icon name="trophy" size={15} color={colors.warning} />
@@ -151,10 +155,10 @@ export function SwipeDemo() {
   return (
     <Frame>
       <Text className="text-base font-semibold text-fg">Almoço</Text>
-      <View className="overflow-hidden rounded-xl">
+      <View className="overflow-hidden rounded-xl" style={continuous}>
         <View
           className="absolute bottom-0 right-0 top-0 items-center justify-center gap-1 rounded-xl px-4"
-          style={{ backgroundColor: colors.danger }}
+          style={{ ...continuous, backgroundColor: colors.danger }}
         >
           <Icon name="trash" size={16} color="#FFFFFF" />
           <Text className="text-xs font-semibold" style={{ color: '#FFFFFF' }}>
@@ -246,8 +250,8 @@ export function VoiceDemo() {
           {VOICE_ITEMS.map((item, index) => (
             <Animated.View
               key={item.name}
-              entering={FadeInUp.duration(250).delay(index * 120)}
-              exiting={FadeOut.duration(150)}
+              entering={enterUp(index * 120)}
+              exiting={exitFade()}
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
               <Text className="text-sm text-fg">{item.name}</Text>
@@ -299,17 +303,17 @@ export function LikeDemo() {
     <Frame>
       <View className="flex-row items-center gap-2">
         <View className="h-8 w-8 items-center justify-center rounded-full bg-primary/20">
-          <Text className="text-xs font-bold text-primary">MM</Text>
+          <Text className="text-xs font-bold text-primary">AS</Text>
         </View>
         <Text className="text-sm font-semibold text-fg">Ana Souza</Text>
         <Text className="text-sm text-fg-muted">· postou o café da manhã</Text>
       </View>
-      <View className="h-32 items-center justify-center rounded-2xl bg-surface-2">
+      <View className="h-32 items-center justify-center rounded-xl bg-surface-2" style={continuous}>
         <Icon name="cup" size={40} color={colors['fg-muted']} />
         {liked ? (
           <Animated.View
-            entering={ZoomIn.springify().damping(10)}
-            exiting={FadeOut.duration(200)}
+            entering={enterPop()}
+            exiting={exitFade()}
             style={{ position: 'absolute' }}
           >
             <Icon name="heartFill" size={64} color={colors.danger} />
@@ -345,7 +349,8 @@ export function SettingsDemo() {
         {(['bell_badge', 'sun', 'share', 'cloud'] as const).map((icon) => (
           <View
             key={icon}
-            className="h-12 flex-1 items-center justify-center rounded-2xl bg-surface-2"
+            className="h-12 flex-1 items-center justify-center rounded-xl bg-surface-2"
+            style={continuous}
           >
             <Icon
               name={icon}
@@ -360,11 +365,11 @@ export function SettingsDemo() {
       </View>
       <View className="h-14 justify-center">
         {show ? (
-          <Animated.View
-            entering={FadeInUp.springify().damping(14)}
-            exiting={FadeOut.duration(200)}
-          >
-            <View className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface-2 p-3">
+          <Animated.View entering={enterUp()} exiting={exitFade()}>
+            <View
+              className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface-2 p-3"
+              style={continuous}
+            >
               <Icon name="drop" size={18} color={colors.water} />
               <Text className="flex-1 text-sm text-fg">
                 <Text className="font-semibold">Hora da água · </Text>faltam 1.200 ml

@@ -6,6 +6,7 @@ import { haptics } from '@/lib/haptics';
 import { useColors } from '@/theme/theme';
 
 import { Icon } from './icon';
+import { continuous } from './shape';
 
 type SwipeRowProps = {
   children: ReactNode;
@@ -39,7 +40,7 @@ export function SwipeRow({ children, actionLabel, onAction }: SwipeRowProps) {
           accessibilityRole="button"
           accessibilityLabel={actionLabel}
           className="ml-2 min-w-24 items-center justify-center gap-1 rounded-xl px-4"
-          style={{ backgroundColor: colors.danger }}
+          style={[continuous, { backgroundColor: colors.danger }]}
         >
           <Icon name="trash" size={18} color="#FFFFFF" />
           <Text className="text-xs font-semibold" style={{ color: '#FFFFFF' }}>

@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 import { useColors, useScheme } from '@/theme/theme';
 
 import type { DateTimeFieldProps } from './date-time-field';
+import { continuous } from './shape';
 
 /** iOS: seletor compacto nativo (SwiftUI) — toque na data ou na hora para abrir o calendário. */
 export function DateTimeField({
@@ -16,7 +17,10 @@ export function DateTimeField({
   const colors = useColors();
   const scheme = useScheme();
   return (
-    <View className="flex-row items-center gap-3 rounded-xl border border-line bg-surface-2 py-2 pl-3 pr-2">
+    <View
+      className="flex-row items-center gap-3 rounded-xl border border-line bg-surface-2 py-2 pl-3 pr-2"
+      style={continuous}
+    >
       <Text className="text-base text-fg-muted">{label}</Text>
       <DateTimePicker
         style={{ flex: 1 }}

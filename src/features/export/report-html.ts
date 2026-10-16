@@ -33,7 +33,7 @@ function weightChart(series: Report['weight']['series']): string {
     <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
       <rect x="0" y="0" width="${width}" height="${height}" fill="#f6f6f8" rx="8" />
       <g fill="#9ca3af">${dots}</g>
-      <polyline points="${trend}" fill="none" stroke="#4d7c0f" stroke-width="2.5" />
+      <polyline points="${trend}" fill="none" stroke="#44700d" stroke-width="2.5" />
       <text x="${width - pad}" y="${pad + 10}" text-anchor="end" font-size="10" fill="#5c5c68">${formatDecimal(max - 0.3)} kg</text>
       <text x="${width - pad}" y="${height - pad}" text-anchor="end" font-size="10" fill="#5c5c68">${formatDecimal(min + 0.3)} kg</text>
     </svg>
@@ -85,7 +85,7 @@ export function reportHtml(report: Report): string {
   @page { margin: 32px; }
   body { font-family: -apple-system, Helvetica, Arial, sans-serif; color: #111114; font-size: 12px; }
   h1 { font-size: 22px; margin: 0; }
-  h2 { font-size: 15px; margin: 22px 0 8px; border-bottom: 2px solid #4d7c0f; padding-bottom: 4px; }
+  h2 { font-size: 15px; margin: 22px 0 8px; border-bottom: 2px solid #44700d; padding-bottom: 4px; }
   .muted { color: #5c5c68; }
   .cards { display: flex; gap: 8px; flex-wrap: wrap; }
   .card { flex: 1; min-width: 110px; background: #f6f6f8; border-radius: 8px; padding: 8px 10px; }

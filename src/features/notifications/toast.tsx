@@ -3,6 +3,8 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { Animated, Pressable, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { continuous } from '@/components/ui/shape';
+
 import { Avatar } from '../social/avatar';
 import type { NotificationRoute } from './describe';
 
@@ -80,6 +82,7 @@ export function NotificationToast() {
         accessibilityLiveRegion="polite"
         className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface-2 p-3 active:opacity-80"
         style={{
+          ...continuous,
           shadowColor: '#000',
           shadowOpacity: 0.4,
           shadowRadius: 12,

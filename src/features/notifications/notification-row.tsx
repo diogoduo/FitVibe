@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Alert, Pressable, Text, View } from 'react-native';
 
 import { Icon, type IconName } from '@/components/ui/icon';
+import { continuous } from '@/components/ui/shape';
 import { formatTimeAgo } from '@/lib/dates';
 import { parseTimestamp } from '@/sync/convert';
 import { useColors, type Colors } from '@/theme/theme';
@@ -76,6 +77,7 @@ export function NotificationRow({
       onPress={() => router.push(notificationRoute(notification))}
       accessibilityRole="button"
       className={`flex-row items-center gap-3 rounded-2xl border px-3 py-3 active:opacity-70 ${unread ? 'border-primary bg-primary/10' : 'border-line bg-surface'}`}
+      style={continuous}
     >
       <View>
         <Avatar path={notification.avatar_path} name={notification.display_name} size={44} />

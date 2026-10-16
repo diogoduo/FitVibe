@@ -7,6 +7,7 @@ import { Icon } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
 import { SwipeRow } from '@/components/ui/swipe-row';
 import { showUndo } from '@/components/ui/undo-bar';
+import { continuous } from '@/components/ui/shape';
 import { haptics } from '@/lib/haptics';
 import { useColors, useScheme } from '@/theme/theme';
 
@@ -22,6 +23,9 @@ import {
   type SetValues,
 } from './repository';
 import { isFailure, RIR_CYCLE, rirLabel } from './rir';
+
+/** Até quanto o texto da linha cresce com o tamanho de texto do sistema. */
+const MAX_FONT_SCALE = 1.3;
 
 /** Tocar no rótulo: válida → Prep → Aq → válida (a série a mais vira preparatória num toque). */
 const NEXT_KIND: Record<SetKind, SetKind> = { working: 'prep', prep: 'warmup', warmup: 'working' };
@@ -120,11 +124,15 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
     ]);
 
   const inputClass = `rounded-lg border bg-surface-2 px-2 py-2 text-center text-base text-fg ${invalid ? 'border-danger' : 'border-line'}`;
+  // Larguras fixas para a linha caber num iPhone de 375 pt: o texto cresce com o tamanho do
+  // sistema, mas só até 1,3× (mais que isso cortaria os números).
+  const fieldProps = { style: continuous, maxFontSizeMultiplier: MAX_FONT_SCALE } as const;
 
   return (
     <SwipeRow actionLabel="Excluir" onAction={remove}>
       <View
-        className={`flex-row items-center gap-2 rounded-xl px-2 py-1 ${done ? 'bg-success/10' : ''}`}
+        className={`flex-row items-center gap-1.5 rounded-xl px-2 py-1 ${done ? 'bg-success/10' : ''}`}
+        style={continuous}
       >
         <Pressable
           onPress={cycleKind}
@@ -133,19 +141,21 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
           accessibilityLabel={`Série ${label}`}
           accessibilityHint="Toque para trocar entre válida, preparatória e aquecimento. Deslize para a esquerda (ou toque e segure) para excluir"
           hitSlop={6}
-          className="w-11 py-2 active:opacity-60"
+          className="w-10 py-2 active:opacity-60"
         >
           <Text
             className={`text-sm font-semibold ${working ? 'text-fg' : 'text-fg-muted'}`}
             numberOfLines={1}
+            maxFontSizeMultiplier={MAX_FONT_SCALE}
           >
             {label}
           </Text>
         </Pressable>
 
         {byTime ? (
-          <View className="flex-1 flex-row items-center gap-1.5">
+          <View className="flex-1 flex-row items-center gap-1">
             <TextInput
+              {...fieldProps}
               value={minutesText}
               onChangeText={setMinutesText}
               onBlur={persist}
@@ -159,8 +169,9 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
             <Text className="text-base text-fg-muted">min</Text>
           </View>
         ) : (
-          <View className="flex-1 flex-row items-center gap-1.5">
+          <View className="flex-1 flex-row items-center gap-1">
             <TextInput
+              {...fieldProps}
               value={loadText}
               onChangeText={setLoadText}
               onBlur={persist}
@@ -171,11 +182,12 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
               keyboardAppearance={scheme}
               selectionColor={colors.primary}
               accessibilityLabel={loadType === 'plates' ? 'Placas' : 'Carga'}
-              className={`w-[70px] ${inputClass}`}
+              className={`w-16 ${inputClass}`}
             />
             {increased ? <Text className="text-sm font-bold text-primary">↑</Text> : null}
             <Text className="text-base text-fg-muted">×</Text>
             <TextInput
+              {...fieldProps}
               value={repsText}
               onChangeText={setRepsText}
               onBlur={persist}
@@ -184,7 +196,7 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
               keyboardAppearance={scheme}
               selectionColor={colors.primary}
               accessibilityLabel="Repetições"
-              className={`w-14 ${inputClass}`}
+              className={`w-12 ${inputClass}`}
             />
           </View>
         )}
@@ -194,9 +206,14 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
             onPress={cycleRir}
             accessibilityRole="button"
             accessibilityLabel="Repetições na reserva"
-            className="w-16 items-center rounded-full bg-surface-2 py-1.5 active:opacity-70"
+            // Área de toque de 44 pt (o chip em si é baixo, para caber na linha).
+            hitSlop={8}
+            className="w-14 items-center rounded-full bg-surface-2 py-1.5 active:opacity-70"
           >
-            <Text className={`text-xs font-semibold ${isFailure(rir) ? 'text-danger' : 'text-fg'}`}>
+            <Text
+              className={`text-xs font-semibold ${isFailure(rir) ? 'text-danger' : 'text-fg'}`}
+              maxFontSizeMultiplier={MAX_FONT_SCALE}
+            >
               {rirLabel(rir)}
             </Text>
           </Pressable>

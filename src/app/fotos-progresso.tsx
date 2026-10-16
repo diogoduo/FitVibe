@@ -220,7 +220,7 @@ function DayChips({
 }) {
   return (
     <View className="gap-1">
-      <Text className="text-xs font-semibold uppercase tracking-wider text-fg-muted">{label}</Text>
+      <Text className="text-xs font-semibold uppercase tracking-wide text-fg-muted">{label}</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

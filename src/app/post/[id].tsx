@@ -13,6 +13,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Spinner } from '@/components/ui/spinner';
+import { continuous } from '@/components/ui/shape';
 import { formatTimeAgo } from '@/lib/dates';
 import { useNow } from '@/lib/use-now';
 import * as api from '@/features/social/api';
@@ -95,7 +96,7 @@ export default function PostScreen() {
       >
         <PostCard post={post.data} linkToPost={false} onDeleted={() => router.back()} />
 
-        <Text className="text-sm font-semibold uppercase tracking-wider text-fg-muted">
+        <Text className="text-footnote font-semibold uppercase tracking-wide text-fg-muted">
           Comentários
         </Text>
         {comments.isLoading ? <Spinner /> : null}
@@ -143,6 +144,7 @@ export default function PostScreen() {
           multiline
           maxLength={500}
           className="max-h-28 flex-1 rounded-xl bg-surface-2 px-3 py-2.5 text-base text-fg"
+          style={continuous}
           accessibilityLabel="Comentário"
         />
         <Pressable
@@ -150,6 +152,7 @@ export default function PostScreen() {
           disabled={sending || !text.trim()}
           accessibilityRole="button"
           className="rounded-xl bg-primary px-4 py-2.5 active:opacity-70 disabled:opacity-40"
+          style={continuous}
         >
           <Text className="text-base font-semibold text-on-primary">
             {sending ? '…' : 'Enviar'}

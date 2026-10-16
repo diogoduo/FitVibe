@@ -2,8 +2,9 @@ import { Pressable, type PressableProps, type ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { haptics, type HapticKind } from '@/lib/haptics';
+import { SPRING_PRESS } from '@/lib/motion';
 
-const SPRING = { damping: 18, stiffness: 320, mass: 0.6 };
+import { continuous } from './shape';
 
 /**
  * Classes que posicionam o botão dentro do pai: vão só para o envoltório animado (que não passa
@@ -27,7 +28,10 @@ type PressableScaleProps = Omit<PressableProps, 'style'> & {
   haptic?: HapticKind;
 };
 
-/** Toque que "afunda" um pouco e volta com mola: dá sensação de botão físico. */
+/**
+ * Toque que "afunda" um pouco no instante do toque e volta com mola sem quique: dá sensação de
+ * botão físico. Os cantos são contínuos (o "squircle" do iOS).
+ */
 export function PressableScale({
   className = '',
   scaleTo = 0.96,
@@ -48,12 +52,13 @@ export function PressableScale({
       <Pressable
         {...props}
         className={inner}
+        style={continuous}
         onPressIn={(event) => {
-          scale.set(withSpring(scaleTo, SPRING));
+          scale.set(withSpring(scaleTo, SPRING_PRESS));
           onPressIn?.(event);
         }}
         onPressOut={(event) => {
-          scale.set(withSpring(1, SPRING));
+          scale.set(withSpring(1, SPRING_PRESS));
           onPressOut?.(event);
         }}
         onPress={(event) => {

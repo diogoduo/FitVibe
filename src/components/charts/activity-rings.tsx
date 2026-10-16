@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import Animated, {
-  Easing,
   useAnimatedProps,
   useSharedValue,
   withDelay,
-  withTiming,
+  withSpring,
 } from 'react-native-reanimated';
 import Svg, { Circle, G } from 'react-native-svg';
+
+import { SPRING_VALUE } from '@/lib/motion';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -59,12 +60,8 @@ function RingArc({
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.set(
-      withDelay(
-        index * 120,
-        withTiming(target, { duration: 900, easing: Easing.out(Easing.cubic) }),
-      ),
-    );
+    // Um anel depois do outro; a mola parte do valor atual, então mudar no meio não dá tranco.
+    progress.set(withDelay(index * 120, withSpring(target, SPRING_VALUE)));
   }, [target, index, progress]);
 
   const animatedProps = useAnimatedProps(() => ({

@@ -1,12 +1,14 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, Text, View } from 'react-native';
-import Animated, { ZoomIn } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import { celebrate } from '@/components/ui/celebration';
 import { showUndo } from '@/components/ui/undo-bar';
 import { Icon } from '@/components/ui/icon';
+import { continuous } from '@/components/ui/shape';
 import { formatDayLabel, toDayKey } from '@/lib/dates';
+import { enterGrow } from '@/lib/motion';
 import { useColors } from '@/theme/theme';
 import type { Exercise, WorkoutExercise, WorkoutSet } from '@/db/schema';
 
@@ -120,7 +122,7 @@ export function WorkoutExerciseCard({
   };
 
   return (
-    <View className="gap-2 rounded-2xl border border-line bg-surface p-3">
+    <View className="gap-2 rounded-card border border-line bg-surface p-3" style={continuous}>
       <Pressable
         onPress={() =>
           exercise && router.push({ pathname: '/exercicio/[id]', params: { id: exercise.id } })
@@ -212,7 +214,7 @@ export function WorkoutExerciseCard({
           {records.length > 0 ? (
             <Animated.View
               key={records.join()}
-              entering={ZoomIn.springify().damping(14)}
+              entering={enterGrow()}
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',

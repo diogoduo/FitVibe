@@ -1,12 +1,14 @@
 import { useEffect, useSyncExternalStore } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { haptics } from '@/lib/haptics';
+import { enterUp, exitDown } from '@/lib/motion';
 import { useColors } from '@/theme/theme';
 
 import { Icon } from './icon';
+import { continuous } from './shape';
 
 /**
  * "Desfazer" depois de apagar com um gesto (deslizar para tirar): fica uns segundos embaixo da
@@ -51,16 +53,18 @@ export function UndoBar() {
   return (
     <View
       pointerEvents="box-none"
-      style={{ position: 'absolute', left: 12, right: 12, bottom: insets.bottom + 64 }}
+      style={{ position: 'absolute', left: 16, right: 16, bottom: insets.bottom + 64 }}
     >
       <Animated.View
         key={item.id}
-        entering={FadeInDown.springify().damping(15)}
-        exiting={FadeOut.duration(150)}
+        // Entra de baixo e volta para baixo: o mesmo caminho nos dois sentidos.
+        entering={enterUp()}
+        exiting={exitDown()}
       >
         <View
           className="flex-row items-center gap-3 rounded-2xl border border-line bg-surface-2 px-4 py-3"
           style={{
+            ...continuous,
             shadowColor: '#000',
             shadowOpacity: 0.25,
             shadowRadius: 12,
