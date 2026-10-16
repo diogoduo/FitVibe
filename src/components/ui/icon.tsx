@@ -46,6 +46,7 @@ const ICONS = {
   close: { ios: 'xmark', android: 'close' },
   info: { ios: 'info.circle', android: 'info' },
   list: { ios: 'list.bullet', android: 'list' },
+  reorder: { ios: 'arrow.up.arrow.down', android: 'swap_vert' },
   cloud: { ios: 'icloud.fill', android: 'cloud' },
   bell_badge: { ios: 'bell.badge.fill', android: 'notifications_active' },
   ruler: { ios: 'ruler.fill', android: 'straighten' },

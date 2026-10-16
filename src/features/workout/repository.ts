@@ -10,6 +10,7 @@ import {
   workouts,
   workoutSets,
   type Exercise,
+  type SetKind,
   type Workout,
   type WorkoutExercise,
   type WorkoutSet,
@@ -18,6 +19,7 @@ import {
 import { defaultPrescription, type Prescription } from '../plan/prescription';
 import { loadIncrementFor, suggestWorkingSets, warmupSets, type PerformedSet } from './progression';
 import { newRecords, type DoneSet, type RecordKind } from './records';
+import { RIR_FAILURE } from './rir';
 
 const alive = (table: { deletedAt: AnySQLiteColumn }) => isNull(table.deletedAt);
 
@@ -183,7 +185,7 @@ function planSets(
       kind: 'working',
       load: suggestion.load,
       reps: suggestion.reps,
-      rir: prescription.lastSetToFailure && isLast ? 0 : prescription.rirTarget,
+      rir: prescription.lastSetToFailure && isLast ? RIR_FAILURE : prescription.rirTarget,
       suggestedLoad: suggestion.load,
       suggestedReps: suggestion.reps,
     });
@@ -330,6 +332,60 @@ export function swapWorkoutExercise(entryId: string, exerciseId: string) {
 
 export function setSkipped(entryId: string, skipped: boolean) {
   db.update(workoutExercises).set({ skipped }).where(eq(workoutExercises.id, entryId)).run();
+}
+
+/** Sobe (-1) ou desce (+1) o exercício uma posição neste treino (o plano não muda). */
+export function moveWorkoutExercise(entryId: string, direction: -1 | 1) {
+  db.transaction((tx) => {
+    const entry = tx.select().from(workoutExercises).where(eq(workoutExercises.id, entryId)).get();
+    if (!entry) return;
+    const entries = tx
+      .select()
+      .from(workoutExercises)
+      .where(and(eq(workoutExercises.workoutId, entry.workoutId), alive(workoutExercises)))
+      .orderBy(asc(workoutExercises.sortOrder))
+      .all();
+    const index = entries.findIndex((item) => item.id === entryId);
+    const neighbor = entries[index + direction];
+    if (!neighbor) return;
+    // Renumera o treino inteiro na nova ordem: evita empates de sortOrder.
+    const reordered = [...entries];
+    [reordered[index], reordered[index + direction]] = [neighbor, entry];
+    reordered.forEach((item, position) => {
+      if (item.sortOrder !== position) {
+        tx.update(workoutExercises)
+          .set({ sortOrder: position })
+          .where(eq(workoutExercises.id, item.id))
+          .run();
+      }
+    });
+  });
+}
+
+const KIND_ORDER: Record<SetKind, number> = { warmup: 0, prep: 1, working: 2 };
+
+/**
+ * Muda o tipo da série (ex.: a "+ Série" que era para ser preparatória). Ela vai para o lugar do
+ * tipo novo (aquecimentos, depois preparatórias, depois válidas) e começa sem RIR: só a válida
+ * tem, e a pessoa escolhe.
+ */
+export function setSetKind(setId: string, kind: SetKind) {
+  db.transaction((tx) => {
+    const set = tx.select().from(workoutSets).where(eq(workoutSets.id, setId)).get();
+    if (!set || set.kind === kind) return;
+    tx.update(workoutSets).set({ kind, rir: null }).where(eq(workoutSets.id, setId)).run();
+    const ordered = entrySets(set.workoutExerciseId, tx).sort(
+      (a, b) => KIND_ORDER[a.kind] - KIND_ORDER[b.kind] || a.sortOrder - b.sortOrder,
+    );
+    ordered.forEach((item, position) => {
+      if (item.sortOrder !== position) {
+        tx.update(workoutSets)
+          .set({ sortOrder: position })
+          .where(eq(workoutSets.id, item.id))
+          .run();
+      }
+    });
+  });
 }
 
 export type SetValues = Pick<WorkoutSet, 'load' | 'reps' | 'rir' | 'durationSec'>;

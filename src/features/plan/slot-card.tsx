@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
+import { OrderButtons } from '@/components/ui/order-buttons';
 import type { Exercise, PlanExercise } from '@/db/schema';
 
 import { ExerciseThumb } from '../exercises/exercise-thumb';
@@ -60,45 +61,11 @@ export function SlotCard({
           ) : null}
         </View>
       </Pressable>
-      <View className="justify-center gap-2">
-        <OrderButton
-          label="↑"
-          hint="Subir"
-          disabled={isFirst}
-          onPress={() => moveSlot(slot.id, -1)}
-        />
-        <OrderButton
-          label="↓"
-          hint="Descer"
-          disabled={isLast}
-          onPress={() => moveSlot(slot.id, 1)}
-        />
-      </View>
+      <OrderButtons
+        isFirst={isFirst}
+        isLast={isLast}
+        onMove={(direction) => moveSlot(slot.id, direction)}
+      />
     </View>
-  );
-}
-
-function OrderButton({
-  label,
-  hint,
-  disabled,
-  onPress,
-}: {
-  label: string;
-  hint: string;
-  disabled: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      disabled={disabled}
-      accessibilityRole="button"
-      accessibilityLabel={hint}
-      hitSlop={6}
-      className="h-9 w-9 items-center justify-center rounded-full bg-surface-2 active:opacity-70 disabled:opacity-30"
-    >
-      <Text className="text-lg text-fg">{label}</Text>
-    </Pressable>
   );
 }

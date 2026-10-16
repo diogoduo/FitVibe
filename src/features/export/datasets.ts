@@ -26,6 +26,7 @@ import {
 
 import { nutrientsFor } from '../foods/nutrition';
 import { computeTrend } from '../weight/trend';
+import { isFailure } from '../workout/rir';
 import { toCsv, type CsvValue } from './csv';
 
 /** Período da exportação, de um dia a outro (os dois inclusos). */
@@ -216,7 +217,7 @@ function workoutsCsv(period: Period): CsvTable {
             set.load,
             set.load != null ? LOAD_UNITS[loadType] : '',
             set.reps,
-            set.rir,
+            isFailure(set.rir) ? 'falha' : set.rir,
             set.durationSec,
           ]);
       }),

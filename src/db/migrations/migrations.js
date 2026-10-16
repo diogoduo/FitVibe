@@ -12,6 +12,7 @@ import m0009 from './0009_ajustes_do_celular.sql';
 import m0010 from './0010_fotos_de_progresso.sql';
 import m0011 from './0011_anotacoes_e_atividades.sql';
 import m0012 from './0012_gatilhos_atividades.sql';
+import m0013 from './0013_rir_falha.sql';
 
   export default {
     journal,
@@ -28,7 +29,8 @@ m0008,
 m0009,
 m0010,
 m0011,
-m0012
+m0012,
+m0013
     }
   }
   

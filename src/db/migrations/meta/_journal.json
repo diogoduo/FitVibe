@@ -92,6 +92,13 @@
       "when": 1791337915311,
       "tag": "0012_gatilhos_atividades",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1792114300556,
+      "tag": "0013_rir_falha",
+      "breakpoints": true
     }
   ]
 }

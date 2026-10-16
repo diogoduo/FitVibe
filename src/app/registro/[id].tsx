@@ -116,7 +116,8 @@ export default function WorkoutLogScreen() {
         {active ? (
           <Text className="text-sm leading-5 text-fg-muted">
             As cargas já vêm com a sugestão (↑ = subir carga). Ajuste se precisar e toque no ✓; o
-            descanso começa sozinho. Deslize uma série para a esquerda para excluí-la.
+            descanso começa sozinho. Toque no número da série para trocar entre válida, Prep e Aq;
+            deslize para a esquerda para excluí-la.
           </Text>
         ) : null}
 
@@ -148,6 +149,14 @@ export default function WorkoutLogScreen() {
             router.push({ pathname: '/biblioteca', params: { escolher: 'extra', alvo: id } })
           }
         />
+        {active && entries.length > 1 ? (
+          <Button
+            label="Mudar a ordem"
+            icon="reorder"
+            variant="secondary"
+            onPress={() => router.push({ pathname: '/ordem-treino', params: { id } })}
+          />
+        ) : null}
         {active ? (
           <>
             <Button label="Finalizar treino" onPress={finish} />

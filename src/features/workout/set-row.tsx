@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Alert, Pressable, Text, TextInput, View } from 'react-native';
 
-import type { LoadType, WorkoutSet } from '@/db/schema';
+import type { LoadType, SetKind, WorkoutSet } from '@/db/schema';
 import { formatDecimal, parseDecimal, toInputText } from '@/lib/numbers';
 import { Icon } from '@/components/ui/icon';
 import { PressableScale } from '@/components/ui/pressable-scale';
@@ -16,13 +16,15 @@ import {
   completeSet,
   removeSet,
   restoreSet,
+  setSetKind,
   uncompleteSet,
   updateSet,
   type SetValues,
 } from './repository';
+import { isFailure, RIR_CYCLE, rirLabel } from './rir';
 
-/** Ciclo do botão de RIR: falha (0), 1, 2, 3, 4. */
-const RIR_CYCLE = [0, 1, 2, 3, 4];
+/** Tocar no rótulo: válida → Prep → Aq → válida (a série a mais vira preparatória num toque). */
+const NEXT_KIND: Record<SetKind, SetKind> = { working: 'prep', prep: 'warmup', warmup: 'working' };
 
 type SetRowProps = {
   set: WorkoutSet;
@@ -36,8 +38,8 @@ type SetRowProps = {
 
 /**
  * Uma série: carga × reps (ou minutos), RIR nas válidas e o ✓. Os campos já vêm com a sugestão;
- * o que for digitado é gravado ao sair do campo e ao concluir. Deslizar para a esquerda (ou
- * segurar o número) exclui, com "Desfazer".
+ * o que for digitado é gravado ao sair do campo e ao concluir. Tocar no rótulo troca o tipo;
+ * deslizar para a esquerda (ou segurar o rótulo) exclui, com "Desfazer".
  */
 export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowProps) {
   const colors = useColors();
@@ -91,10 +93,19 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
   };
 
   const cycleRir = () => {
-    const next = RIR_CYCLE[(RIR_CYCLE.indexOf(rir ?? -1) + 1) % RIR_CYCLE.length];
+    // Sem RIR (ou um fora do ciclo), o primeiro toque vai para o começo do ciclo.
+    const current = rir == null ? -1 : RIR_CYCLE.indexOf(rir);
+    const next = RIR_CYCLE[(current + 1) % RIR_CYCLE.length];
     setRir(next);
     const values = read();
     if (values) updateSet(set.id, { ...values, rir: next });
+  };
+
+  const cycleKind = () => {
+    haptics.select();
+    // O tipo novo começa sem RIR (setSetKind grava o mesmo).
+    setRir(null);
+    setSetKind(set.id, NEXT_KIND[set.kind]);
   };
 
   const remove = () => {
@@ -116,9 +127,13 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
         className={`flex-row items-center gap-2 rounded-xl px-2 py-1 ${done ? 'bg-success/10' : ''}`}
       >
         <Pressable
+          onPress={cycleKind}
           onLongPress={confirmRemove}
-          accessibilityHint="Deslize a série para a esquerda (ou toque e segure) para excluir"
-          className="w-11"
+          accessibilityRole="button"
+          accessibilityLabel={`Série ${label}`}
+          accessibilityHint="Toque para trocar entre válida, preparatória e aquecimento. Deslize para a esquerda (ou toque e segure) para excluir"
+          hitSlop={6}
+          className="w-11 py-2 active:opacity-60"
         >
           <Text
             className={`text-sm font-semibold ${working ? 'text-fg' : 'text-fg-muted'}`}
@@ -181,8 +196,8 @@ export function SetRow({ set, label, loadType, increased, onCompleted }: SetRowP
             accessibilityLabel="Repetições na reserva"
             className="w-16 items-center rounded-full bg-surface-2 py-1.5 active:opacity-70"
           >
-            <Text className={`text-xs font-semibold ${rir === 0 ? 'text-danger' : 'text-fg'}`}>
-              {rir == null ? 'RIR —' : rir === 0 ? 'Falha' : `RIR ${rir}`}
+            <Text className={`text-xs font-semibold ${isFailure(rir) ? 'text-danger' : 'text-fg'}`}>
+              {rirLabel(rir)}
             </Text>
           </Pressable>
         ) : null}

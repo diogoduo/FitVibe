@@ -1,6 +1,13 @@
 import { and, asc, eq, isNull } from 'drizzle-orm';
 
-import { exercises, planSessions, workoutExercises, workouts, workoutSets } from '@/db/schema';
+import {
+  exercises,
+  planExercises,
+  planSessions,
+  workoutExercises,
+  workouts,
+  workoutSets,
+} from '@/db/schema';
 import { createTestDb, type TestDb } from '@/db/test-db';
 
 import { addSession, getActivePlan } from '../../plan/repository';
@@ -14,11 +21,14 @@ import {
   finishWorkout,
   EmptySessionError,
   getActiveWorkout,
+  moveWorkoutExercise,
+  setSetKind,
   setSkipped,
   startWorkout,
   swapWorkoutExercise,
   workoutRecords,
 } from '../repository';
+import { RIR_FAILURE } from '../rir';
 
 let mockDb: TestDb;
 let mockIdCounter = 0;
@@ -85,7 +95,7 @@ describe('começar o treino de segunda', () => {
       ['prep', 17.5, 4, null],
       ['prep', 22.5, 2, null],
       ['working', 25, 7, 1],
-      ['working', 25, 5, 0],
+      ['working', 25, 5, RIR_FAILURE],
     ]);
     // Abdominal máquina: 3 × 10 sem aquecimento e sem alvo de RIR
     expect(setsOf(list[6].id).map(plain)).toEqual([
@@ -145,7 +155,7 @@ describe('progressão e recordes entre treinos', () => {
     // 1ª série bateu 8 (topo de 5–8) → 30 kg; 2ª fez 6 → 25 kg buscando 7
     expect(working.map(plain)).toEqual([
       ['working', 30, 5, 1],
-      ['working', 25, 7, 0],
+      ['working', 25, 7, RIR_FAILURE],
     ]);
     // Aquecimento recalculado sobre os 30 kg
     expect(setsOf(supino2.id)[0]).toMatchObject({ kind: 'warmup', load: 12.5 });
@@ -184,7 +194,7 @@ describe('durante o treino', () => {
         .map(plain),
     ).toEqual([
       ['working', null, 5, 1],
-      ['working', null, 5, 0],
+      ['working', null, 5, RIR_FAILURE],
     ]);
 
     doWorkingSets(swapped.id, [
@@ -216,6 +226,57 @@ describe('durante o treino', () => {
     expect(setsOf(list[0].id)).toHaveLength(2); // só as 2 válidas feitas (aquecimento não marcado)
     expect(entries(workoutId).filter((entry) => entry.skipped)).toHaveLength(7);
     expect(getActiveWorkout()).toBeNull();
+  });
+
+  it('a série a mais vira preparatória: vai para antes das válidas e perde o RIR', () => {
+    const workoutId = startWorkout(session(1).id);
+    const supino = entries(workoutId)[0];
+    addSet(supino.id);
+    const extra = setsOf(supino.id).at(-1)!;
+    expect(extra).toMatchObject({ kind: 'working', rir: RIR_FAILURE });
+
+    setSetKind(extra.id, 'prep');
+    expect(setsOf(supino.id).map((set) => set.kind)).toEqual([
+      'warmup',
+      'warmup',
+      'prep',
+      'prep',
+      'prep',
+      'working',
+      'working',
+    ]);
+    expect(setsOf(supino.id)[4]).toMatchObject({ id: extra.id, rir: null });
+    // Os sortOrder ficam 0..n, sem empate.
+    expect(setsOf(supino.id).map((set) => set.sortOrder)).toEqual([0, 1, 2, 3, 4, 5, 6]);
+
+    // E de volta para válida: a primeira das válidas, ainda sem RIR.
+    setSetKind(extra.id, 'working');
+    expect(setsOf(supino.id)[4]).toMatchObject({ id: extra.id, kind: 'working', rir: null });
+  });
+
+  it('muda a ordem dos exercícios só neste treino', () => {
+    const workoutId = startWorkout(session(1).id);
+    const before = entries(workoutId).map((entry) => entry.id);
+    const planOrder = entries(workoutId).map((entry) => entry.exerciseId);
+    moveWorkoutExercise(before[2], -1);
+    expect(entries(workoutId).map((entry) => entry.id)).toEqual([
+      before[0],
+      before[2],
+      before[1],
+      ...before.slice(3),
+    ]);
+    // Nas pontas não faz nada.
+    moveWorkoutExercise(before[0], -1);
+    moveWorkoutExercise(before.at(-1)!, 1);
+    expect(entries(workoutId).map((entry) => entry.sortOrder)).toEqual(before.map((_, i) => i));
+    // O plano continua na ordem dele.
+    const slots = mockDb
+      .select()
+      .from(planExercises)
+      .where(and(eq(planExercises.sessionId, session(1).id), isNull(planExercises.deletedAt)))
+      .orderBy(asc(planExercises.sortOrder))
+      .all();
+    expect(slots.map((slot) => slot.exerciseId)).toEqual(planOrder);
   });
 
   it('descartar some com tudo', () => {

@@ -10,6 +10,7 @@ import { formatDecimal, formatInt, formatKg, parseDecimal, toInputText } from '@
 import { useColors, useScheme } from '@/theme/theme';
 
 import { useMeals } from '../diary/queries';
+import { rirLabel } from '../workout/rir';
 import { startOrContinueWorkout } from '../workout/start';
 import { foodKcal, type Draft, type DraftFood, type DraftItem } from './draft';
 import { removeDraftItem, updateDraftItem } from './store';
@@ -270,7 +271,7 @@ function OtherRow({ item, today }: { item: Exclude<DraftItem, DraftFood>; today:
             {item.load != null ? `${formatDecimal(item.load)} kg × ` : ''}
             {item.reps}
             {item.load == null ? ' reps' : ''}
-            {item.rir != null ? ` · RIR ${item.rir}` : ''}
+            {item.rir != null ? ` · ${rirLabel(item.rir)}` : ''}
           </Text>
         </Line>
       );

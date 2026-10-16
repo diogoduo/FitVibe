@@ -351,7 +351,7 @@ export const workoutExercises = sqliteTable(
 
 /**
  * Uma série. Nasce planejada (com a sugestão de carga e reps) e vira feita quando `completedAt`
- * é preenchido. RIR 0 = até a falha.
+ * é preenchido. RIR -1 = falha; 0 = nenhuma na reserva, sem tentar (features/workout/rir.ts).
  */
 export const workoutSets = sqliteTable(
   'workout_sets',

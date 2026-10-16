@@ -4,6 +4,7 @@ import { normalizeForSearch } from '@/lib/text';
 import type { AnyFood } from '../foods/food';
 import { nutrientsFor } from '../foods/nutrition';
 import { MEASUREMENT_FIELDS, type MeasurementKey } from '../measurements/measurement-form';
+import { RIR_FAILURE } from '../workout/rir';
 import type { AssistantContext, PreviousTurn } from './request';
 import type { AiItem, AiResult } from './result';
 
@@ -67,6 +68,10 @@ const RANGES = {
 
 const inRange = (value: number | null, range: { min: number; max: number }): value is number =>
   value != null && value >= range.min && value <= range.max;
+
+/** As instruções da função dizem "até a falha" = 0; no app a falha é RIR_FAILURE. */
+const assistantRir = (rir: number | null) =>
+  rir == null || rir < 0 || rir > 10 ? null : rir === 0 ? RIR_FAILURE : rir;
 
 /** Refeição pela hora, quando a pessoa não disse qual foi. */
 const MEAL_BY_HOUR: [number, string][] = [
@@ -202,7 +207,7 @@ export function buildDraft(
           exerciseName: exercise.name,
           load,
           reps: item.reps,
-          rir: item.rir != null && item.rir >= 0 && item.rir <= 10 ? item.rir : null,
+          rir: assistantRir(item.rir),
         });
         break;
       }
