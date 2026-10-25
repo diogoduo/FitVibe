@@ -52,7 +52,7 @@ com o servidor quando a conexão volta.
 
 ## Stack
 
-React Native 0.86 · Expo SDK 57 (Expo Router, expo-sqlite, expo-camera, expo-audio,
+React Native 0.88 · Expo SDK 58 (Expo Router, expo-sqlite, expo-camera, expo-audio,
 expo-notifications) · TypeScript estrito · NativeWind 4 · Drizzle ORM · Supabase (Auth, Postgres,
 Storage, Realtime, Edge Functions) · React Query · Reanimated 4 · react-native-svg · Jest
 

@@ -3,7 +3,7 @@
     "name": "FitVibe",
     "slug": "duo-gym-diet",
     "owner": "duodiogos-team",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "platforms": ["ios", "android"],
     "runtimeVersion": {
       "policy": "sdkVersion"
@@ -71,7 +71,11 @@
           "recordAudioAndroid": true
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "expo-font",
+      "expo-image",
+      "expo-status-bar",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

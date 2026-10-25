@@ -1,6 +1,13 @@
 import { router } from 'expo-router';
 import { useRef, useState, type ComponentType } from 'react';
-import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  useWindowDimensions,
+  type ScrollViewInstance,
+} from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -73,7 +80,7 @@ export default function TutorialScreen() {
   const colors = useColors();
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const [index, setIndex] = useState(0);
   const last = index === SLIDES.length - 1;
 

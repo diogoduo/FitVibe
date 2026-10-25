@@ -22,7 +22,7 @@ export async function addProgressPhoto(takenOn: DayKey, pose: PhotoPose, photo: 
   const compressed = await compressPhoto(photo, PROGRESS_PHOTO_WIDTH);
   const id = newId();
   const fileName = `${id}.jpg`;
-  storeProgressPhoto(compressed.uri, fileName);
+  await storeProgressPhoto(compressed.uri, fileName);
   const previous = db
     .select()
     .from(progressPhotos)

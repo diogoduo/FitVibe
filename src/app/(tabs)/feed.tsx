@@ -93,7 +93,7 @@ function Feed({ me }: { me: SocialProfile }) {
         )
       }
       ListFooterComponent={
-        feed.isFetchingNextPage ? <Spinner style={{ paddingVertical: 16 }} /> : null
+        feed.isFetchingNextPage ? <Spinner style={{ paddingVertical: 16 }} /> : undefined
       }
       onEndReached={() => {
         if (feed.hasNextPage && !feed.isFetchingNextPage) void feed.fetchNextPage();

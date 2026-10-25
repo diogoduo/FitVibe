@@ -5,11 +5,11 @@ const directory = () => new Directory(Paths.document, 'progresso');
 
 export const progressPhotoUri = (fileName: string) => new File(directory(), fileName).uri;
 
-/** Move a foto (já comprimida) para a pasta das fotos de progresso. */
-export function storeProgressPhoto(uri: string, fileName: string) {
+/** Move a foto (já comprimida) para a pasta das fotos de progresso (move é assíncrono). */
+export async function storeProgressPhoto(uri: string, fileName: string) {
   const folder = directory();
   folder.create({ idempotent: true, intermediates: true });
-  new File(uri).move(new File(folder, fileName), { overwrite: true });
+  await new File(uri).move(new File(folder, fileName), { overwrite: true });
 }
 
 export function deleteProgressPhotoFile(fileName: string) {

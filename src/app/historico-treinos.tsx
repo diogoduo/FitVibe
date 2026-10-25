@@ -21,7 +21,7 @@ export default function WorkoutHistoryScreen() {
           <Text className="py-6 text-base leading-6 text-fg-muted">
             Nenhum treino registrado ainda. Comece um pelo Hoje ou pela tela do treino.
           </Text>
-        ) : null
+        ) : undefined
       }
       renderItem={({ item }) => (
         <Pressable

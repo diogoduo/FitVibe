@@ -17,7 +17,7 @@ export async function shareCsv(kind: ExportKind, period: Period): Promise<number
   if (count === 0) return 0;
   const file = new File(Paths.cache, fileName(kind, period, 'csv'));
   file.create({ overwrite: true });
-  file.write(csv);
+  await file.write(csv);
   await Sharing.shareAsync(file.uri, {
     mimeType: 'text/csv',
     UTI: 'public.comma-separated-values-text',
@@ -31,7 +31,7 @@ export async function shareReport(period: Period) {
   const { uri } = await Print.printToFileAsync({ html, ...A4 });
   // O expo-print dá um nome aleatório; com nome e período fica fácil achar depois.
   const named = new File(Paths.cache, fileName('relatorio', period, 'pdf'));
-  new File(uri).move(named, { overwrite: true });
+  await new File(uri).move(named, { overwrite: true });
   await Sharing.shareAsync(named.uri, {
     mimeType: 'application/pdf',
     UTI: 'com.adobe.pdf',
