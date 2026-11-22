@@ -8,6 +8,8 @@ Supabase. Feito por [**Diogo Duo**](https://www.linkedin.com/in/duodiogo/).
 Tudo é gravado primeiro no celular, então funciona no subsolo da academia sem sinal, e sincroniza
 com o servidor quando a conexão volta.
 
+O projeto conta com um assistente chamado **Jarvis**.
+
 <p align="center">
   <img src="docs/screenshots/hoje.jpg" width="180" alt="Hoje: anéis de calorias, proteína e água, e o gasto × consumo">
   <img src="docs/screenshots/treino.jpg" width="180" alt="Treino: treino em andamento e o plano da semana">
